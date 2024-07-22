@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="ZeroJiu">
+    
+    <title>
+        
+            Win32 MultiThread Summary——《Win32多线程程序设计》 |
+        
+        小熊糖否
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+        <link rel="shortcut icon" href="/images/logo.ico">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/font/css/fontawesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/font/css/regular.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/font/css/solid.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/font/css/brands.min.css">
+    
+    <script class="keep-theme-configurations">
+    const KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"example.com","root":"/","language":"en","path":"search.xml"}
+    KEEP.theme_config = {"base_info":{"primary_color":"#c0392b","title":"小熊糖否","author":"ZeroJiu","avatar":"/images/author.jpg","logo":"/images/logo.ico","favicon":"/images/logo.ico"},"menu":{"home":"/","archives":"/archives","tags":"/tags","about":"/about"},"first_screen":{"enable":true,"background_img":"/images/bg.svg","background_img_dark":"/images/bg.svg","description":"True mastery of any skill takes a lifetime.","hitokoto":false},"social_contact":{"enable":true,"links":{"github":"https://github.com/zerojiu","weixin":null,"qq":null,"weibo":null,"zhihu":null,"twitter":null,"x":null,"facebook":null,"email":"xpringlee@gmail.com"}},"scroll":{"progress_bar":true,"percent":false,"hide_header":true},"home":{"announcement":null,"category":true,"tag":true,"post_datetime":"created"},"post":{"author_badge":{"enable":true,"level_badge":false,"custom_badge":["愚昧之巅","绝望之谷","开悟之坡","大师领域"]},"word_count":{"wordcount":true,"min2read":true},"datetime_format":"YYYY-MM-DD HH:mm:ss","copyright_info":true,"share":true,"img_align":"center","reward":{"enable":false,"img_link":null,"text":null}},"code_block":{"tools":{"enable":true,"style":"default"},"highlight_theme":"default"},"toc":{"enable":false,"number":false,"expand_all":true,"init_open":false,"layout":"right"},"website_count":{"busuanzi_count":{"enable":true,"site_uv":true,"site_pv":true,"page_pv":true}},"local_search":{"enable":true,"preload":true},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.36"},"waline":{"server_url":null,"reaction":false,"version":"3.2.1"},"giscus":{"repo":null,"repo_id":null,"category":"Announcements","category_id":null,"reactions_enabled":false},"artalk":{"server":null},"disqus":{"shortname":null}},"rss":{"enable":true},"lazyload":{"enable":true},"cdn":{"enable":true,"provider":"cdnjs"},"pjax":{"enable":true},"footer":{"since":2020,"word_count":false,"site_deploy":{"enable":true,"provider":"github","url":null},"record":{"enable":false,"list":[{"code":null,"link":null}]}},"inject":{"enable":false,"css":[null],"js":[null]},"root":"","source_data":{},"version":"4.1.5"}
+    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"}
+    KEEP.language_code_block = {"copy":"Copy code","copied":"Copied","fold":"Fold code block","folded":"Folded"}
+    KEEP.language_copy_copyright = {"copy":"Copy copyright info","copied":"Copied","title":"Original post title","author":"Original post author","link":"Original post link"}
+  </script>
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+        <span class="scroll-progress-bar"></span>
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <i class="pjax-progress-icon fas fa-circle-notch fa-spin"></i>
+    
+</div>
+
+
+
+<main class="page-container border-box">
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left border-box">
+            
+                <a class="logo-image border-box" href="/">
+                    <img src="/images/logo.ico">
+                </a>
+            
+            <a class="site-name border-box" href="/">
+               小熊糖否
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        
+                        <li class="menu-item">
+                            <a class=""
+                               href="/"
+                            >
+                                
+                                HOME
+                            </a>
+                        </li>
+                    
+                        
+                        <li class="menu-item">
+                            <a class=""
+                               href="/archives"
+                            >
+                                
+                                ARCHIVES
+                            </a>
+                        </li>
+                    
+                        
+                        <li class="menu-item">
+                            <a class=""
+                               href="/tags"
+                            >
+                                
+                                TAGS
+                            </a>
+                        </li>
+                    
+                        
+                        <li class="menu-item">
+                            <a class=""
+                               href="/about"
+                            >
+                                
+                                ABOUT
+                            </a>
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="fas search fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/"
+                    >HOME</a>
+                </li>
+            
+                
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/archives"
+                    >ARCHIVES</a>
+                </li>
+            
+                
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/tags"
+                    >TAGS</a>
+                </li>
+            
+                
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/about"
+                    >ABOUT</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+                
+
+                    
+<div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+        <div class="post-content-container border-box">
+            
+                <div class="post-content-top border-box"
+                     style="height: 13.8rem"
+                >
+                    <div class="cover-post-title">
+                        Win32 MultiThread Summary——《Win32多线程程序设计》
+                    </div>
+                    <img class="post-cover" src="/images/tags/concurrency.svg"
+                         onerror="this.style.display='none'"
+                    >
+                </div>
+            
+
+            <div class="post-content-bottom border-box has-cover">
+                
+
+                
+                    <div class="post-header border-box">
+                        
+                            <div class="avatar-box border-box">
+                                <img src="/images/author.jpg">
+                            </div>
+                        
+                        <div class="info-box">
+                            <div class="author border-box">
+                                <span class="name">ZeroJiu</span>
+                                
+                                    <span class="author-badge">大师领域</span>
+                                
+                            </div>
+                            <div class="meta-info border-box">
+                                
+
+<div class="post-meta-info-container border-box post">
+    <div class="post-meta-info border-box">
+        
+
+        
+            <span class="meta-info-item post-create-date">
+                <i class="icon fa-solid fa-calendar-plus"></i>&nbsp;
+                <span class="datetime">2016-04-10 14:37:46</span>
+            </span>
+
+            <span class="meta-info-item post-update-date">
+                <i class="icon fa-solid fa-file-pen"></i>&nbsp;
+                <span class="datetime" data-updated="Fri Jul 19 2024 21:20:31 GMT+0800">2024-07-19 21:20:31</span>
+            </span>
+        
+
+        
+            <span class="meta-info-item post-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul class="post-category-ul">
+                    
+                            <li class="category-item"><a href="/categories/Reading/">Reading</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="post-tag meta-info-item border-box">
+                <ul class="post-tag-ul">
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Win32/">Win32</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Thread/">Thread</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/BookList/">BookList</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+            <span class="meta-info-item post-wordcount">
+                <i class="icon fas fa-file-word"></i>&nbsp;<span>6.1k Words</span>
+            </span>
+        
+        
+            <span class="meta-info-item post-min2read">
+                <i class="icon fas fa-clock"></i>&nbsp;<span>22 Mins</span>
+            </span>
+        
+        
+            <span class="meta-info-item post-pv">
+                <i class="icon fas fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+            </span>
+        
+    </div>
+
+    
+</div>
+
+                            </div>
+                        </div>
+                    </div>
+                
+
+                <div class="post-content keep-markdown-body ">
+                    
+
+                    
+                         <blockquote><p>我们可以为我们的能力自豪，但对于我们的缺点——还有我们的无知和错误——我们必须诚实。</p>
+<footer><strong>Andrew Hunt/David Thomas</strong><cite>程序员修炼之道</cite></footer></blockquote>
+<p>多线程并不一定是最好的，合适才是最好的。<span id="more"></span></p>
+<h2 id="%E4%B8%BA%E4%BB%80%E4%B9%88%E5%A4%9A%E7%BA%BF%E7%A8%8B%EF%BC%9F" tabindex="-1">为什么多线程？</h2>
+<p>多线程主要的优点是价廉物美，启动快、退出快、与其他线程共享核心对象，很容易实现共产主义的伟大梦想。但是其又有不可预期、测试困难的缺点。</p>
+<p>多线程往往会和多进程在一起进行比较，进程含有内存和资源：</p>
+<ul>
+<li>内存：可达到2GB，分为Code（程序的可执行部分，只读性质）、Data（全局变量和静态变量）和Stack（局部变量）</li>
+<li>资源：核心对象（file handles和线程）、User资源（如对话框和字符串）、GDI资源（如Device Context和brushes）</li>
+</ul>
+<p>线程是进程的一个实体，是独立调度和分派的基本单位，不拥有系统资源（只拥有少许运行中必不可少的私有资源），线程可与同属一个进程的其它线程共享进程的全部资源。</p>
+<p>总结来说，进程拥有资源，属于这个进程的若干个线程共享进程的资源。进程是资源分配和调度的单位，线程是CPU调度和分配的单位，资源是分配给进程的，线程只拥有很少资源，因而切换代价比进程切换低。但是进程的健壮性远比线程好，如果一个进程死亡，系统中的其他进程还是可以继续执行。</p>
+<p>使用好多线程，就是要知道何时应该用多线程，何时不该用。如果应该用多线程，如何解决Race Condition问题？如何共享数据？如何提高效率？如何同步线程和数据？总结起来就是：</p>
+<ul>
+<li>有始有终，线程的创建和释放都要靠自己</li>
+<li>不抛弃不放弃，等一等线程，让它做完自己的工作</li>
+<li>文明有序，资源占用无冲突</li>
+</ul>
+<p>但是有时候却不建议使用多线程：</p>
+<ul>
+<li>针对于慢速I/O设备，Overlapped I/O更能胜任</li>
+<li>程序的健壮性要求很高，值得付出比较多的额外负担，多进程可能更能胜任</li>
+</ul>
+<h2 id="%E6%93%8D%E4%BD%9C%E7%BA%BF%E7%A8%8B" tabindex="-1">操作线程</h2>
+<h3 id="%E5%A6%82%E4%BD%95%E5%88%9B%E5%BB%BA%E7%BA%BF%E7%A8%8B%EF%BC%9F" tabindex="-1">如何创建线程？</h3>
+<p>如果要写一个多线程程序，第一步就是创建一个线程，我们可以使用<code>CreateThread API</code>函数，也可以使用_beginthreadex C 函数，其实我大多数时候使用的是Boost库上面的boost::thread对象来创建线程对象。如果有兴趣可以看看Boost库，这里暂且不讨论Boost库thread。</p>
+<p>如果使用上面两个函数，可以去msdn查看。使用上面两种函数创建线程，其线程函数都必须符合以下格式，当然函数名可以更换：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">DWORD WINAPI <span class="title">ThreadFunc</span><span class="params">(LPVOID n)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>使用CreateThread API函数或者_beginthreadex函数，可以传回两个值用以识别一个新的线程——返回值Handle（句柄）和输出参数lpThread（线程ID）。为了安全防护的缘故，不能根据一个线程的ID获得其handle。</p>
+<h3 id="%E5%A6%82%E4%BD%95%E9%87%8A%E6%94%BE%E7%BA%BF%E7%A8%8B%EF%BC%9F" tabindex="-1">如何释放线程？</h3>
+<p>线程和进程一样，都是核心对象。如何释放线程属于如何释放核心对象的问题。CloseHandle函数在这里起了十分重要的作用。CloseHandle函数的功能是将核心对象的引用计数减1。<em>其不能直接用来释放核心对象，核心对象只有在其引用计数为0的时候会被操作系统自动销毁。</em></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">BOOL <span class="title">CloseHandle</span><span class="params">(HANDLE hObject)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>如果你不调用该函数，即使线程在创建之后执行完毕，引用计数还是不为0，线程无法被销毁。如果一个进程没有在结束之前对它所打开的核心对象调用CloseHandle，操作系统会自动把那些对象的引用计数减一。虽然操作系统会做这个工作，但是他不知道核心对象实际的意义，也就不可能知道解构顺序是否重要。如果你在循环结构创建了核心对象而没有CloseHandle，好吧！你可能会有几十万个句柄没有关闭，你的系统会因此没有可用句柄，然后各种异常现象就出现了。<strong>记住当你完成你的工作，应该调用CloseHandle函数释放核心对象</strong>。</p>
+<p>在清理线程产生的核心对象时也要注意这个问题。<strong>不要依赖因线程结束而清理所有被这一线程产生的核心对象</strong>。面对一个打开的对象，区分其拥有者是进程或是线程是很重要的。这决定了系统何时做清理工作。程序员不能选择有进程或者线程拥有对象，一切都得视对象类型而定。如果被线程打开的核心对象被进程拥有，线程结束是无法清理这些核心对象的。</p>
+<h3 id="%E7%BA%BF%E7%A8%8B%E6%A0%B8%E5%BF%83%E5%AF%B9%E8%B1%A1%E4%B8%8E%E7%BA%BF%E7%A8%8B" tabindex="-1">线程核心对象与线程</h3>
+<p>其实这两个是不同的概念。CreateThread函数返回的句柄其实是指向线程核心对象，而不是直接指向线程本身。在创建一个新的线程时，线程本身会开启线程核心对象，引用计数加1，CreateThread函数返回一个线程核心对象句柄，引用计数再加1，所以线程核心对象一开始引用计数就是2。</p>
+<p>调用CloseHandle函数，该线程核心对象引用计数减一，线程执行完成之后，引用计数再减一为零，该核心对象被自动销毁。</p>
+<blockquote>
+<p>不能依赖因线程的结束而清理所有被这一线程产生的核心对象。许多对象，例如文件，是被进程拥有的。</p>
+</blockquote>
+<h3 id="%E7%BB%93%E6%9D%9F%E4%B8%BB%E7%BA%BF%E7%A8%8B" tabindex="-1">结束主线程</h3>
+<p>首先得了解哪个线程是主线程：程序启动后就执行的线程。主线程有两个特点：</p>
+<ul>
+<li>负责GUI主消息循环</li>
+<li>主线程结束时，强迫其他所有线程被迫结束，其他线程没有机会执行清理工作</li>
+</ul>
+<p>第二个特点也就意味着，如果你不等待其他线程结束，它们没有机会执行完自己的操作，也没有机会做最后的cleanup操作。我遇到过由于没有等待，而出现程序奔溃的情况。反正很危险。</p>
+<h3 id="%E7%BB%93%E6%9D%9F%E7%BA%BF%E7%A8%8B%E5%B9%B6%E8%8E%B7%E5%8F%96%E5%85%B6%E7%BB%93%E6%9D%9F%E4%BB%A3%E7%A0%81" tabindex="-1">结束线程并获取其结束代码</h3>
+<p>这个没什么好说的，可以使用ExitThread函数退出线程，返回一个结束代码。GetExitCodeThread函数获取ExitThread函数或者return语句返回的结束代码。不过想通过GetExitCodeThread来等待线程结束是个很糟糕的注意——CPU被浪费了。下一节提及的WaitForSingleObject才是正道。</p>
+<p>获取程序结束代码：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 如果线程尚未结束，返回TRUE，lpExitCode值为STILL_ACTIVE */</span></span><br><span class="line">BOOL bResult = <span class="built_in">GetExitCodeThread</span>(hThread, lpExitCode);</span><br></pre></td></tr></table></figure>
+<h3 id="%E7%BB%88%E6%AD%A2%E5%85%B6%E4%BB%96%E7%BA%BF%E7%A8%8B" tabindex="-1">终止其他线程</h3>
+<p>终止其他线程可以使用TerminateThread()函数，也可以使用全局标记。</p>
+<p>TerminateThread()函数的缺点是：</p>
+<ul>
+<li>1、线程没有机会在结束前清理自己，其堆栈也没有被释放掉，出现内存泄露；</li>
+<li>2、任何与此线程有附着关系的DLLs也没有机会获得线程解除附着通知；</li>
+<li>3、线程进入的Critical Section将永远处于锁定状态（Mutex会返回wait_abandoned状态）。</li>
+<li>4、线程正在处理的数据会处于不稳定状态。</li>
+</ul>
+<p>TerminateThread()唯一可以预期的是：线程handle变成激发状态，并且传回dwExitCode所指定的结束代码。</p>
+<p>设立全局标记的优点：保证目标线程在结束之前安全而一致的状态<br>
+设立全局标记的缺点：线程需要一个polling机制，时时检查标记值。（可以使用一个<strong>手动重置的event对象</strong>）</p>
+<h2 id="%E7%AD%89%E4%B8%80%E7%AD%89%E7%BA%BF%E7%A8%8B" tabindex="-1">等一等线程</h2>
+<h3 id="%E7%AD%89%E5%BE%85%E4%B8%80%E4%B8%AA%E7%BA%BF%E7%A8%8B%E7%9A%84%E7%BB%93%E6%9D%9F" tabindex="-1">等待一个线程的结束</h3>
+<p>使用WaitForSingleObject最显而易见的好处是你终于可以把以下代码精简成一句了。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(;;)</span><br><span class="line">&#123;</span><br><span class="line">  <span class="type">int</span> rc;</span><br><span class="line">  rc = <span class="built_in">GetExitCodeThread</span>(hThread, &amp;exitCode);</span><br><span class="line">  <span class="keyword">if</span>(!rc &amp;&amp; exitCode != STILL_ACTIVE)</span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line">&#125;</span><br><span class="line">→ → → → → →</span><br><span class="line"><span class="built_in">WaitForSingleObject</span>(hThread, INFINITE);</span><br></pre></td></tr></table></figure>
+<p>其他好处就是：</p>
+<ul>
+<li>busy loop浪费太多CPU时间</li>
+<li>可以设定等待时间</li>
+</ul>
+<h3 id="%E7%AD%89%E5%BE%85%E5%A4%9A%E4%B8%AA%E7%BA%BF%E7%A8%8B%E7%9A%84%E7%BB%93%E6%9D%9F" tabindex="-1">等待多个线程的结束</h3>
+<p>WaitForSingleObject函数不好同时判断多个线程的状态，WaitForMultipleObjects可以同时等待多个线程，可以设定是否等待所有线程执行结束还是只要一个线程执行完立马返回。</p>
+<h3 id="%E5%9C%A8gui%E7%BA%BF%E7%A8%8B%E4%B8%AD%E7%AD%89%E5%BE%85" tabindex="-1">在GUI线程中等待</h3>
+<p>在GUI线程中总是要常常回到主消息循环，上述两个wait api函数会阻塞主消息循环。MsgWaitForMultipleObjects函数可以在对象呗激发或者消息到达时被唤醒而返回。</p>
+<h3 id="%E7%9B%B8%E5%85%B3%E5%9F%BA%E6%9C%AC%E5%87%BD%E6%95%B0" tabindex="-1">相关基本函数</h3>
+<p>1、等待一个核心对象被激发（线程结束）</p>
+<p>WaitForSingleObject不仅仅能够等待一个线程结束，也能等待一个核心对象变成激发状态。</p>
+<p>MSDN中提及：</p>
+<blockquote>
+<p>If this handle（核心对象） is closed while the wait is still pending, the function’s behavior is undefined.</p>
+</blockquote>
+<p>会不会奔溃呢？这是个问题。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">/* 失败返回WAIT_FAILED</span><br><span class="line">/* 成功：</span><br><span class="line">/*    WAIT_OBJECT_0: 等待目标变成激发状态</span><br><span class="line">/*    WAIT_TIMEOUT: 核心对象变成激发状态之前，等待时间终了。</span><br><span class="line">/*    WAIT_ABANDONED: 如果一个拥有mutex互斥器的线程结束之前没有释放mutex</span><br><span class="line">/* dwMilliseconds可以为INFINITE，表示一直等待。也可以为0，表示立即检查handle的状态。</span><br><span class="line">DWORD result = WaitForSingleObject(hThead, dwMilliseconds);</span><br></pre></td></tr></table></figure>
+<p>2、等待多个核心对象被激发（线程结束）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">/* bWaitAll是TRUE，那么返回值将是WAIT_OBJECT_0 */</span><br><span class="line">/* bWaitAll是FALSE，那么将返回值减去WAIT_OBJECT_0，就表示数组中那个handle被激发 */</span><br><span class="line">DWORD result = WaitForMultipleObjects(</span><br><span class="line">                nCount,  /* 最大容量是MAXIMUM_WAIT_OBJECTS（64）*/</span><br><span class="line">                lpHandles,</span><br><span class="line">                bWaitAll,</span><br><span class="line">                dwMilliseconds);</span><br></pre></td></tr></table></figure>
+<p>3、等待核心对象被激发或消息到达队列</p>
+<p>在一个GUI程序中等待线程结束会导致进程卡死，常常回到主消息循环式很重要的。光使用GetMessage函数和WaitForMultipleObjects无法做到这一点。MsgWaitForMultipleObjects函数能够同时等待核心对象被激发或者消息到达队列。</p>
+<p>这块代码详见Win32多线程程序设计P88</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DWORD result = MsgWaitForMultipleObjects(nCount, pHandles, bWaitAll, dwMilliseconds, dwWakeMask);</span><br></pre></td></tr></table></figure>
+<h2 id="%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5" tabindex="-1">线程同步</h2>
+<p>线程同步主要有Critical Sections、Mutex、Semaphores、Event，除了Critical Section是存在于进程<code>内存空间</code>内，其他都是<code>核心对象</code>。</p>
+<h3 id="critical-sections" tabindex="-1">Critical Sections</h3>
+<p>Critical Section用来实现排他性占有，适用范围时单一进程的各个线程之间。临界区并非核心对象，一旦线程进入一个临界区，他就能够一再的<code>重复</code>进入该临界区。但是必须保证，<strong>每一个进入操作都有一个对应的离开操作</strong>。</p>
+<p>Critical Section的一个缺点就是，没有办法获知进入critical section中的那个线程是生是死。这样的话，如果线程挂了还没有离开临界区，系统没有办法将该临界区清楚。</p>
+<p>同时，临界区由于context switching也会发生死锁（DeadLock）现象——每个线程都抓住了部分资源，而都在等待对方线程的资源。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">CRITICAL_SECTION g_criticalSection;</span><br><span class="line">InitializeCriticalSection(&amp;g_criticalSection);</span><br><span class="line">EnterCriticalSection(g_criticalSection);</span><br><span class="line">LeaveCriticalSection(g_criticalSection);</span><br><span class="line">DeleteCriticalSection(&amp;g_criticalSection);</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>千万不要再一个critical section之中调用Sleep()或任何Wait() API函数。</p>
+</blockquote>
+<p>Critical Sections注意事项：</p>
+<ul>
+<li>一旦线程进入一个Critical Section，再调用LeaveCriticalSection函数之前，就能一直重复的进入该Critical Section。</li>
+<li>千万不要在一个Critical section之中调用Sleep()或者任何Wait… API函数。</li>
+<li>如果进入Critical section的那个线程结束了或者当掉了，而没有调用LeaveCriticalSection函数，系统就没有办法将该Critical Section清除。</li>
+</ul>
+<p>Critical Section的优点：</p>
+<ul>
+<li>相对于Mutex来说，其速度很快。锁住一个未被拥有的mutex要比锁住一个未被拥有的critical section，需要花费几乎100倍时间。（critical section不需要进入操作系统核心）</li>
+</ul>
+<p>Critical Section的缺陷：</p>
+<ul>
+<li>Critical Section不是核心对象，无法WaitForSingleObject，没有办法解决<code>死锁</code>问题（一个著名的死锁问题：哲学家进餐问题）</li>
+<li>Critical Section不可<code>跨进程</code></li>
+<li>无法指定等待结束的时间长度</li>
+<li>不能够同时有一个Critical section被等待</li>
+<li>无法侦测是否已被某个线程放弃</li>
+</ul>
+<h3 id="mutex" tabindex="-1">Mutex</h3>
+<p>Mutex可以在不同的线程之间实现排他性占有，甚至即使那些线程属于不同进程。Mutex和临界区类似，但是它牺牲速度以增加弹性。两者区别：</p>
+<ul>
+<li>锁住一个未被拥有的Mutex，比锁住一个未被拥有的critical section，需要花费几乎100倍的时间（临界区非核心对象，不需要进去操作系统核心，只要在用户态进行操作即可）。</li>
+<li>Mutex可以跨进程，而临界区只能在同一进程使用</li>
+<li>等待一个Mutex，可以指定结束等待的时间长度。</li>
+</ul>
+<p>Mutex的激发状态：当没有任何线程拥有该Mutex而且有一个线程正以Wait…()等待该Mutex，该mutex就会短暂的出现激发状态。</p>
+<p>如果线程拥有一个mutex而在结束前没有调用ReleaseMutex函数，mutex不会被摧毁，取而代之的是，该mutex会被视为未拥有以及未被激发。而下一个等待的线程会被以WAIT_ABANDONED_0通知。</p>
+<p>使用示例：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">HANDLE hMutex ; <span class="comment">/* global attributes */</span></span><br><span class="line">hMutex = <span class="built_in">CreateMutex</span> (</span><br><span class="line">        <span class="literal">NULL</span>, <span class="comment">/* default event attributes */</span></span><br><span class="line">        <span class="literal">false</span>, <span class="comment">/* default not initially owned */</span></span><br><span class="line">        <span class="literal">NULL</span> <span class="comment">/* unnamed */</span>);</span><br><span class="line">DWORD dwWaitResult = <span class="built_in">WaitForSingleObject</span> (hMutex , INFINITE );</span><br><span class="line"><span class="keyword">if</span> (dwWaitResult == WAIT_OBJECT_0 ) &#123;</span><br><span class="line">    <span class="comment">/* wait succeed, do what you want */</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">ReleaseMutex</span>(hMutex );</span><br></pre></td></tr></table></figure>
+<p>示例解释：</p>
+<p>1、HMutex在创建时为<code>未被拥有</code>和<code>未激发</code>状态；<br>
+2、调用Wait…()函数，线程获得hMutex的拥有权，HMutex短暂变成激发状态，然后Wait…()函数返回，此时HMutex的状态是<code>被拥有</code>和<code>未激发</code>；<br>
+3、ReleaseMutex之后，HMutex的状态变为<code>未被拥有</code>和<code>未激发</code>状态</p>
+<p>Mutex注意事项：</p>
+<ul>
+<li>Mutex的拥有权并非属于哪个产生它的哪个线程，而是那个最后对此mutex进行Wait…()操作并且尚未进行ReleaseMutex()操作的线程。</li>
+<li>如果线程拥有一个mutex而在结束前没有调用ReleaseMutex()，mutex不会被摧毁，取而代之，该mutex会被视为“未被拥有”以及“未被激发”，而下一个等待中的线程会被以WAIT_ABANDONED_0通知。</li>
+<li>Wait…()函数在Mutex处于<code>未被拥有</code>和<code>未被激发</code>状态时返回。</li>
+<li>将CreateMutex的第二个参数设为true，可以阻止race condition，否则调用CreateMutex的线程还未拥有Mutex，发生了context switch，就被别的线程拥有了。</li>
+</ul>
+<p>Mutex优点</p>
+<ul>
+<li>核心对象，可以调用Wait…() API函数</li>
+<li>跨线程、跨进程、跨用户（将CreateMutex的第三个参数前加上&quot;Global//&quot;）</li>
+<li>可以具名，可以被其他进程开启</li>
+<li>只能被拥有它的哪个线程释放</li>
+</ul>
+<p>Mutex缺点</p>
+<ul>
+<li>等待代价比较大</li>
+</ul>
+<h3 id="semaphores" tabindex="-1">Semaphores</h3>
+<p>Semaphore被用来追踪有限的资源。</p>
+<p>和Mutex的对比</p>
+<ul>
+<li>mutex是semaphore的退化，令semahpore的最大值为1，那就是一个mutex</li>
+<li>semaphore没有拥有权的概念，也没有<code>wait_abandoned</code>状态，一个线程可以反复调用Wait…()函数以产生锁定，而拥有mutex的线程不论在调用多少次Wait…()函数也不会被阻塞。</li>
+<li>在许多系统中都有semaphore的概念，而mutex则不一定。</li>
+<li>调用ReleaseSemaphore()的那个线程并不一定是调用Wait…()的那个线程，<strong>任何线程都可以在任何时间调用ReleaseSemaphore，解除被任何线程锁定的Semaphore。</strong></li>
+</ul>
+<p>Semaphore优点：</p>
+<ul>
+<li>核心对象</li>
+<li>可以具名，可以被其他进程开启</li>
+<li>可以被任何一个线程释放</li>
+</ul>
+<p>Semaphore缺点</p>
+<h3 id="event" tabindex="-1">Event</h3>
+<p>Event通常用于overlapped I/O，或者用来设计某些自定义的同步对象。</p>
+<p>使用示例：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">HANDLE hEvent ; <span class="comment">/* global attributes */</span></span><br><span class="line">hEvent = <span class="built_in">CreateEvent</span> (</span><br><span class="line">        <span class="literal">NULL</span>, <span class="comment">/* default event attributes */</span></span><br><span class="line">        <span class="literal">true</span>, <span class="comment">/* mannual reset */</span></span><br><span class="line">        <span class="literal">false</span>, <span class="comment">/* nonsignaled */</span></span><br><span class="line">        <span class="literal">NULL</span> <span class="comment">/* unnamed */</span></span><br><span class="line">       );</span><br><span class="line"></span><br><span class="line"><span class="built_in">SetEvent</span>(hEvent);</span><br><span class="line"><span class="built_in">PulseEvent</span>(hEvent);</span><br><span class="line">DWORD dwWaitResult = <span class="built_in">WaitForSingleObject</span> (hEvent , INFINITE );</span><br><span class="line"><span class="built_in">ResetEvent</span>(hEvent);</span><br><span class="line"><span class="keyword">if</span> (dwWaitResult == WAIT_OBJECT_0 )</span><br><span class="line">&#123;</span><br><span class="line">        <span class="comment">/* wait succeed, do what you want */</span></span><br><span class="line">       ...</span><br><span class="line">        <span class="built_in">ResetEvent</span>(hEvent );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>示例解释：</p>
+<p>1、CreateEvent默认为非激发状态、手动重置<br>
+2、SetEvent把hEvent设为激发状态<br>
+3、在手动重置情况下（bManualReset=true），PulseEvent把event对象设为激发状态，然而唤醒<code>所有</code>等待中的线程，然后恢复为非激发状态；<br>
+4、在自动重置情况下（bManualReset=false），PulseEvent把event对象设为激发状态，然而唤醒<code>一个</code>等待中的线程，然后恢复为非激发状态；<br>
+5、ResetEvent将hEvent设为未激发状态</p>
+<p>Event注意事项：</p>
+<ul>
+<li>CreateEvent函数的第二个参数bManualReset若为false，event会在变成激发状态（因而唤醒一个线程）之后，自动重置为非激发状态；</li>
+<li>CreateEvent函数的第二个参数bManualReset若为true，event会在变成激发状态（因而唤醒一个线程）之后，不会自动重置为非激发状态，必须要手动ResetEvent；</li>
+</ul>
+<p>Event优点：</p>
+<ul>
+<li>核心对象</li>
+<li>其状态完全由程序来控制，其状态不会因为Wait…()函数的调用而改变。</li>
+<li>适用于设计新的同步对象</li>
+<li>可以具名，可以被其他进程开启</li>
+</ul>
+<p>Event缺点：</p>
+<ul>
+<li>要求苏醒的请求并不会被存储起来，可能会遗失掉。如果一个AutoReset event对象调用SetEvent或PulseEvent，而此时并没有线程在等待，这个event会被遗失。如Wait…()函数还没来得及调用就发生了Context Switch，这个时候SetEvent，这个要求苏醒的请求会被遗失，然后调用Wait…()函数线程卡死。</li>
+</ul>
+<h2 id="%E6%9B%BF%E4%BB%A3%E5%A4%9A%E7%BA%BF%E7%A8%8B" tabindex="-1">替代多线程</h2>
+<h3 id="overlapped-i%2Fo" tabindex="-1">Overlapped I/O</h3>
+<p>Win32之中三个基本的I/O函数：CreateFile()、ReadFile()和WriteFile()。</p>
+<ul>
+<li>设置CreateFile()函数的dwFlagsAndAttributes参数为FILE_FLAG_OVERLAPPED，那么对文件的每一个操作都将是Overlapped。此时可以同时读写文件的许多部分，没有目前的文件位置的概念，每一次读写都要包含其文件位置。</li>
+<li>如果发出许多Overlapped请求，那么执行顺序无法保证。</li>
+<li>Overlapped I/O不能使用C Runtime Library中的stdio.h函数，只能使用ReadFile()和WriteFile()来执行I/O。</li>
+</ul>
+<p>Overlapped I/O函数使用OVERLAPPED结构来识别每一个目前正在进行的Overlapped操作，同时在程序和操作系统之间提供了一个共享区域，参数可以在该区域双向传递。</p>
+<h3 id="%E5%A4%9A%E8%BF%9B%E7%A8%8B" tabindex="-1">多进程</h3>
+<p>如果一个进程死亡，系统中的其他进程还是可以继续执行。多进程程序的健壮性远胜于多线程。因为如果多个线程在同一个进程中运行，那么一个误入歧途的线程就可能把整个进程给毁了。</p>
+<p>另一个使用多重进程的理由是，当一个程序从一个作业平台被移植到另一个作业平台，譬如Unix（不支持线程，但进程的产生与结束的代价并不昂贵），Unix应用程序往往使用多个进程，如果移植成为多线程模式，可能需要大改。</p>
+<h2 id="%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E6%88%90%E5%8A%9F%E7%A7%98%E8%AF%80" tabindex="-1">多线程程序设计成功秘诀</h2>
+<ul>
+<li>各线程的数据要分离开来，避免使用全局变量</li>
+<li>不要再线程之间共享GDI对象</li>
+<li>确定你知道你的线程状态，不要径自结束程序而不等待它们结束</li>
+<li>让主线程处理用户界面（UI）</li>
+</ul>
+<h2 id="%E9%99%84%E5%BD%95%E4%B8%80%EF%BC%9Acontext-switching%E3%80%81race-condition%E3%80%81atomic-operations" tabindex="-1">附录一：Context Switching、Race Condition、Atomic Operations</h2>
+<p>注意几个核心概念：</p>
+<ul>
+<li>Context Switching</li>
+</ul>
+<blockquote>
+<p>线程中断时，CPU把当前线程的寄存器内容拷贝到堆栈中，再把它从堆栈中拷贝到一个CONTEXT结构中，来存储当前线程的状态。要切换不同的线程，操作系统应先切换隶属之进程的内存，然后恢复该线程放在Context结构中的寄存器值。</p>
+</blockquote>
+<ul>
+<li>Race Condition</li>
+</ul>
+<blockquote>
+<p>抢占性多任务系统，两个线程的执行次序不可预期，可能造成竟态条件。至于原子操作，是指一个操作能够不受中断地完成。由于一句代码能够扩展成很多句机器指令，在多线程的情况下，原子操作可以防止简单的一句代码被中断，产生竟态条件。</p>
+</blockquote>
+<ul>
+<li>Atomic Operations</li>
+</ul>
+<blockquote>
+<p>Atomic Operation可以更加广义一点，指一些列操作不受Context Switching导致的Race Conditions的影响，能够正确的执行的操作。</p>
+</blockquote>
+<h2 id="%E9%99%84%E5%BD%95%E4%BA%8C%EF%BC%9A%E5%8D%95%E7%BA%BF%E7%A8%8B%E5%92%8C%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%89%88%E6%9C%ACc-runtime-library" tabindex="-1">附录二：单线程和多线程版本C Runtime Library</h2>
+<p>在编译的时候使用/MD或/MDd选项，表示使用多线程版本的C runtime library。多线程版函数确保你的输出不会中断。</p>
+<p>区别</p>
+<ul>
+<li>如errno之类的变量，在多线程版本里每个线程各拥有一个</li>
+<li>多线程版本中的数据结构以同步机制加以保护</li>
+</ul>
+<p>VS2013中有如下Runtime Library</p>
+<ul>
+<li>Multi-threaded (/MT): multithread, static version</li>
+<li>Multi-threaded Debug (/MTd): multithread, static debug version</li>
+<li>Multi-threaded DLL (/MD): multithread- and DLL-specific version</li>
+<li>Multi-threaded Debug DLL (/MDd):multithread- and DLL-specific debug version</li>
+</ul>
+<p>/MD和/MDd将是潮流所趋，/ML和/MLd方式请及时放弃，其问题主要如下：</p>
+<ul>
+<li>最终生成的二进制代码因链入庞大的运行时库实现而变得非常臃肿。</li>
+<li>当某项目以静态链接库的形式嵌入到多个项目，则可能造成运行时库的内存管理有多份，最终将导致致命的“Invalid Address specified to RtlValidateHeap”问题。</li>
+</ul>
+<p>注意：MFC程序必须使用多线程版本的C Runtime Library，否则会在链接时获得”undefined function“的错误消息。</p>
+<h2 id="%E9%99%84%E5%BD%95%E4%B8%89%EF%BC%9A%E7%BA%BF%E7%A8%8B%E5%AF%B9%E8%B1%A1%E5%92%8C%E7%BA%BF%E7%A8%8B%E7%9A%84%E4%B8%8D%E5%90%8C" tabindex="-1">附录三：线程对象和线程的不同</h2>
+<p>线程的handle是指向线程核心对象，而不是指向线程本身。线程对象的默认计数为2，当你调用CloseHandle时，引用计数下降1，当线程结束时，引用计数再降1。只有当两件事情都发生时，这个对象才会被真正清除。</p>
+<h2 id="%E9%99%84%E5%BD%95%E5%9B%9B%EF%BC%9Agdi%E5%AF%B9%E8%B1%A1%E5%92%8C%E6%A0%B8%E5%BF%83%E5%AF%B9%E8%B1%A1" tabindex="-1">附录四：GDI对象和核心对象</h2>
+<p>包括：进程、线程、文件、事件、信号量、互斥器、管道</p>
+<p>不同：</p>
+<ul>
+<li>GDI对象有单一拥有者，核心对象有一个以上的拥有者。核心对象保持一个引用计数，以记录有多少handles对应到此对象。</li>
+</ul>
+<p>程序员不能选择由进程或线程拥有对象，一切都得视对象类型而定，区分一个对象拥有者是进程或线程是很重要的，因为会决定系统什么时候做清除善后工作。由于引用计数的设计，对象有可能在产生该对象之进程结束之后，还继续幸存。</p>
+<h2 id="%E9%99%84%E5%BD%95%E4%BA%94%EF%BC%9A%E8%A2%AB%E6%BF%80%E5%8F%91%E7%9A%84%E5%AF%B9%E8%B1%A1%EF%BC%88signaled-objects%EF%BC%89" tabindex="-1">附录五：被激发的对象（Signaled Objects）</h2>
+<p>可被WaitForSingleObject使用的核心对象有两种状态：激发与未激发，WaitForSingleObject会在目标物变成激活的时候返回。</p>
+<p>1、线程、进程</p>
+<p>当线程正在执行时，线程对象出于未激发状态，当线程结束时，线程对象就被激发了。</p>
+<p>进程类似。</p>
+<p>2、Event</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SetEvent()</span><br><span class="line">PulseEvent()</span><br><span class="line">ResetEvent()</span><br></pre></td></tr></table></figure>
+<p>3、Mutex</p>
+<p>如果Mutex没有被任何线程拥有，他就是出于激发状态。一旦一个等待mutex的函数返回了，mutex就自动重置为未激发状态。</p>
+<p>4、Semaphore</p>
+<p>Semaphore有一个计数器，当计数器内容大于0时，Semaphore出于激发状态，当计数器内容等于0时，Semaphore处于未激发状态。</p>
+<h2 id="%E9%99%84%E5%BD%95%E5%85%AD%EF%BC%9A%E5%A6%82%E4%BD%95%E9%80%89%E6%8B%A9_beginthreadex()-and-createthread()" tabindex="-1">附录六：如何选择_beginthreadex() and CreateThread()</h2>
+<p>其实你只要记住这句：</p>
+<blockquote>
+<p>如果你写一个多线程程序，而且没有使用MFC，那么你应该总是和多线程版本的C run-time Library链接，并且总是以beginthreadex()和endthreadex()取代CreateThread()和ExitThread()。</p>
+</blockquote>
+<p>_beginthreadex()函数的设计是为了保证多线程情况下的安全，其相对于CreateThread()函数多了层外包，其必须为每一个由它开启和结束的线程做一些簿记工作。</p>
+<p>但是为什么要增加一些簿记工作？Win32多线程编程貌似没有讲清楚。后面会深入学习。</p>
+<p>至于什么时候使用单线程版本的Runtime Library和CreateProcess()，不建议考虑这个问题，弄混乱了就不好了。只要记住上面的那句话就行了。</p>
+<p>使用_beginthreadex()函数需要注意以下：</p>
+<ul>
+<li>_beginthreadex()函数传回的线程handle，必须被强制转换类型为HANDLE后才能使用。</li>
+<li>同时必须对着_beginthreadex()的传回值调用CloseHandle()函数。</li>
+<li>绝对不要在一个“以beginthreadex()启动的线程&quot;中调用ExitThread()，必须使用endthreadex()，否则C Runtime Library就没有机会释放”为该线程而配置的资源“。</li>
+</ul>
+<p>避免_beginthread()是出于：beginthread()传回的HANLDE也许可用，也许不可用。被beginthread()产生出来的线程所做的第一件事就是关闭自己的handle。这样做是为了隐藏Win32的实现细节，但其传回来的handle可能在当时是不可用的。</p>
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/katex/dist/katex.min.css">
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/markdown-it-texmath/css/texmath.min.css">
+
+                    
+                </div>
+
+                
+                        
+<div class="post-copyright-info-container border-box">
+    <div class="copyright-info-content border-box">
+        <div class="copyright-info-top border-box">
+            <div class="copyright-post-title border-box text-ellipsis">
+                Win32 MultiThread Summary——《Win32多线程程序设计》
+            </div>
+
+            <div class="copyright-post-link border-box text-ellipsis">
+                reading/win32-multi-thread/
+            </div>
+        </div>
+
+        <div class="copyright-info-bottom border-box">
+            <div class="copyright-post-author bottom-item">
+                <div class="type">
+                    Author
+                </div>
+                <div class="content">ZeroJiu</div>
+            </div>
+
+            <div class="post-time bottom-item">
+                <div class="type">
+                    Published
+                </div>
+                <div class="content">2016-04-10 14:37</div>
+            </div>
+
+
+            <div class="post-license bottom-item">
+                <div class="type">
+                    License
+                </div>
+                <div class="content tooltip" data-tooltip-content="CC BY-NC-SA 4.0">
+                    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed" target="_blank">
+                        
+                            <i class="fa-brands fa-creative-commons"></i>
+                            <i class="fa-brands fa-creative-commons-by"></i>
+                            <i class="fa-brands fa-creative-commons-nc"></i>
+                            <i class="fa-brands fa-creative-commons-sa"></i>
+                        
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <i class="copyright-bg fa-solid fa-copyright"></i>
+    </div>
+    <div class="copy-copyright-info flex-center tooltip" data-tooltip-content="Copy copyright info" data-tooltip-offset-y="-2px">
+        <i class="fa-solid fa-copy"></i>
+    </div>
+</div>
+
+                
+
+                <div class="post-bottom-tags-and-share border-box">
+                    <div>
+                        
+                            <ul class="post-tags-box border-box">
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Win32/">Win32</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Thread/">Thread</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/BookList/">BookList</a>
+                                    </li>
+                                
+                            </ul>
+                        
+                    </div>
+                    <div>
+                        
+                            <div class="post-share-container border-box">
+    <ul class="share-list-wrap border-box">
+        <li class="qq share-item border-box flex-center tooltip"
+            data-tooltip-content="Share to QQ"
+        >
+            <i class="fa-brands fa-qq"></i>
+        </li>
+        <li class="wechat share-item border-box flex-center tooltip tooltip-img"
+            data-tooltip-content="Share to WeChat"
+            data-tooltip-img-tip="Scan by WeChat"
+            data-tooltip-img-style="background-color: #fff; top: -10px; padding: 0.6rem 0.6rem 0.1rem 0.6rem;"
+        >
+            <i class="fa-brands fa-weixin"></i>
+        </li>
+        <li class="weibo share-item border-box flex-center tooltip"
+            data-tooltip-content="Share to WeiBo"
+        >
+            <i class="fa-brands fa-weibo"></i>
+        </li>
+    </ul>
+</div>
+
+                        
+                    </div>
+                </div>
+
+                
+
+                
+                    <div class="post-nav border-box">
+                        
+                            <div class="prev-post">
+                                <a class="prev"
+                                   rel="prev"
+                                   href="/develop/cpp-the-semantics-of-constructors/"
+                                   title="C++构造函数语意学"
+                                >
+                                    <span class="left arrow-icon flex-center">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </span>
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">C++构造函数语意学</span>
+                                        <span class="post-nav-item">Prev posts</span>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                        
+                            <div class="next-post">
+                                <a class="next"
+                                   rel="next"
+                                   href="/timecapsule/goodbye-2015-hey-2016/"
+                                   title="总结与展望：成长的2015与努力的2016"
+                                >
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">总结与展望：成长的2015与努力的2016</span>
+                                        <span class="post-nav-item">Next posts</span>
+                                    </span>
+                                    <span class="right arrow-icon flex-center">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                    </div>
+                
+
+                
+                    
+
+
+
+
+
+
+                
+            </div>
+        </div>
+
+        
+    </div>
+</div>
+
+
+                
+            </div>
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="copyright-info info-item">
+        &copy;&nbsp;<span>2020</span>&nbsp;-&nbsp;2024
+        
+            &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">ZeroJiu</a>
+        
+    </div>
+
+    <div class="theme-info info-item">
+        Powered by&nbsp;<a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;&&nbsp;Theme&nbsp;<a class="keep-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep</a>
+    </div>
+
+    
+        
+        <div class="deploy-info info-item">
+            
+            This site is deployed on <span class="tooltip" data-tooltip-content="GitHub Pages"><img src="/images/brands/github.png"></span>
+            
+        </div>
+    
+
+    
+        <div class="count-info info-item">
+            
+
+            
+                <span class="count-item border-box uv">
+                    <span class="item-type border-box">Unique Visitor</span>
+                    <span class="item-value border-box uv" id="busuanzi_value_site_uv"></span>
+                </span>
+            
+
+            
+                <span class="count-item border-box pv">
+                    <span class="item-type border-box">Page View</span>
+                    <span class="item-value border-box pv" id="busuanzi_value_site_pv"></span>
+                </span>
+            
+        </div>
+    
+
+    
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="post-tools-list border-box">
+        <!-- PC encrypt again -->
+        
+
+        <!-- PC TOC show toggle -->
+        
+
+        <!-- PC go comment -->
+        
+
+        <!-- PC full screen -->
+        <li class="tools-item flex-center full-screen">
+            <i class="fa-solid fa-expand"></i>
+        </li>
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container border-box ">
+    <ul class="side-tools-list side-tools-show-handle border-box">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-toggle-theme-mode flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list border-box">
+        
+
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        <li class="tools-item tool-scroll-to-top flex-center show-arrow">
+            <i class="arrow fas fa-arrow-up"></i>
+            <span class="percent"></span>
+        </li>
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="Search..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+</main>
+
+
+
+<!-- common -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/utils.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/header-shrink.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/back2top.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/toggle-theme.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/code-block.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/main.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/libs/anime.min.js"></script>
+
+<!-- local-search -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/local-search.min.js"></script>
+
+
+<!-- lazyload -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/lazyload.min.js"></script>
+
+
+<div class="pjax">
+    <!-- home page -->
+    
+
+    <!-- post page -->
+    
+        <!-- post-helper -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/post/post-helper.min.js"></script>
+
+        <!-- toc -->
+        
+
+        <!-- copyright-info -->
+        
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/post/copyright-info.min.js"></script>
+        
+
+        <!-- share -->
+        
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/post/share.min.js"></script>
+        
+    
+
+    <!-- categories page -->
+    
+
+    <!-- links page -->
+    
+
+    <!-- photos page -->
+    
+
+    <!-- tools page -->
+    
+</div>
+
+<!-- mermaid -->
+
+    
+<script src="//cdn.jsdelivr.net/npm/mermaid@10.5.0/dist/mermaid.min.js"></script>
+
+    <script data-pjax>
+      if (window.mermaid) {
+        mermaid.init()
+      }
+    </script>
+
+
+
+
+
+
+<!-- pjax -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/libs/pjax.min.js"></script>
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        window.pjax = new Pjax({
+            selectors: [
+                'head title',
+                '.page-container',
+                '.pjax'
+            ],
+            history: true,
+            debug: false,
+            cacheBust: false,
+            timeout: 0,
+            analytics: false,
+            currentUrlFullReload: false,
+            scrollRestoration: false,
+        });
+
+        document.addEventListener('pjax:send', () => {
+            KEEP.utils.pjaxProgressBarStart()
+        });
+
+        document.addEventListener('pjax:complete', () => {
+            KEEP.utils.pjaxProgressBarEnd()
+            window.pjax.executeScripts(document.querySelectorAll('script[data-pjax], .pjax script'))
+            KEEP.initExecute()
+        });
+    });
+</script>
+
+
+
+
+</body>
+</html>

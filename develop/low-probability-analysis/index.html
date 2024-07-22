@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="ZeroJiu">
+    
+    <title>
+        
+            低概率问题分析解决 |
+        
+        小熊糖否
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+        <link rel="shortcut icon" href="/images/logo.ico">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/font/css/fontawesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/font/css/regular.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/font/css/solid.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/font/css/brands.min.css">
+    
+    <script class="keep-theme-configurations">
+    const KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"example.com","root":"/","language":"en","path":"search.xml"}
+    KEEP.theme_config = {"base_info":{"primary_color":"#c0392b","title":"小熊糖否","author":"ZeroJiu","avatar":"/images/author.jpg","logo":"/images/logo.ico","favicon":"/images/logo.ico"},"menu":{"home":"/","archives":"/archives","tags":"/tags","about":"/about"},"first_screen":{"enable":true,"background_img":"/images/bg.svg","background_img_dark":"/images/bg.svg","description":"True mastery of any skill takes a lifetime.","hitokoto":false},"social_contact":{"enable":true,"links":{"github":"https://github.com/zerojiu","weixin":null,"qq":null,"weibo":null,"zhihu":null,"twitter":null,"x":null,"facebook":null,"email":"xpringlee@gmail.com"}},"scroll":{"progress_bar":true,"percent":false,"hide_header":true},"home":{"announcement":null,"category":true,"tag":true,"post_datetime":"created"},"post":{"author_badge":{"enable":true,"level_badge":false,"custom_badge":["愚昧之巅","绝望之谷","开悟之坡","大师领域"]},"word_count":{"wordcount":true,"min2read":true},"datetime_format":"YYYY-MM-DD HH:mm:ss","copyright_info":true,"share":true,"img_align":"center","reward":{"enable":false,"img_link":null,"text":null}},"code_block":{"tools":{"enable":true,"style":"default"},"highlight_theme":"default"},"toc":{"enable":false,"number":false,"expand_all":true,"init_open":false,"layout":"right"},"website_count":{"busuanzi_count":{"enable":true,"site_uv":true,"site_pv":true,"page_pv":true}},"local_search":{"enable":true,"preload":true},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.36"},"waline":{"server_url":null,"reaction":false,"version":"3.2.1"},"giscus":{"repo":null,"repo_id":null,"category":"Announcements","category_id":null,"reactions_enabled":false},"artalk":{"server":null},"disqus":{"shortname":null}},"rss":{"enable":true},"lazyload":{"enable":true},"cdn":{"enable":true,"provider":"cdnjs"},"pjax":{"enable":true},"footer":{"since":2020,"word_count":false,"site_deploy":{"enable":true,"provider":"github","url":null},"record":{"enable":false,"list":[{"code":null,"link":null}]}},"inject":{"enable":false,"css":[null],"js":[null]},"root":"","source_data":{},"version":"4.1.5"}
+    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"}
+    KEEP.language_code_block = {"copy":"Copy code","copied":"Copied","fold":"Fold code block","folded":"Folded"}
+    KEEP.language_copy_copyright = {"copy":"Copy copyright info","copied":"Copied","title":"Original post title","author":"Original post author","link":"Original post link"}
+  </script>
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+        <span class="scroll-progress-bar"></span>
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <i class="pjax-progress-icon fas fa-circle-notch fa-spin"></i>
+    
+</div>
+
+
+
+<main class="page-container border-box">
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left border-box">
+            
+                <a class="logo-image border-box" href="/">
+                    <img src="/images/logo.ico">
+                </a>
+            
+            <a class="site-name border-box" href="/">
+               小熊糖否
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        
+                        <li class="menu-item">
+                            <a class=""
+                               href="/"
+                            >
+                                
+                                HOME
+                            </a>
+                        </li>
+                    
+                        
+                        <li class="menu-item">
+                            <a class=""
+                               href="/archives"
+                            >
+                                
+                                ARCHIVES
+                            </a>
+                        </li>
+                    
+                        
+                        <li class="menu-item">
+                            <a class=""
+                               href="/tags"
+                            >
+                                
+                                TAGS
+                            </a>
+                        </li>
+                    
+                        
+                        <li class="menu-item">
+                            <a class=""
+                               href="/about"
+                            >
+                                
+                                ABOUT
+                            </a>
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="fas search fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/"
+                    >HOME</a>
+                </li>
+            
+                
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/archives"
+                    >ARCHIVES</a>
+                </li>
+            
+                
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/tags"
+                    >TAGS</a>
+                </li>
+            
+                
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/about"
+                    >ABOUT</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+                
+
+                    
+<div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+        <div class="post-content-container border-box">
+            
+                <div class="post-content-top border-box"
+                     style="height: 13.8rem"
+                >
+                    <div class="cover-post-title">
+                        低概率问题分析解决
+                    </div>
+                    <img class="post-cover" src="/images/tags/experience.jpg"
+                         onerror="this.style.display='none'"
+                    >
+                </div>
+            
+
+            <div class="post-content-bottom border-box has-cover">
+                
+
+                
+                    <div class="post-header border-box">
+                        
+                            <div class="avatar-box border-box">
+                                <img src="/images/author.jpg">
+                            </div>
+                        
+                        <div class="info-box">
+                            <div class="author border-box">
+                                <span class="name">ZeroJiu</span>
+                                
+                                    <span class="author-badge">大师领域</span>
+                                
+                            </div>
+                            <div class="meta-info border-box">
+                                
+
+<div class="post-meta-info-container border-box post">
+    <div class="post-meta-info border-box">
+        
+
+        
+            <span class="meta-info-item post-create-date">
+                <i class="icon fa-solid fa-calendar-plus"></i>&nbsp;
+                <span class="datetime">2018-03-14 08:32:59</span>
+            </span>
+
+            <span class="meta-info-item post-update-date">
+                <i class="icon fa-solid fa-file-pen"></i>&nbsp;
+                <span class="datetime" data-updated="Fri Jul 19 2024 21:19:44 GMT+0800">2024-07-19 21:19:44</span>
+            </span>
+        
+
+        
+            <span class="meta-info-item post-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul class="post-category-ul">
+                    
+                            <li class="category-item"><a href="/categories/Develop/">Develop</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="post-tag meta-info-item border-box">
+                <ul class="post-tag-ul">
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Experience/">Experience</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+            <span class="meta-info-item post-wordcount">
+                <i class="icon fas fa-file-word"></i>&nbsp;<span>2.4k Words</span>
+            </span>
+        
+        
+            <span class="meta-info-item post-min2read">
+                <i class="icon fas fa-clock"></i>&nbsp;<span>8 Mins</span>
+            </span>
+        
+        
+            <span class="meta-info-item post-pv">
+                <i class="icon fas fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+            </span>
+        
+    </div>
+
+    
+</div>
+
+                            </div>
+                        </div>
+                    </div>
+                
+
+                <div class="post-content keep-markdown-body ">
+                    
+
+                    
+                         <p>在软件开发过程中，经常会遇到出现概率很低，但只要出现了就会对系统可用性影响很大的问题。这类问题总是在JIRA上被挂起，时不时的在测试中被报出来。不解决是永不歇停的。因此，在这里根据我遇到的各种低概率问题，整理出一套解决问题的方法，希望在解决其他低概率问题时能够有些借鉴。<span id="more"></span></p>
+<h2 id="%E6%98%8E%E7%A1%AE%E9%97%AE%E9%A2%98%E7%8E%B0%E8%B1%A1" tabindex="-1">明确问题现象</h2>
+<p>明确问题现象对于解决分析问题有很大的帮助。有时候，我们看到的现象只是表面的，或者只是具体现象的某一部分。以视频会议为例，当出现视频画面卡顿，如果我们只关注这一现象，很有可能认为是丢包了。但卡顿这个现象和更多的细节有关：</p>
+<ul>
+<li>卡顿周期：是一直卡顿还是周期性出现卡顿，卡顿周期是多少？</li>
+<li>是否丢包：丢包率是多少？是否持续丢包？</li>
+<li>卡顿发生时间：是白天还是晚上？是工作日还是周末？</li>
+</ul>
+<p>越多的信息能够更好地帮助我们分析问题，不要急于下定论。低概率问题也存在出现的时候，出现时首先要仔细观察，明确问题现象。由于低概率问题出现概率很低，这次观察的结果至关重要。</p>
+<p>这里需要谨记：我们要关注哪些现象与我们具体的业务有关。因此利用自己的经验，但不要局限于现存的经验，开阔的思维有利于问题的解决。</p>
+<h2 id="%E5%BC%95%E5%85%A5%E5%88%86%E6%9E%90%E5%B7%A5%E5%85%B7" tabindex="-1">引入分析工具</h2>
+<p>团队在项目一开始就要制订潜在的问题分析工具开发计划。分析工具能够帮我们定位深层次的现象，并将干扰现象排除在分析之外。一般情况下，团队需要哪些工具帮助分析是很好规划的。工具可能是产品软件的自带功能，也可以是第三方或者自研的小工具。在我们视频会议团队，存在如下分析工具：</p>
+<pre class="mermaid">graph LR
+
+	分析工具-->第三方
+	第三方-->Wireshark
+	第三方-->IPerf3.0
+	第三方-->SocketTools
+	第三方-->Elecard-StreamEye-Tools
+	第三方-->YUVPlayer
+	第三方-->MFTools
+	第三方-->Network-Emulator-Toolkit
+	分析工具-->自研
+	自研-->音频分析小工具
+	自研-->视频分析小工具
+	自研-->音视频数据Dump
+	自研-->日志分析工具
+	自研-->煲鸡功能
+	自研-->性能测试小工具</pre>
+<p>如果因为缺少分析工具，而导致存在的问题迟迟不得解决，或是解决迟缓。开发人员自己需要反思。针对于视频卡顿问题，在发现时我们利用了两个工具：视频分析小工具和Wireshark。通过WireShark我们定位到当前网络没有丢包。通过视频分析小工具我们定位到问题出现在接收端。现在我们能够确定的当前现象是：</p>
+<ul>
+<li>视频卡顿</li>
+<li>网络无丢包</li>
+<li>周期性卡顿</li>
+<li>夜晚发生</li>
+</ul>
+<h2 id="%E5%88%86%E6%9E%90%E9%97%AE%E9%A2%98%E7%8E%B0%E8%B1%A1" tabindex="-1">分析问题现象</h2>
+<p>不要急着去看代码。先分析可能导致这个现象的原因，并根据各种可能原因做好准备。力求一旦下次出现，一次性定位问题。上面的例子总体现象是卡顿，包含了三个细节内容，针对现象和细节部分做针对性分析：</p>
+<pre class="mermaid">graph LR
+
+	卡顿问题-->卡顿现象
+	卡顿现象-->采集/预处理/编码/发送
+	采集/预处理/编码/发送-->排除
+	卡顿现象-->网络波动
+	卡顿现象-->接收
+	卡顿现象-->解码
+	卡顿现象-->处理
+	卡顿现象-->渲染
+	卡顿问题-->周期性卡顿
+	周期性卡顿-->周期性网络波动
+	周期性卡顿-->代码周期性丢包
+	卡顿问题-->无丢包
+	无丢包-->排除网络丢包因素
+	无丢包-->网络抖动
+	卡顿问题-->夜晚发生
+	夜晚发生-->网络因素影响</pre>
+<p>现象分析可能会引入一系列可能原因，先将所有可能的原因罗列出来，然后逐项排查。无法排除的就是我们分析的关键。对问题正确的分析，能够帮助我们少走很多弯路，这个需要耐心。</p>
+<h2 id="%E8%B0%83%E7%94%A8%E9%93%BE%E5%88%86%E6%9E%90" tabindex="-1">调用链分析</h2>
+<p>对于问题现象一定存在着一条调用链，这个调用链中某一个链条出错，进而导致问题发生。通过调用链分析，我们能够更深层次的理解这个问题的可能原因，并且有可能在分析过程中就找打了问题的根源。</p>
+<p>对于调用链简单的问题，可以直接评审代码，尝试找到问题。但是对于调用链很复杂，涉及很多模块，直接评审代码就和大海捞针一样。此时需要做的是熟悉核心调用步骤。如果代码是自己开发的，只要时间不长大多都熟悉，但是如果是长时间未维护或者是第三方代码，熟悉核心调用步骤就极为重要。</p>
+<p>针对视频卡顿场景，需要熟悉的调用链步骤包含：RTP接收、RTP组帧、视频解码、视频处理、视频渲染。</p>
+<h2 id="%E6%BD%9C%E5%9C%A8%E5%8E%9F%E5%9B%A0%E5%9F%8B%E7%82%B9" tabindex="-1">潜在原因埋点</h2>
+<p>调用链分析无法找到原因时，就需要进行潜在原因埋点。埋点通常是通过日志和数据上报。埋点要注意粒度、频度和准确度问题。</p>
+<ul>
+<li>粒度：调用链核心步骤</li>
+<li>频度：不影响正常数据分析</li>
+<li>准确度：埋点信息要全面，埋点位置合理</li>
+</ul>
+<p>针对视频卡顿场景，最终埋点的地方为：RTP接收出口、RTP组帧出口、视频解码出口、视频处理出口、视频渲染出口。</p>
+<h2 id="%E7%85%B2%E9%B8%A1%E5%8E%8B%E5%8A%9B%E6%B5%8B%E8%AF%95" tabindex="-1">煲鸡压力测试</h2>
+<p>低概率问题其核心表现在于出现概率低。要突破概率限制，有两个办法：增加尝试次数和增加并发。两个方法的具体表现为：煲鸡测试和压力测试。对于压力测试，使用压力测试工具，增加大并发；对于煲鸡测试，利用煲鸡小工具，增加尝试次数。</p>
+<p>压力测试和煲鸡测试都要考虑环境问题。这个环境是根据问题现象的推导出来的。针对视频卡顿问题，有一个现象是<strong>夜晚发生</strong>，意味着可能网络并不差。因此我们在煲鸡测试时，特定针对这一现象，在周末过来煲鸡复现。</p>
+<p>煲鸡是个拼耐心的过程，有些问题是可以通过其他手段监控提醒，有些问题是需要时刻盯着，否则转瞬即逝，还有一些问题是需要我们反复操作，记住操作步骤。</p>
+<h2 id="%E5%AE%9A%E4%BD%8D%E8%A7%A3%E5%86%B3%E9%97%AE%E9%A2%98" tabindex="-1">定位解决问题</h2>
+<p>等煲鸡测试复现该问题。可能很多次才会复现一次。上面的所有手段也无法保证我们一次解决问题。但也为我们向解决问题迈了一大步。如果经过一次复现，通过埋点数据，一次性解决问题皆大欢喜。如果不能解决，埋点数据能够为我们进一步分析问题。如果上次埋点的数据对你一点用都没有，这个时候就要好好反思。大多数情况下，埋点的数据会给我提供更多的思路。这个时候，可以通过评审代码，或者增加核心埋点数据，争取下次一次性解决问题。</p>
+<div id="flowchart-0" class="flow-chart"></div>
+<h2 id="%E5%8F%8D%E6%80%9D%E6%80%BB%E7%BB%93" tabindex="-1">反思总结</h2>
+<p>问题解决了，这个时候就要用手术刀来剖析自己了。剖析分为三点：</p>
+<ul>
+<li>解决问题是否优雅</li>
+<li>问题根源分析</li>
+<li>潜在问题排查</li>
+<li>后续问题避免</li>
+</ul>
+<h2 id="%E4%BD%8E%E6%A6%82%E7%8E%87%E9%97%AE%E9%A2%98%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B" tabindex="-1">低概率问题处理流程</h2>
+<p>有些低概率问题就出现了一次，后续再也没出现，需要执行一定的流程。这个流程需要和测试人员共同制定。一个简单的流程如下：</p>
+<div id="flowchart-1" class="flow-chart"></div>
+<h2 id="%E8%99%9A%E5%BF%83%E6%8E%A5%E5%8F%97%E6%89%B9%E8%AF%84%E5%92%8C%E6%8C%87%E5%AF%BC" tabindex="-1">虚心接受批评和指导</h2>
+<p>解决问题的过程一定不是一帆风顺的，不要妄下定论，保持耐心，开阔思路。对于外界的批评和指导都要需求接收。很多时候自以为是会让我们忽略一些问题，拒绝指导又会让我们难以解决一些问题。成长的机会白白浪费，问题还得不到解决。<script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/flowchart/1.6.5/flowchart.min.js"></script><textarea id="flowchart-0-code" style="display: none">st=>start: 开始
+op1=>operation: 发掘现象
+op2=>operation: 求助工具
+op3=>operation: 深挖分析
+op4=>operation: 调用链分析
+op5=>operation: 原因埋点
+op6=>operation: 煲鸡压测
+cond=>condition: 定位解决
+e=>end: 结束
+
+st->op1->op2->op3->op4->op5->cond
+cond(yes)->e
+cond(no)->op3</textarea><textarea id="flowchart-0-options" style="display: none">{"scale":1,"line-width":2,"line-length":50,"text-margin":10,"font-size":12}</textarea><script>  var code = document.getElementById("flowchart-0-code").value;  var options = JSON.parse(decodeURIComponent(document.getElementById("flowchart-0-options").value));  var diagram = flowchart.parse(code);  diagram.drawSVG("flowchart-0", options);</script><textarea id="flowchart-1-code" style="display: none">st=>start: 开始
+op1=>operation: 指定开发人员
+op2=>operation: 尝试分析解决
+cond1=>condition: 是否定位问题
+op3=>operation: 解决问题
+op4=>operation: 当前版本煲鸡一定次数
+cond2=>condition: 是否复现
+op5=>operation: 降低优先级
+op6=>operation: 下个版本煲鸡一定次数
+cond3=>condition: 是否复现
+op7=>operation: 问题挂起
+op8=>operation: 最终评审
+e=>end: 结束
+
+st->op1->op2->cond1
+cond1(yes,right)->op3
+cond1(no)->op4->cond2
+cond2(yes,right)->op2
+cond2(no)->op5->op6->cond3
+cond3(yes,right)->op3->e
+cond3(no)->op7->op8->e</textarea><textarea id="flowchart-1-options" style="display: none">{"scale":1,"line-width":2,"line-length":50,"text-margin":10,"font-size":12}</textarea><script>  var code = document.getElementById("flowchart-1-code").value;  var options = JSON.parse(decodeURIComponent(document.getElementById("flowchart-1-options").value));  var diagram = flowchart.parse(code);  diagram.drawSVG("flowchart-1", options);</script></p>
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/katex/dist/katex.min.css">
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/markdown-it-texmath/css/texmath.min.css">
+
+                    
+                </div>
+
+                
+                        
+<div class="post-copyright-info-container border-box">
+    <div class="copyright-info-content border-box">
+        <div class="copyright-info-top border-box">
+            <div class="copyright-post-title border-box text-ellipsis">
+                低概率问题分析解决
+            </div>
+
+            <div class="copyright-post-link border-box text-ellipsis">
+                develop/low-probability-analysis/
+            </div>
+        </div>
+
+        <div class="copyright-info-bottom border-box">
+            <div class="copyright-post-author bottom-item">
+                <div class="type">
+                    Author
+                </div>
+                <div class="content">ZeroJiu</div>
+            </div>
+
+            <div class="post-time bottom-item">
+                <div class="type">
+                    Published
+                </div>
+                <div class="content">2018-03-14 08:32</div>
+            </div>
+
+
+            <div class="post-license bottom-item">
+                <div class="type">
+                    License
+                </div>
+                <div class="content tooltip" data-tooltip-content="CC BY-NC-SA 4.0">
+                    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed" target="_blank">
+                        
+                            <i class="fa-brands fa-creative-commons"></i>
+                            <i class="fa-brands fa-creative-commons-by"></i>
+                            <i class="fa-brands fa-creative-commons-nc"></i>
+                            <i class="fa-brands fa-creative-commons-sa"></i>
+                        
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <i class="copyright-bg fa-solid fa-copyright"></i>
+    </div>
+    <div class="copy-copyright-info flex-center tooltip" data-tooltip-content="Copy copyright info" data-tooltip-offset-y="-2px">
+        <i class="fa-solid fa-copy"></i>
+    </div>
+</div>
+
+                
+
+                <div class="post-bottom-tags-and-share border-box">
+                    <div>
+                        
+                            <ul class="post-tags-box border-box">
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Experience/">Experience</a>
+                                    </li>
+                                
+                            </ul>
+                        
+                    </div>
+                    <div>
+                        
+                            <div class="post-share-container border-box">
+    <ul class="share-list-wrap border-box">
+        <li class="qq share-item border-box flex-center tooltip"
+            data-tooltip-content="Share to QQ"
+        >
+            <i class="fa-brands fa-qq"></i>
+        </li>
+        <li class="wechat share-item border-box flex-center tooltip tooltip-img"
+            data-tooltip-content="Share to WeChat"
+            data-tooltip-img-tip="Scan by WeChat"
+            data-tooltip-img-style="background-color: #fff; top: -10px; padding: 0.6rem 0.6rem 0.1rem 0.6rem;"
+        >
+            <i class="fa-brands fa-weixin"></i>
+        </li>
+        <li class="weibo share-item border-box flex-center tooltip"
+            data-tooltip-content="Share to WeiBo"
+        >
+            <i class="fa-brands fa-weibo"></i>
+        </li>
+    </ul>
+</div>
+
+                        
+                    </div>
+                </div>
+
+                
+
+                
+                    <div class="post-nav border-box">
+                        
+                            <div class="prev-post">
+                                <a class="prev"
+                                   rel="prev"
+                                   href="/develop/webrtc-tcc-vs-gcc/"
+                                   title="WebRTC-GCC两种实现方案对比"
+                                >
+                                    <span class="left arrow-icon flex-center">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </span>
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">WebRTC-GCC两种实现方案对比</span>
+                                        <span class="post-nav-item">Prev posts</span>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                        
+                            <div class="next-post">
+                                <a class="next"
+                                   rel="next"
+                                   href="/timecapsule/2017-improve/"
+                                   title="三月：迟来的总结和反思"
+                                >
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">三月：迟来的总结和反思</span>
+                                        <span class="post-nav-item">Next posts</span>
+                                    </span>
+                                    <span class="right arrow-icon flex-center">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                    </div>
+                
+
+                
+                    
+
+
+
+
+
+
+                
+            </div>
+        </div>
+
+        
+    </div>
+</div>
+
+
+                
+            </div>
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="copyright-info info-item">
+        &copy;&nbsp;<span>2020</span>&nbsp;-&nbsp;2024
+        
+            &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">ZeroJiu</a>
+        
+    </div>
+
+    <div class="theme-info info-item">
+        Powered by&nbsp;<a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;&&nbsp;Theme&nbsp;<a class="keep-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep</a>
+    </div>
+
+    
+        
+        <div class="deploy-info info-item">
+            
+            This site is deployed on <span class="tooltip" data-tooltip-content="GitHub Pages"><img src="/images/brands/github.png"></span>
+            
+        </div>
+    
+
+    
+        <div class="count-info info-item">
+            
+
+            
+                <span class="count-item border-box uv">
+                    <span class="item-type border-box">Unique Visitor</span>
+                    <span class="item-value border-box uv" id="busuanzi_value_site_uv"></span>
+                </span>
+            
+
+            
+                <span class="count-item border-box pv">
+                    <span class="item-type border-box">Page View</span>
+                    <span class="item-value border-box pv" id="busuanzi_value_site_pv"></span>
+                </span>
+            
+        </div>
+    
+
+    
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="post-tools-list border-box">
+        <!-- PC encrypt again -->
+        
+
+        <!-- PC TOC show toggle -->
+        
+
+        <!-- PC go comment -->
+        
+
+        <!-- PC full screen -->
+        <li class="tools-item flex-center full-screen">
+            <i class="fa-solid fa-expand"></i>
+        </li>
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container border-box ">
+    <ul class="side-tools-list side-tools-show-handle border-box">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-toggle-theme-mode flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list border-box">
+        
+
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        <li class="tools-item tool-scroll-to-top flex-center show-arrow">
+            <i class="arrow fas fa-arrow-up"></i>
+            <span class="percent"></span>
+        </li>
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="Search..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+</main>
+
+
+
+<!-- common -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/utils.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/header-shrink.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/back2top.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/toggle-theme.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/code-block.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/main.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/libs/anime.min.js"></script>
+
+<!-- local-search -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/local-search.min.js"></script>
+
+
+<!-- lazyload -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/lazyload.min.js"></script>
+
+
+<div class="pjax">
+    <!-- home page -->
+    
+
+    <!-- post page -->
+    
+        <!-- post-helper -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/post/post-helper.min.js"></script>
+
+        <!-- toc -->
+        
+
+        <!-- copyright-info -->
+        
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/post/copyright-info.min.js"></script>
+        
+
+        <!-- share -->
+        
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/post/share.min.js"></script>
+        
+    
+
+    <!-- categories page -->
+    
+
+    <!-- links page -->
+    
+
+    <!-- photos page -->
+    
+
+    <!-- tools page -->
+    
+</div>
+
+<!-- mermaid -->
+
+    
+<script src="//cdn.jsdelivr.net/npm/mermaid@10.5.0/dist/mermaid.min.js"></script>
+
+    <script data-pjax>
+      if (window.mermaid) {
+        mermaid.init()
+      }
+    </script>
+
+
+
+
+
+
+<!-- pjax -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/libs/pjax.min.js"></script>
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        window.pjax = new Pjax({
+            selectors: [
+                'head title',
+                '.page-container',
+                '.pjax'
+            ],
+            history: true,
+            debug: false,
+            cacheBust: false,
+            timeout: 0,
+            analytics: false,
+            currentUrlFullReload: false,
+            scrollRestoration: false,
+        });
+
+        document.addEventListener('pjax:send', () => {
+            KEEP.utils.pjaxProgressBarStart()
+        });
+
+        document.addEventListener('pjax:complete', () => {
+            KEEP.utils.pjaxProgressBarEnd()
+            window.pjax.executeScripts(document.querySelectorAll('script[data-pjax], .pjax script'))
+            KEEP.initExecute()
+        });
+    });
+</script>
+
+
+
+
+</body>
+</html>

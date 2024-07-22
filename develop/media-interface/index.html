@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="ZeroJiu">
+    
+    <title>
+        
+            视频会议中的音视频接口 |
+        
+        小熊糖否
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+        <link rel="shortcut icon" href="/images/logo.ico">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/font/css/fontawesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/font/css/regular.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/font/css/solid.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/font/css/brands.min.css">
+    
+    <script class="keep-theme-configurations">
+    const KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"example.com","root":"/","language":"en","path":"search.xml"}
+    KEEP.theme_config = {"base_info":{"primary_color":"#c0392b","title":"小熊糖否","author":"ZeroJiu","avatar":"/images/author.jpg","logo":"/images/logo.ico","favicon":"/images/logo.ico"},"menu":{"home":"/","archives":"/archives","tags":"/tags","about":"/about"},"first_screen":{"enable":true,"background_img":"/images/bg.svg","background_img_dark":"/images/bg.svg","description":"True mastery of any skill takes a lifetime.","hitokoto":false},"social_contact":{"enable":true,"links":{"github":"https://github.com/zerojiu","weixin":null,"qq":null,"weibo":null,"zhihu":null,"twitter":null,"x":null,"facebook":null,"email":"xpringlee@gmail.com"}},"scroll":{"progress_bar":true,"percent":false,"hide_header":true},"home":{"announcement":null,"category":true,"tag":true,"post_datetime":"created"},"post":{"author_badge":{"enable":true,"level_badge":false,"custom_badge":["愚昧之巅","绝望之谷","开悟之坡","大师领域"]},"word_count":{"wordcount":true,"min2read":true},"datetime_format":"YYYY-MM-DD HH:mm:ss","copyright_info":true,"share":true,"img_align":"center","reward":{"enable":false,"img_link":null,"text":null}},"code_block":{"tools":{"enable":true,"style":"default"},"highlight_theme":"default"},"toc":{"enable":false,"number":false,"expand_all":true,"init_open":false,"layout":"right"},"website_count":{"busuanzi_count":{"enable":true,"site_uv":true,"site_pv":true,"page_pv":true}},"local_search":{"enable":true,"preload":true},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.36"},"waline":{"server_url":null,"reaction":false,"version":"3.2.1"},"giscus":{"repo":null,"repo_id":null,"category":"Announcements","category_id":null,"reactions_enabled":false},"artalk":{"server":null},"disqus":{"shortname":null}},"rss":{"enable":true},"lazyload":{"enable":true},"cdn":{"enable":true,"provider":"cdnjs"},"pjax":{"enable":true},"footer":{"since":2020,"word_count":false,"site_deploy":{"enable":true,"provider":"github","url":null},"record":{"enable":false,"list":[{"code":null,"link":null}]}},"inject":{"enable":false,"css":[null],"js":[null]},"root":"","source_data":{},"version":"4.1.5"}
+    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"}
+    KEEP.language_code_block = {"copy":"Copy code","copied":"Copied","fold":"Fold code block","folded":"Folded"}
+    KEEP.language_copy_copyright = {"copy":"Copy copyright info","copied":"Copied","title":"Original post title","author":"Original post author","link":"Original post link"}
+  </script>
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+        <span class="scroll-progress-bar"></span>
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <i class="pjax-progress-icon fas fa-circle-notch fa-spin"></i>
+    
+</div>
+
+
+
+<main class="page-container border-box">
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left border-box">
+            
+                <a class="logo-image border-box" href="/">
+                    <img src="/images/logo.ico">
+                </a>
+            
+            <a class="site-name border-box" href="/">
+               小熊糖否
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        
+                        <li class="menu-item">
+                            <a class=""
+                               href="/"
+                            >
+                                
+                                HOME
+                            </a>
+                        </li>
+                    
+                        
+                        <li class="menu-item">
+                            <a class=""
+                               href="/archives"
+                            >
+                                
+                                ARCHIVES
+                            </a>
+                        </li>
+                    
+                        
+                        <li class="menu-item">
+                            <a class=""
+                               href="/tags"
+                            >
+                                
+                                TAGS
+                            </a>
+                        </li>
+                    
+                        
+                        <li class="menu-item">
+                            <a class=""
+                               href="/about"
+                            >
+                                
+                                ABOUT
+                            </a>
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="fas search fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/"
+                    >HOME</a>
+                </li>
+            
+                
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/archives"
+                    >ARCHIVES</a>
+                </li>
+            
+                
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/tags"
+                    >TAGS</a>
+                </li>
+            
+                
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/about"
+                    >ABOUT</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+                
+
+                    
+<div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+        <div class="post-content-container border-box">
+            
+                <div class="post-content-top border-box"
+                     style="height: 13.8rem"
+                >
+                    <div class="cover-post-title">
+                        视频会议中的音视频接口
+                    </div>
+                    <img class="post-cover" src="/images/tags/hardware.png"
+                         onerror="this.style.display='none'"
+                    >
+                </div>
+            
+
+            <div class="post-content-bottom border-box has-cover">
+                
+
+                
+                    <div class="post-header border-box">
+                        
+                            <div class="avatar-box border-box">
+                                <img src="/images/author.jpg">
+                            </div>
+                        
+                        <div class="info-box">
+                            <div class="author border-box">
+                                <span class="name">ZeroJiu</span>
+                                
+                                    <span class="author-badge">大师领域</span>
+                                
+                            </div>
+                            <div class="meta-info border-box">
+                                
+
+<div class="post-meta-info-container border-box post">
+    <div class="post-meta-info border-box">
+        
+
+        
+            <span class="meta-info-item post-create-date">
+                <i class="icon fa-solid fa-calendar-plus"></i>&nbsp;
+                <span class="datetime">2022-03-20 23:13:00</span>
+            </span>
+
+            <span class="meta-info-item post-update-date">
+                <i class="icon fa-solid fa-file-pen"></i>&nbsp;
+                <span class="datetime" data-updated="Fri Jul 19 2024 21:19:46 GMT+0800">2024-07-19 21:19:46</span>
+            </span>
+        
+
+        
+            <span class="meta-info-item post-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul class="post-category-ul">
+                    
+                            <li class="category-item"><a href="/categories/Develop/">Develop</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="post-tag meta-info-item border-box">
+                <ul class="post-tag-ul">
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Media/">Media</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Hardware/">Hardware</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+            <span class="meta-info-item post-wordcount">
+                <i class="icon fas fa-file-word"></i>&nbsp;<span>2.3k Words</span>
+            </span>
+        
+        
+            <span class="meta-info-item post-min2read">
+                <i class="icon fas fa-clock"></i>&nbsp;<span>8 Mins</span>
+            </span>
+        
+        
+            <span class="meta-info-item post-pv">
+                <i class="icon fas fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+            </span>
+        
+    </div>
+
+    
+</div>
+
+                            </div>
+                        </div>
+                    </div>
+                
+
+                <div class="post-content keep-markdown-body ">
+                    
+
+                    
+                         <p>接口是两实体交换资料的介质，交换资料的实体可以是软件、电脑硬件、外部设备、人等等。有些接口是双向的，可以收发信息，譬如触摸屏；有些接口是单向的，仅能收或者发信息，譬如鼠标或喇叭。人类与计算机软体之间的接口是用户界面；电脑和外部设备等计算机硬件之间的接口是硬件接口；电脑等计算机软件之间的接口是软件接口。<span id="more"></span></p>
+<p>在视频会议设备中，存在丰富的硬件外设和硬件接口。设计一款优秀的视频会议设备，需要搭配合适的硬件外设，需要对音视频硬件接口能力有深入的认知。</p>
+<h2 id="%E9%9F%B3%E9%A2%91%E6%8E%A5%E5%8F%A3" tabindex="-1">音频接口</h2>
+<p>音频接口是连接麦克风和其他声源计算机的设备，其在模拟和数字信号之间起到桥梁连接的作用。</p>
+<h3 id="%E9%9F%B3%E9%A2%91%E6%8E%A5%E5%8F%A3%E5%88%86%E7%B1%BB" tabindex="-1">音频接口分类</h3>
+<p>音频接口按照传输信号的类型可分为模拟音频接口和数字音频接口，按照接线方式可分为平衡接口与非平衡接口。</p>
+<p>模拟音频是在模拟状态下记录、处理、传输和处理音频信号的技术。常见的模拟音频接口为TRS接口、XLR卡侬头、RCA莲花头。</p>
+<p>数字音频是通过数字信号处理的手段，记录、存储、编辑、压缩或播放音频信号的技术。常见的数字音频接口为AES/EBU物理接口、S/PDIF接口、同轴接口以及光纤接口。</p>
+<p>平衡传输接口使用两个通道分别传送电压大小相同而相位相反的信号。接收端设备将这两组信号相减，干扰信号就被抵消掉，从而获得高质量的模拟信号。常见的平衡传输音频接口为TRS接口、XLR卡侬头。</p>
+<p><img  
+                       lazyload
+                       alt="image"
+                       data-src="../../assets/balanced-transmission-interface.png"
+                        alt="balanced-transmission-interface"
+                 ></p>
+<p>非平衡传输接口由一条负责传送信号的信号线和一条接地线组合而成。信号在传输过程中，线材会受到外界干扰通过话放或功放的二次放大，由于抗噪声能力比较弱，所以容易输出一段带有噪音的声音。常见的非平衡传输音频接口为TS接口、RCA莲花头。</p>
+<p><img  
+                       lazyload
+                       alt="image"
+                       data-src="../../assets/non-balanced-transmission-interface.png"
+                        alt="non-balanced-transmission-interface"
+                 ></p>
+<p>Line Out是一个音频输出接口，旨在将线性音频信号发送给其他设备，Line In是一个音频输入接口，用于接受来自另一个设备的线性音频信号。Mic In是一个音频输入接口，用来连接麦克风录音使用。</p>
+<p>Line In和Mic In的区别在于，Mic In需要有前置放大器，也就是麦克风本身输出功率小，必须要有一个外部的放大设备来放大音频信号，Mic In接口就是起到这个作用。譬如卡农口就是Mic In，需要48V幻想电源。</p>
+<h3 id="%E5%B8%B8%E7%94%A8%E9%9F%B3%E9%A2%91%E6%8E%A5%E5%8F%A3" tabindex="-1">常用音频接口</h3>
+<h4 id="trs%E6%8E%A5%E5%8F%A3" tabindex="-1">TRS接口</h4>
+<p>TRS，Tip（尖）、Ring（环）、Sleeve（套），一般用于接插耳机和麦克风。以下图为例：</p>
+<ul>
+<li>① - Sleeve，套，接地；</li>
+<li>② - Ring，环，立体声的右沟道；</li>
+<li>③ - Tip，尖，上为立体声的左沟道，下为单声道的主声道</li>
+<li>④ - 绝缘环</li>
+</ul>
+<img    
+                       lazyload
+                       alt="image"
+                       data-src="../../assets/trs.png"
+                         style="zoom:60%;" 
+                 >
+<p>依据接口的环（R）数不同可以将接口分为TS（无环，尖和套各提供一个接触点）、TRS（一环，尖、环、套共提供三个接触点）、TRRS（两环，环多提供一个接触点）。常见接口尺寸包含1/4&quot;（6.3mm）、1/8&quot;（3.5mm）、3/32&quot;（2.5mm）。以下图为例，从左到右分别为：</p>
+<ul>
+<li>2.5mm 单声道（TS）：用于早期掌上随身听或移动电话的耳机连接，现多用于为小型设备输入/输出电源。</li>
+<li>3.5mm 单声道（TS）：小二芯，常用于耳机、小提琴、电吉他等。</li>
+<li>3.5mm 立体声（TRS）：小三芯，常用于随身听、移动电话、录音笔等3C产品的耳机和音频输出。</li>
+<li>6.35mm 立体声（TRS）：大三芯，常用于中大型音频设备，譬如台式CD播放器、专业录音室耳机等。</li>
+</ul>
+<img    
+                       lazyload
+                       alt="image"
+                       data-src="../../assets/trs-class.jpg"
+                         alt="trs-class" style="zoom: 60%;" 
+                 >
+<p>大三芯用于立体声信号的传输，一般采用平衡式接法，用于传输平衡信号；大二芯用于单声道信号的传输，一般采用非平衡式接法，用于传输非平衡信号。大二芯相对于大三芯少一个环（Ring）。</p>
+<ul>
+<li>大三芯接法</li>
+</ul>
+<p><img  
+                       lazyload
+                       alt="image"
+                       data-src="../../assets/trs-transmission-3.png"
+                        alt="trs-transmission-3"
+                 ></p>
+<ul>
+<li>大二芯接法</li>
+</ul>
+<p><img  
+                       lazyload
+                       alt="image"
+                       data-src="../../assets/trs-transmission-2.png"
+                        alt="trs-transmission-2"
+                 ></p>
+<h4 id="xlr%E5%8D%A1%E4%BE%AC%E5%A4%B4" tabindex="-1">XLR卡侬头</h4>
+<p>卡侬头是一种专为电容麦等高端话筒服务的音频接口头，常用于连接专业麦克风、影音器材、舞台设备等，并使用平衡传输方式，需要幻象供电（48V）。卡侬头分为公母两种，通常为3脚，如下图所示：</p>
+<ul>
+<li>1 - 底架接地（线缆保护罩）</li>
+<li>2 - 正极终端（热）</li>
+<li>3 - 回路终端（冷）</li>
+</ul>
+<img    
+                       lazyload
+                       alt="image"
+                       data-src="../../assets/xlr.svg"
+                         alt="xlr" style="zoom:67%;" 
+                 >
+<p>卡侬头一般采用平衡式接法，用于传输平衡信号。</p>
+<p><img  
+                       lazyload
+                       alt="image"
+                       data-src="../../assets/xlr-transmission.png"
+                        alt="xlr-transmission"
+                 ></p>
+<h4 id="rca%E8%8E%B2%E8%8A%B1%E5%A4%B4" tabindex="-1">RCA莲花头</h4>
+<p>RCA接口采用同轴传输信号的方式，中轴用来传输信号，外沿一圈的基础层用来接地。可以用来传输模拟视频或音频、数字音频等。常用于连接调音台、电视机等。</p>
+<p>每一根RCA线缆负责传输一个声道的音频信号。因此，可以根据对声道的实际需要，使用与之数量相匹配的RCA线缆。RCA接口常以颜色区分，黄色用于复合视频，模拟立体声音频中以白色（或黑色）作左声道，红色作右声道。</p>
+<img    
+                       lazyload
+                       alt="image"
+                       data-src="../../assets/rca.jpg"
+                         alt="rca" style="zoom:67%;" 
+                 >
+<p>莲花头一般采用非平衡式接法，用于传输非平衡信号。</p>
+<p><img  
+                       lazyload
+                       alt="image"
+                       data-src="../../assets/rca-transmission.png"
+                        alt="rca-transmission"
+                 ></p>
+<h4 id="%E6%8E%A5%E5%8F%A3%E5%AF%B9%E6%AF%94%E8%A1%A8" tabindex="-1">接口对比表</h4>
+<p><img  
+                       lazyload
+                       alt="image"
+                       data-src="../../assets/audio-interface.png"
+                        alt="audio-interface"
+                 ></p>
+<h2 id="%E8%A7%86%E9%A2%91%E6%8E%A5%E5%8F%A3" tabindex="-1">视频接口</h2>
+<p>视频接口的主要作用是将视频信号输出到外部设备，或者将外部采集的视频信号收集起来。</p>
+<h3 id="%E8%A7%86%E9%A2%91%E6%8E%A5%E5%8F%A3%E5%88%86%E7%B1%BB" tabindex="-1">视频接口分类</h3>
+<p>视频接口按照传输信号的类型可以分为模拟视频接口和数字视频接口。常用的模拟视频接口包含：VGA、AV、YUV、S-Video等，常用的数字视频接口包含：USB、SDI、HDMI、DVI-D、Mini-DP、POE等。</p>
+<h3 id="%E5%B8%B8%E7%94%A8%E8%A7%86%E9%A2%91%E6%8E%A5%E5%8F%A3" tabindex="-1">常用视频接口</h3>
+<h4 id="vga" tabindex="-1">VGA</h4>
+<p>VGA接口，Video Graphics Array connector，是一种3排共15针的DE-15，用来传输模拟视频信号。VGA接口通常用在电脑的显卡、显示器及其他设备。</p>
+<p><img  
+                       lazyload
+                       alt="image"
+                       data-src="../../assets/vga-pinout.svg"
+                        alt="vga-pinout"
+                 ></p>
+<h4 id="dvi" tabindex="-1">DVI</h4>
+<p>DVI接口，Digital Visual Interface，是用来传输未经压缩的数字化影像。常用在LCD、数字投影机等显示设备上。</p>
+<ul>
+<li>DVI-D，数字信号</li>
+<li>DVI-A，模拟信号</li>
+<li>DVI-I，混合数字/模拟信号</li>
+</ul>
+<p><img  
+                       lazyload
+                       alt="image"
+                       data-src="../../assets/dvi.webp"
+                        alt="dvi"
+                 ></p>
+<h2 id="%E5%BD%B1%E9%9F%B3%E6%8E%A5%E5%8F%A3" tabindex="-1">影音接口</h2>
+<p>部分音视频接口即支持音频传输也支持视频传输，譬如USB、HDMI、DP等。</p>
+<h3 id="%E5%B8%B8%E7%94%A8%E5%BD%B1%E9%9F%B3%E6%8E%A5%E5%8F%A3" tabindex="-1">常用影音接口</h3>
+<h4 id="usb" tabindex="-1">USB</h4>
+<p>USB，Universal Serial Bus，通用串行总线，是连接计算机系统与外部设备的一种串口总线标准。<strong>所有的USB接口共享一个USB总线带宽</strong>，如果几台设备共用一个USB通道，主控制芯片会对每台设备可支配的带宽进行分配、控制。</p>
+<p><img  
+                       lazyload
+                       alt="image"
+                       data-src="../../assets/usb.jpg"
+                        alt="usb"
+                 ></p>
+<p>现有USB标准，按照速度等级和连接方式，可以将USB分为以下七种版本：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">版本</th>
+<th style="text-align:center">传输速率bps</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">USB 2.0 LowSpeed</td>
+<td style="text-align:center">1.5 mbps</td>
+</tr>
+<tr>
+<td style="text-align:center">USB 2.0 FullSpeed</td>
+<td style="text-align:center">12 mbps</td>
+</tr>
+<tr>
+<td style="text-align:center">USB 2.0 HiSpeed</td>
+<td style="text-align:center">480 mbps</td>
+</tr>
+<tr>
+<td style="text-align:center">USB 3.2 Gen 1</td>
+<td style="text-align:center">5 gbps</td>
+</tr>
+<tr>
+<td style="text-align:center">USB 3.2 Gen 2</td>
+<td style="text-align:center">10 gbps</td>
+</tr>
+<tr>
+<td style="text-align:center">USB 3.2 Gen 2x2</td>
+<td style="text-align:center">20 gbps</td>
+</tr>
+</tbody>
+</table>
+<h4 id="hdmi" tabindex="-1">HDMI</h4>
+<p>HDMI，High Definition Multimedia Interface，高清多媒体界面，可以发送未压缩的音频及视频信号。常用于机顶盒、DVD播放器、个人电脑、电视游戏机等设备。</p>
+<p><img  
+                       lazyload
+                       alt="image"
+                       data-src="../../assets/hdmi.svg"
+                        alt="hdmi"
+                 ></p>
+<h4 id="sdi" tabindex="-1">SDI</h4>
+<p>SDI，Serial Digital Interface，数字分量串行接口，在摄像机领域广泛使用。</p>
+<img    
+                       lazyload
+                       alt="image"
+                       data-src="../../assets/sdi.jpg"
+                         alt="sdi" style="zoom:67%;" 
+                 >
+<p>SDI接口按照传输速率分为四类：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">版本</th>
+<th style="text-align:center">传输速率bps</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">SD-SDI</td>
+<td style="text-align:center">270 mbps</td>
+</tr>
+<tr>
+<td style="text-align:center">HD-SDI</td>
+<td style="text-align:center">1.485 mbps</td>
+</tr>
+<tr>
+<td style="text-align:center">3G-SDI</td>
+<td style="text-align:center">2.97 gbps</td>
+</tr>
+<tr>
+<td style="text-align:center">12G-SDI</td>
+<td style="text-align:center">12 gbps</td>
+</tr>
+</tbody>
+</table>
+<h4 id="dp" tabindex="-1">DP</h4>
+<p>DP，Display Port，数字视频接口标准，主要用于视频源与显示器等设备的连接。</p>
+<img    
+                       lazyload
+                       alt="image"
+                       data-src="../../assets/dp.svg"
+                         alt="dp" style="zoom:50%;" 
+                 >
+<h4 id="poe" tabindex="-1">POE</h4>
+<p>POE，Power over Ethernet，POE供电，是一种可以在以太网中透过双绞线来传输电力与资料设备上的技术。</p>
+<p><img  
+                       lazyload
+                       alt="image"
+                       data-src="../../assets/poe.png"
+                        alt="poe"
+                 ></p>
+<h3 id="%E6%8E%A5%E5%8F%A3%E5%AF%B9%E6%AF%94%E8%A1%A8-1" tabindex="-1">接口对比表</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">缩写</th>
+<th style="text-align:center">类型</th>
+<th style="text-align:center">应用</th>
+<th style="text-align:center">分辨率@刷新率</th>
+<th style="text-align:center">传输距离</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">VGA</td>
+<td style="text-align:center">模拟/视频</td>
+<td style="text-align:center">显卡、显示器</td>
+<td style="text-align:center">2560×1600@60Hz</td>
+<td style="text-align:center">15~30m</td>
+</tr>
+<tr>
+<td style="text-align:center">HD-SDI</td>
+<td style="text-align:center">数字</td>
+<td style="text-align:center">摄像头、麦克风</td>
+<td style="text-align:center">1920×1080@30Hz</td>
+<td style="text-align:center">150m</td>
+</tr>
+<tr>
+<td style="text-align:center">3G-SDI</td>
+<td style="text-align:center">数字</td>
+<td style="text-align:center">摄像头、麦克风</td>
+<td style="text-align:center">1920×1080@60Hz</td>
+<td style="text-align:center">150m</td>
+</tr>
+<tr>
+<td style="text-align:center">12G-SDI</td>
+<td style="text-align:center">数字</td>
+<td style="text-align:center">摄像头、麦克风</td>
+<td style="text-align:center">3840×2160@60Hz</td>
+<td style="text-align:center">150m</td>
+</tr>
+<tr>
+<td style="text-align:center">DVI-I</td>
+<td style="text-align:center">数字/视频</td>
+<td style="text-align:center">显卡、显示器</td>
+<td style="text-align:center">2560×1600@60Hz</td>
+<td style="text-align:center">7~15m</td>
+</tr>
+<tr>
+<td style="text-align:center">USB3.2</td>
+<td style="text-align:center">数字</td>
+<td style="text-align:center">摄像头、麦克风</td>
+<td style="text-align:center">3840×2160@30Hz</td>
+<td style="text-align:center">3m</td>
+</tr>
+<tr>
+<td style="text-align:center">HDMI2.0</td>
+<td style="text-align:center">数字</td>
+<td style="text-align:center">显示器、摄像头、麦克风</td>
+<td style="text-align:center">3840×2160@60Hz</td>
+<td style="text-align:center">15m</td>
+</tr>
+<tr>
+<td style="text-align:center">DP1.2</td>
+<td style="text-align:center">数字</td>
+<td style="text-align:center">摄像头、麦克风</td>
+<td style="text-align:center">4096×2160@60Hz</td>
+<td style="text-align:center">10m</td>
+</tr>
+<tr>
+<td style="text-align:center">DP1.4</td>
+<td style="text-align:center">数字</td>
+<td style="text-align:center">摄像头、麦克风</td>
+<td style="text-align:center">7680 × 4320@60Hz</td>
+<td style="text-align:center">10m</td>
+</tr>
+<tr>
+<td style="text-align:center">POE</td>
+<td style="text-align:center">数字/视频</td>
+<td style="text-align:center">摄像头、麦克风</td>
+<td style="text-align:center">100mbps/Cat5<br />1000mbps/Cat6</td>
+<td style="text-align:center">100m/Cat5<br />150m/Cat6</td>
+</tr>
+</tbody>
+</table>
+<h2 id="%E4%B8%B2%E8%A1%8C%E6%8E%A5%E5%8F%A3" tabindex="-1">串行接口</h2>
+<p>串行接口主要用于串行式逐位数据传输。常用的有RS-232，其分为8针接口、9针接口和25针接口。</p>
+<ul>
+<li>RS232</li>
+</ul>
+<p><img  
+                       lazyload
+                       alt="image"
+                       data-src="../../assets/rs232.jpg"
+                        alt="rs232"
+                 ></p>
+<ul>
+<li>RS-232/RS422/RS485 to RJ45</li>
+</ul>
+<p><img  
+                       lazyload
+                       alt="image"
+                       data-src="../../assets/com-rj45-pin.png"
+                        alt="com-rj45-pin"
+                 ></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">版本</th>
+<th style="text-align:center">传输方式</th>
+<th style="text-align:center">传输距离</th>
+<th style="text-align:center">传输速率</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">RS-232</td>
+<td style="text-align:center">非平衡传输/单工</td>
+<td style="text-align:center">15m</td>
+<td style="text-align:center">20kbps</td>
+</tr>
+<tr>
+<td style="text-align:center">RS-422</td>
+<td style="text-align:center">平衡传输/全双工</td>
+<td style="text-align:center">1219m</td>
+<td style="text-align:center">10mbps</td>
+</tr>
+<tr>
+<td style="text-align:center">RS-485</td>
+<td style="text-align:center">平衡传输/半双工</td>
+<td style="text-align:center">1219m</td>
+<td style="text-align:center">10mbps</td>
+</tr>
+</tbody>
+</table>
+<h2 id="reference" tabindex="-1">Reference</h2>
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/katex/dist/katex.min.css">
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/markdown-it-texmath/css/texmath.min.css">
+
+                    
+                </div>
+
+                
+                        
+<div class="post-copyright-info-container border-box">
+    <div class="copyright-info-content border-box">
+        <div class="copyright-info-top border-box">
+            <div class="copyright-post-title border-box text-ellipsis">
+                视频会议中的音视频接口
+            </div>
+
+            <div class="copyright-post-link border-box text-ellipsis">
+                develop/media-interface/
+            </div>
+        </div>
+
+        <div class="copyright-info-bottom border-box">
+            <div class="copyright-post-author bottom-item">
+                <div class="type">
+                    Author
+                </div>
+                <div class="content">ZeroJiu</div>
+            </div>
+
+            <div class="post-time bottom-item">
+                <div class="type">
+                    Published
+                </div>
+                <div class="content">2022-03-20 23:13</div>
+            </div>
+
+
+            <div class="post-license bottom-item">
+                <div class="type">
+                    License
+                </div>
+                <div class="content tooltip" data-tooltip-content="CC BY-NC-SA 4.0">
+                    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed" target="_blank">
+                        
+                            <i class="fa-brands fa-creative-commons"></i>
+                            <i class="fa-brands fa-creative-commons-by"></i>
+                            <i class="fa-brands fa-creative-commons-nc"></i>
+                            <i class="fa-brands fa-creative-commons-sa"></i>
+                        
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <i class="copyright-bg fa-solid fa-copyright"></i>
+    </div>
+    <div class="copy-copyright-info flex-center tooltip" data-tooltip-content="Copy copyright info" data-tooltip-offset-y="-2px">
+        <i class="fa-solid fa-copy"></i>
+    </div>
+</div>
+
+                
+
+                <div class="post-bottom-tags-and-share border-box">
+                    <div>
+                        
+                            <ul class="post-tags-box border-box">
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Media/">Media</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Hardware/">Hardware</a>
+                                    </li>
+                                
+                            </ul>
+                        
+                    </div>
+                    <div>
+                        
+                            <div class="post-share-container border-box">
+    <ul class="share-list-wrap border-box">
+        <li class="qq share-item border-box flex-center tooltip"
+            data-tooltip-content="Share to QQ"
+        >
+            <i class="fa-brands fa-qq"></i>
+        </li>
+        <li class="wechat share-item border-box flex-center tooltip tooltip-img"
+            data-tooltip-content="Share to WeChat"
+            data-tooltip-img-tip="Scan by WeChat"
+            data-tooltip-img-style="background-color: #fff; top: -10px; padding: 0.6rem 0.6rem 0.1rem 0.6rem;"
+        >
+            <i class="fa-brands fa-weixin"></i>
+        </li>
+        <li class="weibo share-item border-box flex-center tooltip"
+            data-tooltip-content="Share to WeiBo"
+        >
+            <i class="fa-brands fa-weibo"></i>
+        </li>
+    </ul>
+</div>
+
+                        
+                    </div>
+                </div>
+
+                
+
+                
+                    <div class="post-nav border-box">
+                        
+                            <div class="prev-post">
+                                <a class="prev"
+                                   rel="prev"
+                                   href="/develop/webrtc-compile/"
+                                   title="WebRTC编译必知必会"
+                                >
+                                    <span class="left arrow-icon flex-center">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </span>
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">WebRTC编译必知必会</span>
+                                        <span class="post-nav-item">Prev posts</span>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                        
+                            <div class="next-post">
+                                <a class="next"
+                                   rel="next"
+                                   href="/develop/cpp-reverse/"
+                                   title="有关字符串翻转reverse的思考"
+                                >
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">有关字符串翻转reverse的思考</span>
+                                        <span class="post-nav-item">Next posts</span>
+                                    </span>
+                                    <span class="right arrow-icon flex-center">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                    </div>
+                
+
+                
+                    
+
+
+
+
+
+
+                
+            </div>
+        </div>
+
+        
+    </div>
+</div>
+
+
+                
+            </div>
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="copyright-info info-item">
+        &copy;&nbsp;<span>2020</span>&nbsp;-&nbsp;2024
+        
+            &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">ZeroJiu</a>
+        
+    </div>
+
+    <div class="theme-info info-item">
+        Powered by&nbsp;<a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;&&nbsp;Theme&nbsp;<a class="keep-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep</a>
+    </div>
+
+    
+        
+        <div class="deploy-info info-item">
+            
+            This site is deployed on <span class="tooltip" data-tooltip-content="GitHub Pages"><img src="/images/brands/github.png"></span>
+            
+        </div>
+    
+
+    
+        <div class="count-info info-item">
+            
+
+            
+                <span class="count-item border-box uv">
+                    <span class="item-type border-box">Unique Visitor</span>
+                    <span class="item-value border-box uv" id="busuanzi_value_site_uv"></span>
+                </span>
+            
+
+            
+                <span class="count-item border-box pv">
+                    <span class="item-type border-box">Page View</span>
+                    <span class="item-value border-box pv" id="busuanzi_value_site_pv"></span>
+                </span>
+            
+        </div>
+    
+
+    
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="post-tools-list border-box">
+        <!-- PC encrypt again -->
+        
+
+        <!-- PC TOC show toggle -->
+        
+
+        <!-- PC go comment -->
+        
+
+        <!-- PC full screen -->
+        <li class="tools-item flex-center full-screen">
+            <i class="fa-solid fa-expand"></i>
+        </li>
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container border-box ">
+    <ul class="side-tools-list side-tools-show-handle border-box">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-toggle-theme-mode flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list border-box">
+        
+
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        <li class="tools-item tool-scroll-to-top flex-center show-arrow">
+            <i class="arrow fas fa-arrow-up"></i>
+            <span class="percent"></span>
+        </li>
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="Search..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+</main>
+
+
+
+<!-- common -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/utils.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/header-shrink.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/back2top.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/toggle-theme.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/code-block.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/main.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/libs/anime.min.js"></script>
+
+<!-- local-search -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/local-search.min.js"></script>
+
+
+<!-- lazyload -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/lazyload.min.js"></script>
+
+
+<div class="pjax">
+    <!-- home page -->
+    
+
+    <!-- post page -->
+    
+        <!-- post-helper -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/post/post-helper.min.js"></script>
+
+        <!-- toc -->
+        
+
+        <!-- copyright-info -->
+        
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/post/copyright-info.min.js"></script>
+        
+
+        <!-- share -->
+        
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/post/share.min.js"></script>
+        
+    
+
+    <!-- categories page -->
+    
+
+    <!-- links page -->
+    
+
+    <!-- photos page -->
+    
+
+    <!-- tools page -->
+    
+</div>
+
+<!-- mermaid -->
+
+    
+<script src="//cdn.jsdelivr.net/npm/mermaid@10.5.0/dist/mermaid.min.js"></script>
+
+    <script data-pjax>
+      if (window.mermaid) {
+        mermaid.init()
+      }
+    </script>
+
+
+
+
+
+
+<!-- pjax -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/libs/pjax.min.js"></script>
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        window.pjax = new Pjax({
+            selectors: [
+                'head title',
+                '.page-container',
+                '.pjax'
+            ],
+            history: true,
+            debug: false,
+            cacheBust: false,
+            timeout: 0,
+            analytics: false,
+            currentUrlFullReload: false,
+            scrollRestoration: false,
+        });
+
+        document.addEventListener('pjax:send', () => {
+            KEEP.utils.pjaxProgressBarStart()
+        });
+
+        document.addEventListener('pjax:complete', () => {
+            KEEP.utils.pjaxProgressBarEnd()
+            window.pjax.executeScripts(document.querySelectorAll('script[data-pjax], .pjax script'))
+            KEEP.initExecute()
+        });
+    });
+</script>
+
+
+
+
+</body>
+</html>

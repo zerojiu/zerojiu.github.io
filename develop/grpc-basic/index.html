@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="ZeroJiu">
+    
+    <title>
+        
+            gRPC初识——同步单向gRPC |
+        
+        小熊糖否
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+        <link rel="shortcut icon" href="/images/logo.ico">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/font/css/fontawesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/font/css/regular.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/font/css/solid.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/font/css/brands.min.css">
+    
+    <script class="keep-theme-configurations">
+    const KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"example.com","root":"/","language":"en","path":"search.xml"}
+    KEEP.theme_config = {"base_info":{"primary_color":"#c0392b","title":"小熊糖否","author":"ZeroJiu","avatar":"/images/author.jpg","logo":"/images/logo.ico","favicon":"/images/logo.ico"},"menu":{"home":"/","archives":"/archives","tags":"/tags","about":"/about"},"first_screen":{"enable":true,"background_img":"/images/bg.svg","background_img_dark":"/images/bg.svg","description":"True mastery of any skill takes a lifetime.","hitokoto":false},"social_contact":{"enable":true,"links":{"github":"https://github.com/zerojiu","weixin":null,"qq":null,"weibo":null,"zhihu":null,"twitter":null,"x":null,"facebook":null,"email":"xpringlee@gmail.com"}},"scroll":{"progress_bar":true,"percent":false,"hide_header":true},"home":{"announcement":null,"category":true,"tag":true,"post_datetime":"created"},"post":{"author_badge":{"enable":true,"level_badge":false,"custom_badge":["愚昧之巅","绝望之谷","开悟之坡","大师领域"]},"word_count":{"wordcount":true,"min2read":true},"datetime_format":"YYYY-MM-DD HH:mm:ss","copyright_info":true,"share":true,"img_align":"center","reward":{"enable":false,"img_link":null,"text":null}},"code_block":{"tools":{"enable":true,"style":"default"},"highlight_theme":"default"},"toc":{"enable":false,"number":false,"expand_all":true,"init_open":false,"layout":"right"},"website_count":{"busuanzi_count":{"enable":true,"site_uv":true,"site_pv":true,"page_pv":true}},"local_search":{"enable":true,"preload":true},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.36"},"waline":{"server_url":null,"reaction":false,"version":"3.2.1"},"giscus":{"repo":null,"repo_id":null,"category":"Announcements","category_id":null,"reactions_enabled":false},"artalk":{"server":null},"disqus":{"shortname":null}},"rss":{"enable":true},"lazyload":{"enable":true},"cdn":{"enable":true,"provider":"cdnjs"},"pjax":{"enable":true},"footer":{"since":2020,"word_count":false,"site_deploy":{"enable":true,"provider":"github","url":null},"record":{"enable":false,"list":[{"code":null,"link":null}]}},"inject":{"enable":false,"css":[null],"js":[null]},"root":"","source_data":{},"version":"4.1.5"}
+    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"}
+    KEEP.language_code_block = {"copy":"Copy code","copied":"Copied","fold":"Fold code block","folded":"Folded"}
+    KEEP.language_copy_copyright = {"copy":"Copy copyright info","copied":"Copied","title":"Original post title","author":"Original post author","link":"Original post link"}
+  </script>
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+        <span class="scroll-progress-bar"></span>
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <i class="pjax-progress-icon fas fa-circle-notch fa-spin"></i>
+    
+</div>
+
+
+
+<main class="page-container border-box">
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left border-box">
+            
+                <a class="logo-image border-box" href="/">
+                    <img src="/images/logo.ico">
+                </a>
+            
+            <a class="site-name border-box" href="/">
+               小熊糖否
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        
+                        <li class="menu-item">
+                            <a class=""
+                               href="/"
+                            >
+                                
+                                HOME
+                            </a>
+                        </li>
+                    
+                        
+                        <li class="menu-item">
+                            <a class=""
+                               href="/archives"
+                            >
+                                
+                                ARCHIVES
+                            </a>
+                        </li>
+                    
+                        
+                        <li class="menu-item">
+                            <a class=""
+                               href="/tags"
+                            >
+                                
+                                TAGS
+                            </a>
+                        </li>
+                    
+                        
+                        <li class="menu-item">
+                            <a class=""
+                               href="/about"
+                            >
+                                
+                                ABOUT
+                            </a>
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="fas search fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/"
+                    >HOME</a>
+                </li>
+            
+                
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/archives"
+                    >ARCHIVES</a>
+                </li>
+            
+                
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/tags"
+                    >TAGS</a>
+                </li>
+            
+                
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/about"
+                    >ABOUT</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+                
+
+                    
+<div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+        <div class="post-content-container border-box">
+            
+                <div class="post-content-top border-box"
+                     style="height: 13.8rem"
+                >
+                    <div class="cover-post-title">
+                        gRPC初识——同步单向gRPC
+                    </div>
+                    <img class="post-cover" src="/images/tags/standard-library.png"
+                         onerror="this.style.display='none'"
+                    >
+                </div>
+            
+
+            <div class="post-content-bottom border-box has-cover">
+                
+
+                
+                    <div class="post-header border-box">
+                        
+                            <div class="avatar-box border-box">
+                                <img src="/images/author.jpg">
+                            </div>
+                        
+                        <div class="info-box">
+                            <div class="author border-box">
+                                <span class="name">ZeroJiu</span>
+                                
+                                    <span class="author-badge">大师领域</span>
+                                
+                            </div>
+                            <div class="meta-info border-box">
+                                
+
+<div class="post-meta-info-container border-box post">
+    <div class="post-meta-info border-box">
+        
+
+        
+            <span class="meta-info-item post-create-date">
+                <i class="icon fa-solid fa-calendar-plus"></i>&nbsp;
+                <span class="datetime">2017-02-05 22:59:48</span>
+            </span>
+
+            <span class="meta-info-item post-update-date">
+                <i class="icon fa-solid fa-file-pen"></i>&nbsp;
+                <span class="datetime" data-updated="Fri Jul 19 2024 21:19:37 GMT+0800">2024-07-19 21:19:37</span>
+            </span>
+        
+
+        
+            <span class="meta-info-item post-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul class="post-category-ul">
+                    
+                            <li class="category-item"><a href="/categories/Develop/">Develop</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="post-tag meta-info-item border-box">
+                <ul class="post-tag-ul">
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Library/">Library</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+            <span class="meta-info-item post-wordcount">
+                <i class="icon fas fa-file-word"></i>&nbsp;<span>1.6k Words</span>
+            </span>
+        
+        
+            <span class="meta-info-item post-min2read">
+                <i class="icon fas fa-clock"></i>&nbsp;<span>7 Mins</span>
+            </span>
+        
+        
+            <span class="meta-info-item post-pv">
+                <i class="icon fas fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+            </span>
+        
+    </div>
+
+    
+</div>
+
+                            </div>
+                        </div>
+                    </div>
+                
+
+                <div class="post-content keep-markdown-body ">
+                    
+
+                    
+                         <blockquote>
+<p>复利效应</p>
+</blockquote>
+<p>gRPC是Google开源的RPC框架，拥有高性能、跨语言等诸多优点。gRPC官方网站为<a href="grpc.io">grpc.io</a>。鉴于官网的介绍较为混乱，并且其教程并不完善易懂，故而这里做一个简单的整理，希望一起成长。<span id="more"></span></p>
+<p>本文所采用编程语言为C++，其他语言可以参考，开发平台为Windows平台。</p>
+<h2 id="%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8grpc" tabindex="-1">如何使用gRPC</h2>
+<p>gRPC基于Protocol Buffer，在使用gRPC时，一般都是按照下列步骤：</p>
+<ul>
+<li>定义proto3协议</li>
+<li>生成RPC代码</li>
+<li>实现服务端</li>
+<li>实现客户端</li>
+</ul>
+<img    
+                       lazyload
+                       alt="image"
+                       data-src="../../assets/io/rpc/grpc_concept_diagram.png"
+                          alt="grpc concept" 
+                 >
+<p>上图是gRPC原理图，gRPC服务端实现具体的RPC服务，客户端通过gRPC Stub来调用这些RPC服务。客户端和服务端是通过信道（<code>Channel</code>）来连接的。</p>
+<p>gRPC有四种使用场景：单向RPC（一问一答）、服务端流式RPC（一问多答）、客户端流式RPC（多问一答）、双向流式RPC（多问多答）。gRPC的调用方式又分为同步(阻塞)和异步（非阻塞），所以我们需要根据需求，来选择使用场景和调用方式。四类服务方法如下：</p>
+<ul>
+<li>单项RPC，客户端发送请求给服务端，服务端发送一个应答；</li>
+</ul>
+<figure class="highlight proto"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">rpc</span> sayHello(HelloRequest) <span class="keyword">returns</span>(HelloResponse) </span>&#123; &#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>服务端流式RPC，客户端发送请求给服务端，可获取一个数据流，通过该数据流能够读取服务端后续发送的一系列消息；</li>
+</ul>
+<figure class="highlight proto"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">rpc</span> LotsOfReplies(HelloRequest) <span class="keyword">returns</span>(stream HelloResponse) </span>&#123; &#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>客户端流式RPC，客户端用提供的一个数据流写入并发送一系列消息给服务端。</li>
+</ul>
+<figure class="highlight proto"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">rpc</span> LotsOfGreetings(stream HelloRequest) <span class="keyword">returns</span> (HelloResponse) </span>&#123; &#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>双向流式RPC，客户端和服务端都可以分别通过一个读写数据流来发送一系列消息。</li>
+</ul>
+<figure class="highlight proto"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">rpc</span> BidiHello(stream HelloRequest) <span class="keyword">returns</span> (stream HelloResponse)</span>&#123; &#125;</span><br></pre></td></tr></table></figure>
+<p>对于gRPC使用场景，在生成RPC代码时，都会生成同步和异步接口。下文中会给出一个简单的同步单向gRPC示例，再次基础上我们会分析gRPC的详细代码。</p>
+<p>有关gRPC的示例代码，都可以从<a class="link"   target="_blank" rel="noopener" href="https://github.com/JerkWisdom/gRPC-Guide" >Github: gRPC-Guide<i class="fas fa-external-link-alt"></i></a>获取。</p>
+<h2 id="%E5%90%8C%E6%AD%A5%E5%8D%95%E5%90%91grpc%E7%A4%BA%E4%BE%8B" tabindex="-1">同步单向gRPC示例</h2>
+<h3 id="%E5%AE%9A%E4%B9%89proto3%E5%8D%8F%E8%AE%AE" tabindex="-1">定义proto3协议</h3>
+<p>这里需要有Protocol Buffer基础，具体使用可以Google。</p>
+<figure class="highlight proto"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"># hello.proto</span><br><span class="line"></span><br><span class="line">syntax=<span class="string">&quot;proto3&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">package</span> guide;</span><br><span class="line"></span><br><span class="line"><span class="keyword">message </span><span class="title class_">HelloRequest</span> &#123;</span><br><span class="line">    <span class="type">string</span> name = <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">message </span><span class="title class_">HelloResponse</span> &#123;</span><br><span class="line">    <span class="type">string</span> message = <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">service </span><span class="title class_">HelloSvc</span> &#123;</span><br><span class="line">    <span class="function"><span class="keyword">rpc</span> sayHello(HelloRequest) <span class="keyword">returns</span>(HelloResponse)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="%E7%94%9F%E6%88%90rpc%E4%BB%A3%E7%A0%81" tabindex="-1">生成RPC代码</h3>
+<p>为了显示目录结构，下面的RPC代码借助了cmake。<code>protoc.exe</code>可以从protobuf网站下载，也可以自己编译。</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">EXECUTE_PROCESS(COMMAND</span><br><span class="line">    $&#123;CMAKE_SOURCE_DIR&#125;/thirdparty/gRPC/third_party/protobuf/cmake/win/Debug/protoc.exe</span><br><span class="line">    -I $&#123;CMAKE_SOURCE_DIR&#125;/protos/guide</span><br><span class="line">    --grpc_out=$&#123;CMAKE_SOURCE_DIR&#125;/sync/client/src</span><br><span class="line">    --grpc_out=$&#123;CMAKE_SOURCE_DIR&#125;/sync/server/src</span><br><span class="line">    --cpp_out=$&#123;CMAKE_SOURCE_DIR&#125;/sync/client/src</span><br><span class="line">    --cpp_out=$&#123;CMAKE_SOURCE_DIR&#125;/sync/server/src</span><br><span class="line">    --plugin=protoc-gen-grpc=$&#123;CMAKE_SOURCE_DIR&#125;/thirdparty/gRPC/vsprojects/x64/Debug/grpc_cpp_plugin.exe</span><br><span class="line">    $&#123;CMAKE_SOURCE_DIR&#125;/protos/guide/hello.proto)</span><br></pre></td></tr></table></figure>
+<p>通过上面的命令，我们会生成四个文件：</p>
+<ul>
+<li>hello.grpc.pb.h</li>
+<li><a class="link"   target="_blank" rel="noopener" href="http://hello.grpc.pb.cc" >hello.grpc.pb.cc<i class="fas fa-external-link-alt"></i></a></li>
+<li>hello.pb.h</li>
+<li><a class="link"   target="_blank" rel="noopener" href="http://hello.pb.cc" >hello.pb.cc<i class="fas fa-external-link-alt"></i></a></li>
+</ul>
+<p><code>hello.pb.*</code>中定义了<code>HelloReqeust</code>和<code>HelloResponse</code>消息的具体实现，而<code>hello.grpc.pb.*</code>中定义同步gRPC服务和异步gRPC服务等。后文的gRPC实现解析中会详细的讲解这块的代码。</p>
+<h3 id="%E5%AE%9E%E7%8E%B0%E6%9C%8D%E5%8A%A1%E7%AB%AF" tabindex="-1">实现服务端</h3>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">HelloService</span> : <span class="keyword">public</span> HelloSvc::Service</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">HelloService</span>() = <span class="keyword">default</span>;</span><br><span class="line">    ~<span class="built_in">HelloService</span>() = <span class="keyword">default</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> Status <span class="title">sayHello</span><span class="params">(ServerContext* context, <span class="type">const</span> HelloRequest* req, HelloResponse* rsp)</span> <span class="keyword">override</span></span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function">Status <span class="title">HelloService::sayHello</span><span class="params">(ServerContext* context, <span class="type">const</span> HelloRequest* req, HelloResponse* rsp)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;Received from client: &quot;</span> &lt;&lt; req-&gt;<span class="built_in">name</span>() &lt;&lt; std::endl;</span><br><span class="line">    std::string response = <span class="string">&quot;hello, &quot;</span>;</span><br><span class="line">    rsp-&gt;<span class="built_in">set_message</span>(response + req-&gt;<span class="built_in">name</span>());</span><br><span class="line">    <span class="keyword">return</span> Status::OK;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">runServer</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    guide::HelloService service;</span><br><span class="line">    ServerBuilder builder;</span><br><span class="line">    builder.<span class="built_in">AddListeningPort</span>(<span class="string">&quot;0.0.0.0:50051&quot;</span>, grpc::<span class="built_in">InsecureServerCredentials</span>());</span><br><span class="line">    builder.<span class="built_in">RegisterService</span>(&amp;service);</span><br><span class="line">    <span class="function">std::unique_ptr&lt;Server&gt; <span class="title">server</span><span class="params">(builder.BuildAndStart())</span></span>;</span><br><span class="line">    server-&gt;<span class="built_in">Wait</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>sayHello</code>接口是在<code>HelloSvc::Service</code>类中定义，这个类就是在<code>hello.grpc.pb.h</code>中生成的同步服务类。<code>HelloService</code>服务实现类派生自该类，并实现<code>sayHello</code>接口，我们就可以利用<code>ServerBuilder</code>建立服务（绑定端口，）并运行。</p>
+<h3 id="%E5%AE%9E%E7%8E%B0%E5%AE%A2%E6%88%B7%E7%AB%AF" tabindex="-1">实现客户端</h3>
+<p>客户端通过Stub来调用RPC服务端的代码，Stub必须运行在具体Channel上。我们必须要先建立信道：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grpc::<span class="built_in">CreateChannel</span>(<span class="string">&quot;localhost:50051&quot;</span>, grpc::<span class="built_in">InsecureChannelCredentials</span>())</span><br></pre></td></tr></table></figure>
+<p>在建立信道的基础上，新建Stub，通过Stub来调用具体的RPC代码。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">HelloClient</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">HelloClient</span>(std::shared_ptr&lt;Channel&gt; channel)</span><br><span class="line">        : _stub(HelloSvc::<span class="built_in">NewStub</span>(channel)) &#123; &#125;</span><br><span class="line">    ~<span class="built_in">HelloClient</span>() = <span class="keyword">default</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function">std::string <span class="title">sayHello</span><span class="params">(<span class="type">const</span> std::string name)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    std::unique_ptr&lt;HelloSvc::Stub&gt; _stub;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function">std::string <span class="title">HelloClient::sayHello</span><span class="params">(std::string user)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    HelloRequest req;</span><br><span class="line">    req.<span class="built_in">set_name</span>(user);</span><br><span class="line"></span><br><span class="line">    HelloResponse rsp;</span><br><span class="line">    ClientContext ctx;</span><br><span class="line">    Status status = _stub-&gt;<span class="built_in">sayHello</span>(&amp;ctx, req, &amp;rsp);</span><br><span class="line">    <span class="keyword">if</span> (status.<span class="built_in">ok</span>()) &#123;</span><br><span class="line">        <span class="keyword">return</span> rsp.<span class="built_in">message</span>();</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;RPC Failed.&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>调用RPC服务：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">runClient</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="function">HelloClient <span class="title">client</span><span class="params">(grpc::CreateChannel(</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="string">&quot;localhost:50051&quot;</span>, grpc::InsecureChannelCredentials()))</span></span>;</span><br><span class="line">    <span class="function">std::string <span class="title">user</span><span class="params">(<span class="string">&quot;John&quot;</span>)</span></span>;</span><br><span class="line">    std::string rsp = client.<span class="built_in">sayHello</span>(user);</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;Hello Client Received: &quot;</span> &lt;&lt; rsp &lt;&lt; std::endl;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="grpc%E5%AE%9E%E7%8E%B0%E8%A7%A3%E6%9E%90" tabindex="-1">gRPC实现解析</h2>
+<p>上文中我们给出了单向RPC示例，步骤二：生成RPC代码会生成RPC服务和客户端调用代码，这块代码是gRPC实现的核心代码。该段代码涉及到三点：</p>
+<ul>
+<li>客户端桩Stub类代码</li>
+<li>服务端同步服务接口类代码</li>
+<li>服务端异步服务接口类代码</li>
+</ul>
+<p>我们依次来看着三段代码：</p>
+<p>1、客户端桩Stub类代码</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Stub</span> GRPC_FINAL : <span class="keyword">public</span> StubInterface &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Stub</span>(<span class="type">const</span> std::shared_ptr&lt; ::grpc::ChannelInterface&gt;&amp; channel);</span><br><span class="line">    ::<span class="function">grpc::Status <span class="title">sayHello</span><span class="params">(::grpc::ClientContext* context, <span class="type">const</span> ::guide::HelloRequest&amp; request, ::guide::HelloResponse* response)</span> GRPC_OVERRIDE</span>;</span><br><span class="line">    std::unique_ptr&lt; ::grpc::ClientAsyncResponseReader&lt; ::guide::HelloResponse&gt;&gt;</span><br><span class="line">    <span class="built_in">AsyncsayHello</span>(::grpc::ClientContext* context, <span class="type">const</span> ::guide::HelloRequest&amp; request, ::grpc::CompletionQueue* cq)</span><br><span class="line">    &#123;  </span><br><span class="line">        <span class="keyword">return</span> std::unique_ptr&lt; ::grpc::ClientAsyncResponseReader&lt; ::guide::HelloResponse&gt;&gt;(<span class="built_in">AsyncsayHelloRaw</span>(context, request, cq));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>客户端桩Stub类中分别定义了同步版本和异步版本的RPC方法，我们可以按照我们的需求来选择。</p>
+<p>2、服务端同步服务接口类代码</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Service</span> : <span class="keyword">public</span> ::grpc::Service &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Service</span>();</span><br><span class="line">    <span class="keyword">virtual</span> ~<span class="built_in">Service</span>();</span><br><span class="line">    <span class="keyword">virtual</span> ::<span class="function">grpc::Status <span class="title">sayHello</span><span class="params">(::grpc::ServerContext* context, <span class="type">const</span> ::guide::HelloRequest* request, ::guide::HelloResponse* response)</span></span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>同步服务接口是阻塞的，服务端会阻塞在Server.wait()代码这儿，直到出现一次RPC调用。</p>
+<p>3、服务端异步服务接口类代码</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">class</span> <span class="title class_">BaseClass</span>&gt;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">WithAsyncMethod_sayHello</span> : <span class="keyword">public</span> BaseClass &#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">BaseClassMustBeDerivedFromService</span><span class="params">(<span class="type">const</span> Service *service)</span> </span>&#123;&#125;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line"><span class="built_in">WithAsyncMethod_sayHello</span>()</span><br><span class="line">&#123;</span><br><span class="line">    ::grpc::Service::<span class="built_in">MarkMethodAsync</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br><span class="line">~<span class="built_in">WithAsyncMethod_sayHello</span>() GRPC_OVERRIDE</span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">BaseClassMustBeDerivedFromService</span>(<span class="keyword">this</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">RequestsayHello</span><span class="params">(::grpc::ServerContext* context, ::guide::HelloRequest* request, ::grpc::ServerAsyncResponseWriter&lt; ::guide::HelloResponse&gt;* reÂsponse, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, <span class="type">void</span> *tag)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    ::grpc::Service::<span class="built_in">RequestAsyncUnary</span>(<span class="number">0</span>, context, request, response, new_call_cq, notification_cq, tag);</span><br><span class="line">&#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">typedef</span> WithAsyncMethod_sayHello&lt;Service &gt; AsyncService;</span><br></pre></td></tr></table></figure>
+<p>异步服务接口是既可以是阻塞的也可以是非阻塞的，异步服务通过在<code>CompletionQueue</code>上等待完成实践，一旦等到相应的事件<code>Next</code>函数返回（<code>AsyncNext</code>等到一定的时间间隔也会返回），执行相应的RPC服务代码。</p>
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/katex/dist/katex.min.css">
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/markdown-it-texmath/css/texmath.min.css">
+
+                    
+                </div>
+
+                
+                        
+<div class="post-copyright-info-container border-box">
+    <div class="copyright-info-content border-box">
+        <div class="copyright-info-top border-box">
+            <div class="copyright-post-title border-box text-ellipsis">
+                gRPC初识——同步单向gRPC
+            </div>
+
+            <div class="copyright-post-link border-box text-ellipsis">
+                develop/grpc-basic/
+            </div>
+        </div>
+
+        <div class="copyright-info-bottom border-box">
+            <div class="copyright-post-author bottom-item">
+                <div class="type">
+                    Author
+                </div>
+                <div class="content">ZeroJiu</div>
+            </div>
+
+            <div class="post-time bottom-item">
+                <div class="type">
+                    Published
+                </div>
+                <div class="content">2017-02-05 22:59</div>
+            </div>
+
+
+            <div class="post-license bottom-item">
+                <div class="type">
+                    License
+                </div>
+                <div class="content tooltip" data-tooltip-content="CC BY-NC-SA 4.0">
+                    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed" target="_blank">
+                        
+                            <i class="fa-brands fa-creative-commons"></i>
+                            <i class="fa-brands fa-creative-commons-by"></i>
+                            <i class="fa-brands fa-creative-commons-nc"></i>
+                            <i class="fa-brands fa-creative-commons-sa"></i>
+                        
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <i class="copyright-bg fa-solid fa-copyright"></i>
+    </div>
+    <div class="copy-copyright-info flex-center tooltip" data-tooltip-content="Copy copyright info" data-tooltip-offset-y="-2px">
+        <i class="fa-solid fa-copy"></i>
+    </div>
+</div>
+
+                
+
+                <div class="post-bottom-tags-and-share border-box">
+                    <div>
+                        
+                            <ul class="post-tags-box border-box">
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Library/">Library</a>
+                                    </li>
+                                
+                            </ul>
+                        
+                    </div>
+                    <div>
+                        
+                            <div class="post-share-container border-box">
+    <ul class="share-list-wrap border-box">
+        <li class="qq share-item border-box flex-center tooltip"
+            data-tooltip-content="Share to QQ"
+        >
+            <i class="fa-brands fa-qq"></i>
+        </li>
+        <li class="wechat share-item border-box flex-center tooltip tooltip-img"
+            data-tooltip-content="Share to WeChat"
+            data-tooltip-img-tip="Scan by WeChat"
+            data-tooltip-img-style="background-color: #fff; top: -10px; padding: 0.6rem 0.6rem 0.1rem 0.6rem;"
+        >
+            <i class="fa-brands fa-weixin"></i>
+        </li>
+        <li class="weibo share-item border-box flex-center tooltip"
+            data-tooltip-content="Share to WeiBo"
+        >
+            <i class="fa-brands fa-weibo"></i>
+        </li>
+    </ul>
+</div>
+
+                        
+                    </div>
+                </div>
+
+                
+
+                
+                    <div class="post-nav border-box">
+                        
+                            <div class="prev-post">
+                                <a class="prev"
+                                   rel="prev"
+                                   href="/develop/cpp-undefined-behavior/"
+                                   title="C++未定义行为"
+                                >
+                                    <span class="left arrow-icon flex-center">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </span>
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">C++未定义行为</span>
+                                        <span class="post-nav-item">Prev posts</span>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                        
+                            <div class="next-post">
+                                <a class="next"
+                                   rel="next"
+                                   href="/develop/mysql-basic/"
+                                   title="MySQL初识"
+                                >
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">MySQL初识</span>
+                                        <span class="post-nav-item">Next posts</span>
+                                    </span>
+                                    <span class="right arrow-icon flex-center">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                    </div>
+                
+
+                
+                    
+
+
+
+
+
+
+                
+            </div>
+        </div>
+
+        
+    </div>
+</div>
+
+
+                
+            </div>
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="copyright-info info-item">
+        &copy;&nbsp;<span>2020</span>&nbsp;-&nbsp;2024
+        
+            &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">ZeroJiu</a>
+        
+    </div>
+
+    <div class="theme-info info-item">
+        Powered by&nbsp;<a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;&&nbsp;Theme&nbsp;<a class="keep-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep</a>
+    </div>
+
+    
+        
+        <div class="deploy-info info-item">
+            
+            This site is deployed on <span class="tooltip" data-tooltip-content="GitHub Pages"><img src="/images/brands/github.png"></span>
+            
+        </div>
+    
+
+    
+        <div class="count-info info-item">
+            
+
+            
+                <span class="count-item border-box uv">
+                    <span class="item-type border-box">Unique Visitor</span>
+                    <span class="item-value border-box uv" id="busuanzi_value_site_uv"></span>
+                </span>
+            
+
+            
+                <span class="count-item border-box pv">
+                    <span class="item-type border-box">Page View</span>
+                    <span class="item-value border-box pv" id="busuanzi_value_site_pv"></span>
+                </span>
+            
+        </div>
+    
+
+    
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="post-tools-list border-box">
+        <!-- PC encrypt again -->
+        
+
+        <!-- PC TOC show toggle -->
+        
+
+        <!-- PC go comment -->
+        
+
+        <!-- PC full screen -->
+        <li class="tools-item flex-center full-screen">
+            <i class="fa-solid fa-expand"></i>
+        </li>
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container border-box ">
+    <ul class="side-tools-list side-tools-show-handle border-box">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-toggle-theme-mode flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list border-box">
+        
+
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        <li class="tools-item tool-scroll-to-top flex-center show-arrow">
+            <i class="arrow fas fa-arrow-up"></i>
+            <span class="percent"></span>
+        </li>
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="Search..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+</main>
+
+
+
+<!-- common -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/utils.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/header-shrink.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/back2top.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/toggle-theme.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/code-block.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/main.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/libs/anime.min.js"></script>
+
+<!-- local-search -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/local-search.min.js"></script>
+
+
+<!-- lazyload -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/lazyload.min.js"></script>
+
+
+<div class="pjax">
+    <!-- home page -->
+    
+
+    <!-- post page -->
+    
+        <!-- post-helper -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/post/post-helper.min.js"></script>
+
+        <!-- toc -->
+        
+
+        <!-- copyright-info -->
+        
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/post/copyright-info.min.js"></script>
+        
+
+        <!-- share -->
+        
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/post/share.min.js"></script>
+        
+    
+
+    <!-- categories page -->
+    
+
+    <!-- links page -->
+    
+
+    <!-- photos page -->
+    
+
+    <!-- tools page -->
+    
+</div>
+
+<!-- mermaid -->
+
+    
+<script src="//cdn.jsdelivr.net/npm/mermaid@10.5.0/dist/mermaid.min.js"></script>
+
+    <script data-pjax>
+      if (window.mermaid) {
+        mermaid.init()
+      }
+    </script>
+
+
+
+
+
+
+<!-- pjax -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/libs/pjax.min.js"></script>
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        window.pjax = new Pjax({
+            selectors: [
+                'head title',
+                '.page-container',
+                '.pjax'
+            ],
+            history: true,
+            debug: false,
+            cacheBust: false,
+            timeout: 0,
+            analytics: false,
+            currentUrlFullReload: false,
+            scrollRestoration: false,
+        });
+
+        document.addEventListener('pjax:send', () => {
+            KEEP.utils.pjaxProgressBarStart()
+        });
+
+        document.addEventListener('pjax:complete', () => {
+            KEEP.utils.pjaxProgressBarEnd()
+            window.pjax.executeScripts(document.querySelectorAll('script[data-pjax], .pjax script'))
+            KEEP.initExecute()
+        });
+    });
+</script>
+
+
+
+
+</body>
+</html>

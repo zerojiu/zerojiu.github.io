@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="ZeroJiu">
+    
+    <title>
+        
+            浅谈Windows共享网络热点开发 |
+        
+        小熊糖否
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+        <link rel="shortcut icon" href="/images/logo.ico">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/font/css/fontawesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/font/css/regular.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/font/css/solid.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/font/css/brands.min.css">
+    
+    <script class="keep-theme-configurations">
+    const KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"example.com","root":"/","language":"en","path":"search.xml"}
+    KEEP.theme_config = {"base_info":{"primary_color":"#c0392b","title":"小熊糖否","author":"ZeroJiu","avatar":"/images/author.jpg","logo":"/images/logo.ico","favicon":"/images/logo.ico"},"menu":{"home":"/","archives":"/archives","tags":"/tags","about":"/about"},"first_screen":{"enable":true,"background_img":"/images/bg.svg","background_img_dark":"/images/bg.svg","description":"True mastery of any skill takes a lifetime.","hitokoto":false},"social_contact":{"enable":true,"links":{"github":"https://github.com/zerojiu","weixin":null,"qq":null,"weibo":null,"zhihu":null,"twitter":null,"x":null,"facebook":null,"email":"xpringlee@gmail.com"}},"scroll":{"progress_bar":true,"percent":false,"hide_header":true},"home":{"announcement":null,"category":true,"tag":true,"post_datetime":"created"},"post":{"author_badge":{"enable":true,"level_badge":false,"custom_badge":["愚昧之巅","绝望之谷","开悟之坡","大师领域"]},"word_count":{"wordcount":true,"min2read":true},"datetime_format":"YYYY-MM-DD HH:mm:ss","copyright_info":true,"share":true,"img_align":"center","reward":{"enable":false,"img_link":null,"text":null}},"code_block":{"tools":{"enable":true,"style":"default"},"highlight_theme":"default"},"toc":{"enable":false,"number":false,"expand_all":true,"init_open":false,"layout":"right"},"website_count":{"busuanzi_count":{"enable":true,"site_uv":true,"site_pv":true,"page_pv":true}},"local_search":{"enable":true,"preload":true},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.36"},"waline":{"server_url":null,"reaction":false,"version":"3.2.1"},"giscus":{"repo":null,"repo_id":null,"category":"Announcements","category_id":null,"reactions_enabled":false},"artalk":{"server":null},"disqus":{"shortname":null}},"rss":{"enable":true},"lazyload":{"enable":true},"cdn":{"enable":true,"provider":"cdnjs"},"pjax":{"enable":true},"footer":{"since":2020,"word_count":false,"site_deploy":{"enable":true,"provider":"github","url":null},"record":{"enable":false,"list":[{"code":null,"link":null}]}},"inject":{"enable":false,"css":[null],"js":[null]},"root":"","source_data":{},"version":"4.1.5"}
+    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"}
+    KEEP.language_code_block = {"copy":"Copy code","copied":"Copied","fold":"Fold code block","folded":"Folded"}
+    KEEP.language_copy_copyright = {"copy":"Copy copyright info","copied":"Copied","title":"Original post title","author":"Original post author","link":"Original post link"}
+  </script>
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+        <span class="scroll-progress-bar"></span>
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <i class="pjax-progress-icon fas fa-circle-notch fa-spin"></i>
+    
+</div>
+
+
+
+<main class="page-container border-box">
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left border-box">
+            
+                <a class="logo-image border-box" href="/">
+                    <img src="/images/logo.ico">
+                </a>
+            
+            <a class="site-name border-box" href="/">
+               小熊糖否
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        
+                        <li class="menu-item">
+                            <a class=""
+                               href="/"
+                            >
+                                
+                                HOME
+                            </a>
+                        </li>
+                    
+                        
+                        <li class="menu-item">
+                            <a class=""
+                               href="/archives"
+                            >
+                                
+                                ARCHIVES
+                            </a>
+                        </li>
+                    
+                        
+                        <li class="menu-item">
+                            <a class=""
+                               href="/tags"
+                            >
+                                
+                                TAGS
+                            </a>
+                        </li>
+                    
+                        
+                        <li class="menu-item">
+                            <a class=""
+                               href="/about"
+                            >
+                                
+                                ABOUT
+                            </a>
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="fas search fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/"
+                    >HOME</a>
+                </li>
+            
+                
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/archives"
+                    >ARCHIVES</a>
+                </li>
+            
+                
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/tags"
+                    >TAGS</a>
+                </li>
+            
+                
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/about"
+                    >ABOUT</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+                
+
+                    
+<div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+        <div class="post-content-container border-box">
+            
+                <div class="post-content-top border-box"
+                     style="height: 13.8rem"
+                >
+                    <div class="cover-post-title">
+                        浅谈Windows共享网络热点开发
+                    </div>
+                    <img class="post-cover" src="/images/tags/system-win.png"
+                         onerror="this.style.display='none'"
+                    >
+                </div>
+            
+
+            <div class="post-content-bottom border-box has-cover">
+                
+
+                
+                    <div class="post-header border-box">
+                        
+                            <div class="avatar-box border-box">
+                                <img src="/images/author.jpg">
+                            </div>
+                        
+                        <div class="info-box">
+                            <div class="author border-box">
+                                <span class="name">ZeroJiu</span>
+                                
+                                    <span class="author-badge">大师领域</span>
+                                
+                            </div>
+                            <div class="meta-info border-box">
+                                
+
+<div class="post-meta-info-container border-box post">
+    <div class="post-meta-info border-box">
+        
+
+        
+            <span class="meta-info-item post-create-date">
+                <i class="icon fa-solid fa-calendar-plus"></i>&nbsp;
+                <span class="datetime">2017-05-03 19:53:26</span>
+            </span>
+
+            <span class="meta-info-item post-update-date">
+                <i class="icon fa-solid fa-file-pen"></i>&nbsp;
+                <span class="datetime" data-updated="Fri Jul 19 2024 21:20:19 GMT+0800">2024-07-19 21:20:19</span>
+            </span>
+        
+
+        
+            <span class="meta-info-item post-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul class="post-category-ul">
+                    
+                            <li class="category-item"><a href="/categories/Develop/">Develop</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="post-tag meta-info-item border-box">
+                <ul class="post-tag-ul">
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Win32/">Win32</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/WiFi/">WiFi</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+            <span class="meta-info-item post-wordcount">
+                <i class="icon fas fa-file-word"></i>&nbsp;<span>2.2k Words</span>
+            </span>
+        
+        
+            <span class="meta-info-item post-min2read">
+                <i class="icon fas fa-clock"></i>&nbsp;<span>7 Mins</span>
+            </span>
+        
+        
+            <span class="meta-info-item post-pv">
+                <i class="icon fas fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+            </span>
+        
+    </div>
+
+    
+</div>
+
+                            </div>
+                        </div>
+                    </div>
+                
+
+                <div class="post-content keep-markdown-body ">
+                    
+
+                    
+                         <blockquote>
+<p>思考比工具更重要，发挥才智远优于理性，行动比分析更为迫切。</p>
+</blockquote>
+<p>市面上WiFi热点软件竞争激烈，猎豹WiFi、360WiFi、WiFi共享精灵等等产品在WiFi热点方面已经做得很成熟。但这总是其他人家的产品，对于一个新手来说，如何很快的开发出一款稳定的WiFi热点产品呢？基于分享互助的观点，这里将自己从事WiFi热点开发的经验写成博文。<span id="more"></span></p>
+<h2 id="%E5%87%A0%E4%B8%AA%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86%E7%82%B9" tabindex="-1">几个基本知识点</h2>
+<p>开发一款WiFi热点软件需要知道哪些知识？我们先来看看这几个基本知识点，帮助我们更快的上手。</p>
+<h3 id="windows%E6%97%A0%E7%BA%BF%E6%89%BF%E8%BD%BD%E7%BD%91%E7%BB%9C" tabindex="-1">Windows无线承载网络</h3>
+<p>如果不需要连接外部网络的功能，实现Windows无线承载网络，就已经实现了一款WiFi热点软件了。多简单，从百度上搜搜别人博客上实现的代码，从谷歌上搜搜开源的代码——有一个C#开源项目已经实现该功能。的确很简单，不过即使是不需要连接外部网络，这点实现也是不够的。</p>
+<h3 id="ics" tabindex="-1">ICS</h3>
+<p>Internet Connection Sharing，网络连接共享，为WiFi热点提供连接外部热点的功能。大多数人使用WiFi热点软件，主要就是为了方便移动设备连接网络。</p>
+<blockquote>
+<p>MSDN的Native WiFi一节给出了Windows无线承载网络和ICS的详尽讲解，读懂了这里的讲解，也就能实现最简单的WiFi热点功能。</p>
+</blockquote>
+<p>为什么说是最简单的呢？那是因为你还会遇到下面问题：</p>
+<ul>
+<li>你可能开启不了热点</li>
+<li>移动端可能连接不上该热点</li>
+<li>移动端连接上了却没法上网</li>
+<li>连接上了一直掉线</li>
+<li>…</li>
+</ul>
+<p>这些问题，都会在本文后面给出解决方案或者原因分析——解决不了呀。</p>
+<h3 id="dhcp" tabindex="-1">DHCP</h3>
+<p>ICS提供了基本的DHCP功能，不过千万不要太指望它，我们还是老老实实的自己实现一个DHCP服务。DHCP协议内容，网络上很多，开源的DHCP服务器代码不稳定，自己实现DHCP服务更能保证正确性。</p>
+<h3 id="nat" tabindex="-1">NAT</h3>
+<p>NAT，Network Address Translator，网络地址转换，主要作用是把内网IP地址转换成为全球唯一的可定位的外部IP地址，从而使得局域网内的所有用户可以通过一个或者少数几个IP地址与全球的Internet通信——不仅节约了IP地址，而且在一定程度上保护了内部网络。</p>
+<p>我们这儿使用NAT也是为了提供一个类似ICS的功能，实际上微软的ICS也是简版的NAT。</p>
+<h2 id="%E5%9F%BA%E6%9C%AC%E7%9A%84%E7%BD%91%E7%BB%9C%E5%85%B1%E4%BA%AB%E5%8A%9F%E8%83%BD%E5%BC%80%E5%8F%91" tabindex="-1">基本的网络共享功能开发</h2>
+<p>Windows无线承载网络提供最基本的网络共享功能，然而由于未加入ICS/NAT，这里仅仅是一个局域网络，实现这个基本功能，我们仍然是不能使用其来连接外网的。可是实现这一步也是必须的一步。</p>
+<h3 id="%E5%90%AF%E5%8A%A8%E5%89%8D%E5%87%86%E5%A4%87" tabindex="-1">启动前准备</h3>
+<p>在启动无线承载网络之前，需要有一些准备步骤，用来确定当前系统环境适合无线承载网络的启动。</p>
+<blockquote>
+<p>这些准备步骤是重中之重，如果没有这些准备步骤，启动失败的概率会大大提高。</p>
+</blockquote>
+<p>启动前准备一：开启无线承载网络所需服务，这些服务有可能会被关闭，必须要主动检测服务是否正常运行。具体服务包括：</p>
+<ul>
+<li>Winmgmt</li>
+<li>ALG</li>
+<li>BFE</li>
+<li>Wlansvc</li>
+<li>MpsSvc</li>
+<li>iphlpsvc</li>
+<li>dot3svc</li>
+<li>WwanSvc</li>
+<li>SharedAccess</li>
+<li>WZCSVC</li>
+</ul>
+<p>启动前准备二：启动DHCP服务，并检测服务是否正常运行。DHCP服务后文会提及。</p>
+<p>启动前准备三：判断是否存在无线网卡，如果没有无线网卡，网络共享功能只是空谈。</p>
+<p>启动前准备四：检测无线网卡是否支持无限承载网络。</p>
+<p>启动前准备五：检测无线网卡是否被禁用，如果被禁用就重启。</p>
+<h3 id="%E8%B0%83%E7%94%A8%E6%B5%81%E7%A8%8B" tabindex="-1">调用流程</h3>
+<p>基本功能的实现主要依赖于对MSDN相关文档的深入阅读，本节不会翻译这篇文章，本节的重点是基本功能实现的调用流程。</p>
+<blockquote>
+<p><a class="link"   target="_blank" rel="noopener" href="https://msdn.microsoft.com/en-us/library/windows/desktop/dd815252" >MSDN: Using Wireless Hosted Network and Internet Connection Sharing<i class="fas fa-external-link-alt"></i></a></p>
+</blockquote>
+<p>调用流程一：初始化无线承载网络信息。</p>
+<ul>
+<li>设置无线承载网络可开启：调用WlanHostedNetworkSetProperty函数设置wlan_hosted_network_opcode_enable属性为TRUE；</li>
+<li>设置无线承载网络基本信息：调用WlanHostedNetworkSetProperty函数设置wlan_hosted_network_opcode_connection_settings属性，需要设置SSID、连接用户数；</li>
+<li>设置密码键值：调用WlanHostedNetworkSetSecondaryKey设置密码信息</li>
+</ul>
+<p>调用流程二：启动无线承载网络。</p>
+<ul>
+<li>关闭已经启动的无线承载网络：调用WlanHostedNetworkForceStop函数；</li>
+<li>启动无线承载网络：调用WlanHostedNetworkStartUsing函数；</li>
+<li>保存无线承载网络GUID信息：调用WlanHostedNetworkQueryStatus函数获取PWLAN_HOSTED_NETWORK_STATUS信息中的IPDeviceID值</li>
+</ul>
+<p>调用流程三：启动失败自修复。</p>
+<ul>
+<li>使用SetupAPI禁用设备并重新打开设备：这段可能需要百度/谷歌/MSDN寻找SetupAPI的使用方法，有可能需要多次禁用和启动，直到网络状态非wlan_hosted_network_unavailable；</li>
+<li>重新启动无线承载网络</li>
+</ul>
+<p>上述流程没有涉及到具体代码的撰写，主要阐述需要调用的函数和操作。</p>
+<h2 id="dhcp-1" tabindex="-1">DHCP</h2>
+<p>在启动无限承载网络后，如果这时用手机连接热点，会发现手机无线网络一直都卡在获取IP地址的地方。这是因为这个时候无线承载网络并没有提供DHCP功能——ICS能够提供该功能，如果已经开启ICS，是能够获取到IP的，缺陷是不稳定，很有可能无法分配IP。</p>
+<p>所以就需要我们自己实现一个DHCP服务，Google一下你就会发现不少开源的服务，选择一个仔细调试。否则你很有可能被这个水土不服的家伙坑了。你必须要了解DHCP的原理、能够分析抓包获取的数据。（推荐博文<a class="link"   target="_blank" rel="noopener" href="http://blog.163.com/hlz_2599/blog/static/14237847420134139541993/" >DHCP协议原理及报文分析  <i class="fas fa-external-link-alt"></i></a>以及<a class="link"   target="_blank" rel="noopener" href="https://wenku.baidu.com/view/7aee72277375a417866f8fe6.html" >DHCP报文精细分析_加上wireshark抓包<i class="fas fa-external-link-alt"></i></a>）</p>
+<p>DHCP服务需要绑定一个静态IP，这个静态IP的设定必须要正确。可以设置一个IP库，防止IP和主机IP冲突。具体静态IP的设置方法，可以通过命令行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ netsh interface ip <span class="built_in">set</span> address ..。</span><br></pre></td></tr></table></figure>
+<p>不过这个设置是需要找到对于那个的无限承载网络命名信息，这个信息定义在&quot;SYSTEM\CurrentControlSet\Control\Network\{4D36E972-E325-11CE-BFC1-08002BE10318}\{GUID Get Before}\Connection&quot;下。</p>
+<p>DHCP实现的最终效果要能满足下面需求：</p>
+<ul>
+<li>无线承载网络开启时，能够给移动端快速的分配IP地址；</li>
+<li>不能影响电脑本身所在局域网中的DHCP服务；</li>
+<li>不能导致IP分配冲突</li>
+</ul>
+<h2 id="ics-1" tabindex="-1">ICS</h2>
+<p>Windows通过ICS提供基本的网络共享功能。ICS共享网络的流程如下：</p>
+<ul>
+<li>通过获取HostedNetwork接口GUID</li>
+<li>获取外网接口GUID，需要判断该网络是否能够连接外部网络</li>
+<li>通过调用EnableSharing开启ICS网络共享</li>
+</ul>
+<h2 id="nat-1" tabindex="-1">NAT</h2>
+<p>首先，我们需要知道NAT的原理，具体参考<a class="link"   target="_blank" rel="noopener" href="http://www.cnblogs.com/bo083/articles/2170189.html" >NAT原理与NAT穿越<i class="fas fa-external-link-alt"></i></a>。</p>
+<p>然后，需要对中间层驱动有一定的了解。参考下列文献：</p>
+<ul>
+<li><a class="link"   target="_blank" rel="noopener" href="http://www.xfocus.net/articles/200307/568.html" >基于IMD的包过滤防火墙原理与实现<i class="fas fa-external-link-alt"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://wenku.baidu.com/view/3ae23920915f804d2b16c12c.html" >基于PassThru的NDIS中间层驱动程序扩展1<i class="fas fa-external-link-alt"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="http://bbs.pediy.com/thread-191434.htm" >如何把NDIS Filter框架利用到日常的Windows驱动开发工作中<i class="fas fa-external-link-alt"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="http://blog.csdn.net/yxyhack/article/details/6060999" >NDIS中间层的驱动包截获技术教程<i class="fas fa-external-link-alt"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="http://www.xfocus.net/articles/200605/865.html" >基于PassThru的NDIS中间层驱动程序扩展<i class="fas fa-external-link-alt"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="http://bbs.pediy.com/thread-137545.htm" >NDIS中间层驱动开发在Win7系统下和Windows XP系统下的区别<i class="fas fa-external-link-alt"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="http://www.xfocus.net/articles/200606/870.html" >NAT在NDIS中间层驱动中的实现<i class="fas fa-external-link-alt"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="http://www.cnblogs.com/wubiyu/archive/2008/08/01/1257801.html" >NDIS开发[网络驱动开发]<i class="fas fa-external-link-alt"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="http://www.cnblogs.com/LittleHann/p/4844874.html" >Windows网络驱动、NDIS驱动(微端口驱动、中间层驱动、协议驱动)、TDI驱动(网络传输层过滤)、WFP(Windows Filtering Platform)<i class="fas fa-external-link-alt"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="http://bbs.csdn.net/topics/348555" >用NDIS中的passthru实现NAT的若干问题<i class="fas fa-external-link-alt"></i></a></li>
+</ul>
+<p>这一块的代码我也只实现了一半，仅列出参考的一些文献。</p>
+<h2 id="%E4%B8%80%E4%BA%9B%E9%9A%BE%E4%BB%A5%E8%A7%A3%E5%86%B3%E7%9A%84%E9%97%AE%E9%A2%98" tabindex="-1">一些难以解决的问题</h2>
+<p>最重要的问题就是稳定性问题，经过多方求证，目前主要和系统以及无线网卡驱动有关。此问题暂时不可解。</p>
+<h2 id="some-tips" tabindex="-1">Some Tips</h2>
+<p>下面是一些有用的链接，帮助我们完成可能存在的额外工作：</p>
+<ul>
+<li><a class="link"   target="_blank" rel="noopener" href="http://stackoverflow.com/questions/31249684/how-to-change-the-network-name-shown-in-windowss-ncpa-cpl-using-c" >How to change the Network name shown in Windows’s ncpa.cpl using C++?<i class="fas fa-external-link-alt"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="http://bbs.csdn.net/topics/390864539/" >如何判断网卡是有线网卡还是无线网卡<i class="fas fa-external-link-alt"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://superuser.com/questions/618908/how-does-windows-know-which-network-adapter-is-a-wireless-device" >How does Windows know which network adapter is a wireless device?<i class="fas fa-external-link-alt"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/windows-hardware/drivers/network/configuring-an-inf-file-for-a-modifying-filter-driver" >Configuring an INF File for a Modifying Filter Driver<i class="fas fa-external-link-alt"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="http://blog.csdn.net/woshinia/article/details/10631483" >寻找正在连接中的网络连接，并开启网络连接的网络连接共享功能<i class="fas fa-external-link-alt"></i></a></li>
+</ul>
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/katex/dist/katex.min.css">
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/markdown-it-texmath/css/texmath.min.css">
+
+                    
+                </div>
+
+                
+                        
+<div class="post-copyright-info-container border-box">
+    <div class="copyright-info-content border-box">
+        <div class="copyright-info-top border-box">
+            <div class="copyright-post-title border-box text-ellipsis">
+                浅谈Windows共享网络热点开发
+            </div>
+
+            <div class="copyright-post-link border-box text-ellipsis">
+                develop/win-wifi/
+            </div>
+        </div>
+
+        <div class="copyright-info-bottom border-box">
+            <div class="copyright-post-author bottom-item">
+                <div class="type">
+                    Author
+                </div>
+                <div class="content">ZeroJiu</div>
+            </div>
+
+            <div class="post-time bottom-item">
+                <div class="type">
+                    Published
+                </div>
+                <div class="content">2017-05-03 19:53</div>
+            </div>
+
+
+            <div class="post-license bottom-item">
+                <div class="type">
+                    License
+                </div>
+                <div class="content tooltip" data-tooltip-content="CC BY-NC-SA 4.0">
+                    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed" target="_blank">
+                        
+                            <i class="fa-brands fa-creative-commons"></i>
+                            <i class="fa-brands fa-creative-commons-by"></i>
+                            <i class="fa-brands fa-creative-commons-nc"></i>
+                            <i class="fa-brands fa-creative-commons-sa"></i>
+                        
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <i class="copyright-bg fa-solid fa-copyright"></i>
+    </div>
+    <div class="copy-copyright-info flex-center tooltip" data-tooltip-content="Copy copyright info" data-tooltip-offset-y="-2px">
+        <i class="fa-solid fa-copy"></i>
+    </div>
+</div>
+
+                
+
+                <div class="post-bottom-tags-and-share border-box">
+                    <div>
+                        
+                            <ul class="post-tags-box border-box">
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Win32/">Win32</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/WiFi/">WiFi</a>
+                                    </li>
+                                
+                            </ul>
+                        
+                    </div>
+                    <div>
+                        
+                            <div class="post-share-container border-box">
+    <ul class="share-list-wrap border-box">
+        <li class="qq share-item border-box flex-center tooltip"
+            data-tooltip-content="Share to QQ"
+        >
+            <i class="fa-brands fa-qq"></i>
+        </li>
+        <li class="wechat share-item border-box flex-center tooltip tooltip-img"
+            data-tooltip-content="Share to WeChat"
+            data-tooltip-img-tip="Scan by WeChat"
+            data-tooltip-img-style="background-color: #fff; top: -10px; padding: 0.6rem 0.6rem 0.1rem 0.6rem;"
+        >
+            <i class="fa-brands fa-weixin"></i>
+        </li>
+        <li class="weibo share-item border-box flex-center tooltip"
+            data-tooltip-content="Share to WeiBo"
+        >
+            <i class="fa-brands fa-weibo"></i>
+        </li>
+    </ul>
+</div>
+
+                        
+                    </div>
+                </div>
+
+                
+
+                
+                    <div class="post-nav border-box">
+                        
+                            <div class="prev-post">
+                                <a class="prev"
+                                   rel="prev"
+                                   href="/develop/cpp-thread-sync-event-condition_varaiable/"
+                                   title="多线程同步问题 - 条件变量和Event"
+                                >
+                                    <span class="left arrow-icon flex-center">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </span>
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">多线程同步问题 - 条件变量和Event</span>
+                                        <span class="post-nav-item">Prev posts</span>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                        
+                            <div class="next-post">
+                                <a class="next"
+                                   rel="next"
+                                   href="/develop/codec-yuv-rgb/"
+                                   title="视频像素格式YUV和RGB"
+                                >
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">视频像素格式YUV和RGB</span>
+                                        <span class="post-nav-item">Next posts</span>
+                                    </span>
+                                    <span class="right arrow-icon flex-center">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                    </div>
+                
+
+                
+                    
+
+
+
+
+
+
+                
+            </div>
+        </div>
+
+        
+    </div>
+</div>
+
+
+                
+            </div>
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="copyright-info info-item">
+        &copy;&nbsp;<span>2020</span>&nbsp;-&nbsp;2024
+        
+            &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">ZeroJiu</a>
+        
+    </div>
+
+    <div class="theme-info info-item">
+        Powered by&nbsp;<a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;&&nbsp;Theme&nbsp;<a class="keep-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep</a>
+    </div>
+
+    
+        
+        <div class="deploy-info info-item">
+            
+            This site is deployed on <span class="tooltip" data-tooltip-content="GitHub Pages"><img src="/images/brands/github.png"></span>
+            
+        </div>
+    
+
+    
+        <div class="count-info info-item">
+            
+
+            
+                <span class="count-item border-box uv">
+                    <span class="item-type border-box">Unique Visitor</span>
+                    <span class="item-value border-box uv" id="busuanzi_value_site_uv"></span>
+                </span>
+            
+
+            
+                <span class="count-item border-box pv">
+                    <span class="item-type border-box">Page View</span>
+                    <span class="item-value border-box pv" id="busuanzi_value_site_pv"></span>
+                </span>
+            
+        </div>
+    
+
+    
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="post-tools-list border-box">
+        <!-- PC encrypt again -->
+        
+
+        <!-- PC TOC show toggle -->
+        
+
+        <!-- PC go comment -->
+        
+
+        <!-- PC full screen -->
+        <li class="tools-item flex-center full-screen">
+            <i class="fa-solid fa-expand"></i>
+        </li>
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container border-box ">
+    <ul class="side-tools-list side-tools-show-handle border-box">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-toggle-theme-mode flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list border-box">
+        
+
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        <li class="tools-item tool-scroll-to-top flex-center show-arrow">
+            <i class="arrow fas fa-arrow-up"></i>
+            <span class="percent"></span>
+        </li>
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="Search..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+</main>
+
+
+
+<!-- common -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/utils.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/header-shrink.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/back2top.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/toggle-theme.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/code-block.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/main.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/libs/anime.min.js"></script>
+
+<!-- local-search -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/local-search.min.js"></script>
+
+
+<!-- lazyload -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/lazyload.min.js"></script>
+
+
+<div class="pjax">
+    <!-- home page -->
+    
+
+    <!-- post page -->
+    
+        <!-- post-helper -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/post/post-helper.min.js"></script>
+
+        <!-- toc -->
+        
+
+        <!-- copyright-info -->
+        
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/post/copyright-info.min.js"></script>
+        
+
+        <!-- share -->
+        
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/post/share.min.js"></script>
+        
+    
+
+    <!-- categories page -->
+    
+
+    <!-- links page -->
+    
+
+    <!-- photos page -->
+    
+
+    <!-- tools page -->
+    
+</div>
+
+<!-- mermaid -->
+
+    
+<script src="//cdn.jsdelivr.net/npm/mermaid@10.5.0/dist/mermaid.min.js"></script>
+
+    <script data-pjax>
+      if (window.mermaid) {
+        mermaid.init()
+      }
+    </script>
+
+
+
+
+
+
+<!-- pjax -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/libs/pjax.min.js"></script>
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        window.pjax = new Pjax({
+            selectors: [
+                'head title',
+                '.page-container',
+                '.pjax'
+            ],
+            history: true,
+            debug: false,
+            cacheBust: false,
+            timeout: 0,
+            analytics: false,
+            currentUrlFullReload: false,
+            scrollRestoration: false,
+        });
+
+        document.addEventListener('pjax:send', () => {
+            KEEP.utils.pjaxProgressBarStart()
+        });
+
+        document.addEventListener('pjax:complete', () => {
+            KEEP.utils.pjaxProgressBarEnd()
+            window.pjax.executeScripts(document.querySelectorAll('script[data-pjax], .pjax script'))
+            KEEP.initExecute()
+        });
+    });
+</script>
+
+
+
+
+</body>
+</html>

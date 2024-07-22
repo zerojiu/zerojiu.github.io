@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="ZeroJiu">
+    
+    <title>
+        
+            WebRTC编译必知必会 |
+        
+        小熊糖否
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+        <link rel="shortcut icon" href="/images/logo.ico">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/font/css/fontawesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/font/css/regular.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/font/css/solid.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/font/css/brands.min.css">
+    
+    <script class="keep-theme-configurations">
+    const KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"example.com","root":"/","language":"en","path":"search.xml"}
+    KEEP.theme_config = {"base_info":{"primary_color":"#c0392b","title":"小熊糖否","author":"ZeroJiu","avatar":"/images/author.jpg","logo":"/images/logo.ico","favicon":"/images/logo.ico"},"menu":{"home":"/","archives":"/archives","tags":"/tags","about":"/about"},"first_screen":{"enable":true,"background_img":"/images/bg.svg","background_img_dark":"/images/bg.svg","description":"True mastery of any skill takes a lifetime.","hitokoto":false},"social_contact":{"enable":true,"links":{"github":"https://github.com/zerojiu","weixin":null,"qq":null,"weibo":null,"zhihu":null,"twitter":null,"x":null,"facebook":null,"email":"xpringlee@gmail.com"}},"scroll":{"progress_bar":true,"percent":false,"hide_header":true},"home":{"announcement":null,"category":true,"tag":true,"post_datetime":"created"},"post":{"author_badge":{"enable":true,"level_badge":false,"custom_badge":["愚昧之巅","绝望之谷","开悟之坡","大师领域"]},"word_count":{"wordcount":true,"min2read":true},"datetime_format":"YYYY-MM-DD HH:mm:ss","copyright_info":true,"share":true,"img_align":"center","reward":{"enable":false,"img_link":null,"text":null}},"code_block":{"tools":{"enable":true,"style":"default"},"highlight_theme":"default"},"toc":{"enable":false,"number":false,"expand_all":true,"init_open":false,"layout":"right"},"website_count":{"busuanzi_count":{"enable":true,"site_uv":true,"site_pv":true,"page_pv":true}},"local_search":{"enable":true,"preload":true},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.36"},"waline":{"server_url":null,"reaction":false,"version":"3.2.1"},"giscus":{"repo":null,"repo_id":null,"category":"Announcements","category_id":null,"reactions_enabled":false},"artalk":{"server":null},"disqus":{"shortname":null}},"rss":{"enable":true},"lazyload":{"enable":true},"cdn":{"enable":true,"provider":"cdnjs"},"pjax":{"enable":true},"footer":{"since":2020,"word_count":false,"site_deploy":{"enable":true,"provider":"github","url":null},"record":{"enable":false,"list":[{"code":null,"link":null}]}},"inject":{"enable":false,"css":[null],"js":[null]},"root":"","source_data":{},"version":"4.1.5"}
+    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"}
+    KEEP.language_code_block = {"copy":"Copy code","copied":"Copied","fold":"Fold code block","folded":"Folded"}
+    KEEP.language_copy_copyright = {"copy":"Copy copyright info","copied":"Copied","title":"Original post title","author":"Original post author","link":"Original post link"}
+  </script>
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+        <span class="scroll-progress-bar"></span>
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <i class="pjax-progress-icon fas fa-circle-notch fa-spin"></i>
+    
+</div>
+
+
+
+<main class="page-container border-box">
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left border-box">
+            
+                <a class="logo-image border-box" href="/">
+                    <img src="/images/logo.ico">
+                </a>
+            
+            <a class="site-name border-box" href="/">
+               小熊糖否
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        
+                        <li class="menu-item">
+                            <a class=""
+                               href="/"
+                            >
+                                
+                                HOME
+                            </a>
+                        </li>
+                    
+                        
+                        <li class="menu-item">
+                            <a class=""
+                               href="/archives"
+                            >
+                                
+                                ARCHIVES
+                            </a>
+                        </li>
+                    
+                        
+                        <li class="menu-item">
+                            <a class=""
+                               href="/tags"
+                            >
+                                
+                                TAGS
+                            </a>
+                        </li>
+                    
+                        
+                        <li class="menu-item">
+                            <a class=""
+                               href="/about"
+                            >
+                                
+                                ABOUT
+                            </a>
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="fas search fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/"
+                    >HOME</a>
+                </li>
+            
+                
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/archives"
+                    >ARCHIVES</a>
+                </li>
+            
+                
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/tags"
+                    >TAGS</a>
+                </li>
+            
+                
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/about"
+                    >ABOUT</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+                
+
+                    
+<div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+        <div class="post-content-container border-box">
+            
+                <div class="post-content-top border-box"
+                     style="height: 13.8rem"
+                >
+                    <div class="cover-post-title">
+                        WebRTC编译必知必会
+                    </div>
+                    <img class="post-cover" src="/images/tags/webrtc.png"
+                         onerror="this.style.display='none'"
+                    >
+                </div>
+            
+
+            <div class="post-content-bottom border-box has-cover">
+                
+
+                
+                    <div class="post-header border-box">
+                        
+                            <div class="avatar-box border-box">
+                                <img src="/images/author.jpg">
+                            </div>
+                        
+                        <div class="info-box">
+                            <div class="author border-box">
+                                <span class="name">ZeroJiu</span>
+                                
+                                    <span class="author-badge">大师领域</span>
+                                
+                            </div>
+                            <div class="meta-info border-box">
+                                
+
+<div class="post-meta-info-container border-box post">
+    <div class="post-meta-info border-box">
+        
+
+        
+            <span class="meta-info-item post-create-date">
+                <i class="icon fa-solid fa-calendar-plus"></i>&nbsp;
+                <span class="datetime">2024-02-26 14:43:46</span>
+            </span>
+
+            <span class="meta-info-item post-update-date">
+                <i class="icon fa-solid fa-file-pen"></i>&nbsp;
+                <span class="datetime" data-updated="Fri Jul 19 2024 21:19:59 GMT+0800">2024-07-19 21:19:59</span>
+            </span>
+        
+
+        
+            <span class="meta-info-item post-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul class="post-category-ul">
+                    
+                            <li class="category-item"><a href="/categories/Develop/">Develop</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="post-tag meta-info-item border-box">
+                <ul class="post-tag-ul">
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/WebRTC/">WebRTC</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+            <span class="meta-info-item post-wordcount">
+                <i class="icon fas fa-file-word"></i>&nbsp;<span>1.2k Words</span>
+            </span>
+        
+        
+            <span class="meta-info-item post-min2read">
+                <i class="icon fas fa-clock"></i>&nbsp;<span>4 Mins</span>
+            </span>
+        
+        
+            <span class="meta-info-item post-pv">
+                <i class="icon fas fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+            </span>
+        
+    </div>
+
+    
+</div>
+
+                            </div>
+                        </div>
+                    </div>
+                
+
+                <div class="post-content keep-markdown-body ">
+                    
+
+                    
+                         <p>任何想入手WebRTC的人，都必须要先过编译大魔王这一关。大魔王精通各种故障制造手法，随便来个网络故障就要折腾我们半天，一些初出茅庐的新手，可能就因此放弃了。本文将笔者编译过程中遇到的坑坑点点记录下来，以飨读者。<span id="more"></span></p>
+<h2 id="%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87" tabindex="-1">前置准备</h2>
+<h3 id="%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83" tabindex="-1">开发环境</h3>
+<p>在开始WebRTC之旅前，我们要做好充足的准备，才能游刃有余。编译设备和工具的选用：</p>
+<ul>
+<li>CPU建议8代I7起步，Win10/11 64bits专业版系统，16/32GB内存，NTFS格式磁盘，空间至少剩余250GB。</li>
+</ul>
+<blockquote>
+<p>FAT32不起作用，因为某些Git包文件大于4GB。</p>
+</blockquote>
+<ul>
+<li>Google的编译工具更新十分的快，要想使用最新版本的WebRTC，则必须要更新Visual Studio到2019版本。</li>
+</ul>
+<blockquote>
+<p>Visual Studio必须安装“Desktop development with C++”组件和“MFC/ATL support”子组件。</p>
+</blockquote>
+<ul>
+<li>更新Windows SDK到最新版本，本文撰写时最新版本号为：10.0.22621.0，地址<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup>见<a class="link"   target="_blank" rel="noopener" href="https://developer.microsoft.com/zh-cn/windows/downloads/windows-sdk/" >Windows开发人员中心<i class="fas fa-external-link-alt"></i></a>。</li>
+</ul>
+<h3 id="%E8%B0%B7%E6%AD%8C%E5%B7%A5%E5%85%B7" tabindex="-1">谷歌工具</h3>
+<p>在准备好基础设施后，在正式启动WebRTC编译工作前，还需要安装Google的开发工具<a class="link"   target="_blank" rel="noopener" href="https://storage.googleapis.com/chrome-infra/depot_tools.zip" >depot tools<i class="fas fa-external-link-alt"></i></a><sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup>。按照下面步骤执行：</p>
+<p>步骤一：将<code>depot_tools</code>下载后解压到某个目录，这里需要注意两点：</p>
+<ul>
+<li>为了保留目录里的.git文件夹，必须要使用右键菜单的<code>全部解压缩</code>或者解压软件来提取到目录中。</li>
+<li>depot_tools不能保存在*C:\Program Files (x86)*文件夹下，否则后续操作会报错。</li>
+</ul>
+<p>步骤二：将depot_tools路径增加到系统环境变量PATH中，增加系统环境变量<code>DEPOT_TOOLS_WIN_TOOLCHAIN=0</code>，告诉depot_tools使用本地安装的Visual Studio。两个注意项：</p>
+<ul>
+<li>建议两个环境变量设置成系统环境变量，不要放到用户环境变量里；</li>
+<li>depot_tools路径环境变量必须要在任何安装的Python/Git路径前。</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ setx PATH=e:\depot_tools;%PATH% /m</span><br><span class="line">$ <span class="built_in">set</span> DEPOT_TOOLS_WIN_TOOLCHAIN 0 /m</span><br></pre></td></tr></table></figure>
+<p><img  
+                       lazyload
+                       alt="image"
+                       data-src="../../assets/webrtc-compile-env-variable.png"
+                        alt="webrtc-compile-env-variable"
+                 ></p>
+<p>步骤三：通过cmd运行<code>gclient</code>命令去更新<code>depot_tools</code>及其依赖项。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ gclient</span><br></pre></td></tr></table></figure>
+<p>行文至此，准备工作的最后提醒，FBI Warning：考虑到一些网络因素，建议科学上网。</p>
+<h2 id="%E7%BC%96%E8%AF%91%E4%BB%A3%E7%A0%81" tabindex="-1">编译代码</h2>
+<h3 id="%E4%B8%8B%E8%BD%BD%E4%BB%A3%E7%A0%81" tabindex="-1">下载代码</h3>
+<p>下载代码步骤虽然简单，但是出错的可能性很大，出错的最大原因在于前置准备不够充分，重新看看哪里没有搞对。按照下面脚本执行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> webrtc-checkout</span><br><span class="line"><span class="built_in">cd</span> webrtc-checkout</span><br><span class="line">fetch --nohooks webrtc <span class="comment"># 第一次才用这个</span></span><br><span class="line">gclient <span class="built_in">sync</span></span><br><span class="line"></span><br><span class="line">git checkout master   </span><br><span class="line">git pull origin master <span class="comment"># 更新代码用这个</span></span><br><span class="line">gclient</span><br></pre></td></tr></table></figure>
+<p>由于WebRTC代码在谷歌的仓库里，想要拉到这些代码是一个非常漫长的过程，<strong>Please Keep Patience</strong>。</p>
+<h3 id="%E7%94%9F%E6%88%90%E7%BC%96%E8%AF%91" tabindex="-1">生成编译</h3>
+<p>WebRTC的默认构建系统为Ninja，Ninja工程文件通过GN（Google构建配置工具Google’s Ninja）来生成。按照下面脚本执行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ gn gen out/Default --ide=<span class="string">&quot;vs2017&quot;</span> <span class="comment"># 参照GN Reference IDE Flag来更改对应的IDE</span></span><br><span class="line">$ autoninja -C out/Default</span><br></pre></td></tr></table></figure>
+<p>建议直接使用<em>Developer Command Prompt for VS 2019</em>来执行命令，而不是直接使用cmd——可能会出现报错，但是也不一定，如果出错了可以试试。</p>
+<h3 id="%E9%94%99%E8%AF%AF%E8%AE%B0%E5%BD%95" tabindex="-1">错误记录</h3>
+<p>错误一：<strong>IOError: [Errno 2] No such file or directory: ‘webrtc-checkout\src\build\util\LASTCHANGE.committime’</strong></p>
+<p>解决方案<sup class="footnote-ref"><a href="#fn3" id="fnref3">[3]</a></sup>见连接：<a class="link"   target="_blank" rel="noopener" href="https://groups.google.com/a/chromium.org/g/chromium-discuss/c/9-clGIeN7bI?pli=1" >https://groups.google.com/a/chromium.org/g/chromium-discuss/c/9-clGIeN7bI?pli=1<i class="fas fa-external-link-alt"></i></a></p>
+<p>步骤如下：</p>
+<ul>
+<li>检查webrtc-checkout\src\build\util目录下是否存在LASTCHANGE.committime文件</li>
+<li>若不存在，执行命令&quot;<a class="link"   target="_blank" rel="noopener" href="http://lastchange.py" >lastchange.py<i class="fas fa-external-link-alt"></i></a> LASTCHANGE.dummy&quot; or “python <a class="link"   target="_blank" rel="noopener" href="http://lastchange.py" >lastchange.py<i class="fas fa-external-link-alt"></i></a> LASTCHANGE.dummy”</li>
+<li>将生成的LASTCHANGE.dummy.committime重命名为LASTCHANGE.committime</li>
+</ul>
+<p>错误二：<strong>VS2019提醒未识别的命令ninja.exe</strong></p>
+<p>这是因为VS2019没有办法直接识别Ninja.exe，因此需要将ninja.exe放到环境变量里面，其目录如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\CommonExtensions\Microsoft\CMake\Ninja</span><br></pre></td></tr></table></figure>
+<h2 id="%E8%BF%90%E8%A1%8C%E7%A8%8B%E5%BA%8F" tabindex="-1">运行程序</h2>
+<h3 id="%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95" tabindex="-1">单元测试</h3>
+<p>WebRTC的单元测试大部分是编译在.lib文件中，然后链接到同一个exe文件，以module为例就是modules_unittests.exe。如果想要使用resharper C++的单元测试工具直接调试某个.lib文件中的单元测试用例，需要将modules_unittests.exe的路径增加到对应的工程–&gt;配置属性–&gt;调试–&gt;命令中。</p>
+<h3 id="%E8%B0%83%E8%AF%95%E6%9B%B4%E6%94%B9" tabindex="-1">调试更改</h3>
+<p>WebRTC的demo PeerConnectionClient/Service已经不再维护，如果想要在本地回环使用peerconnection_client可以按照下列更改。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// api/peerconnection_interface.h</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">PeerConnectionFactoryInterface</span> &#123;</span><br><span class="line">  <span class="type">bool</span> disable_encryption = <span class="literal">true</span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// examples/peerconnection/client/conductor.cc</span></span><br><span class="line"><span class="function"><span class="type">bool</span> <span class="title">Conductor::ReinitializePeerConnectionForLoopback</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  options.disable_encryption = <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">Conductor::StartLogin</span><span class="params">(<span class="type">const</span> std::string&amp; server, <span class="type">int</span> port)</span> </span>&#123;</span><br><span class="line">  <span class="built_in">InitializePeerConnection</span>();</span><br><span class="line">  <span class="built_in">ReinitializePeerConnectionForLoopback</span>();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// modules/video_capture/windows/sink_filter_ds.cc</span></span><br><span class="line">CaptureInputPin::<span class="built_in">Receive</span>(IMediaSample* media_sample) &#123;</span><br><span class="line">  <span class="comment">//RTC_DCHECK_RUN_ON(&amp;capture_checker_);</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE" tabindex="-1">参考文献</h2>
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/katex/dist/katex.min.css">
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/markdown-it-texmath/css/texmath.min.css">
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p><a class="link"   target="_blank" rel="noopener" href="https://developer.microsoft.com/zh-cn/windows/downloads/windows-sdk/" >Windows开发人员中心<i class="fas fa-external-link-alt"></i></a> <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn2" class="footnote-item"><p><a class="link"   target="_blank" rel="noopener" href="https://webrtc.github.io/webrtc-org/native-code/" >WebRTC Native Code<i class="fas fa-external-link-alt"></i></a> <a href="#fnref2" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn3" class="footnote-item"><p><a class="link"   target="_blank" rel="noopener" href="https://groups.google.com/a/chromium.org/g/chromium-discuss/c/9-clGIeN7bI?pli=1" >Error gn gen on win10<i class="fas fa-external-link-alt"></i></a> <a href="#fnref3" class="footnote-backref">↩︎</a></p>
+</li>
+</ol>
+</section>
+
+                    
+                </div>
+
+                
+                        
+<div class="post-copyright-info-container border-box">
+    <div class="copyright-info-content border-box">
+        <div class="copyright-info-top border-box">
+            <div class="copyright-post-title border-box text-ellipsis">
+                WebRTC编译必知必会
+            </div>
+
+            <div class="copyright-post-link border-box text-ellipsis">
+                develop/webrtc-compile/
+            </div>
+        </div>
+
+        <div class="copyright-info-bottom border-box">
+            <div class="copyright-post-author bottom-item">
+                <div class="type">
+                    Author
+                </div>
+                <div class="content">ZeroJiu</div>
+            </div>
+
+            <div class="post-time bottom-item">
+                <div class="type">
+                    Published
+                </div>
+                <div class="content">2024-02-26 14:43</div>
+            </div>
+
+
+            <div class="post-license bottom-item">
+                <div class="type">
+                    License
+                </div>
+                <div class="content tooltip" data-tooltip-content="CC BY-NC-SA 4.0">
+                    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed" target="_blank">
+                        
+                            <i class="fa-brands fa-creative-commons"></i>
+                            <i class="fa-brands fa-creative-commons-by"></i>
+                            <i class="fa-brands fa-creative-commons-nc"></i>
+                            <i class="fa-brands fa-creative-commons-sa"></i>
+                        
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <i class="copyright-bg fa-solid fa-copyright"></i>
+    </div>
+    <div class="copy-copyright-info flex-center tooltip" data-tooltip-content="Copy copyright info" data-tooltip-offset-y="-2px">
+        <i class="fa-solid fa-copy"></i>
+    </div>
+</div>
+
+                
+
+                <div class="post-bottom-tags-and-share border-box">
+                    <div>
+                        
+                            <ul class="post-tags-box border-box">
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/WebRTC/">WebRTC</a>
+                                    </li>
+                                
+                            </ul>
+                        
+                    </div>
+                    <div>
+                        
+                            <div class="post-share-container border-box">
+    <ul class="share-list-wrap border-box">
+        <li class="qq share-item border-box flex-center tooltip"
+            data-tooltip-content="Share to QQ"
+        >
+            <i class="fa-brands fa-qq"></i>
+        </li>
+        <li class="wechat share-item border-box flex-center tooltip tooltip-img"
+            data-tooltip-content="Share to WeChat"
+            data-tooltip-img-tip="Scan by WeChat"
+            data-tooltip-img-style="background-color: #fff; top: -10px; padding: 0.6rem 0.6rem 0.1rem 0.6rem;"
+        >
+            <i class="fa-brands fa-weixin"></i>
+        </li>
+        <li class="weibo share-item border-box flex-center tooltip"
+            data-tooltip-content="Share to WeiBo"
+        >
+            <i class="fa-brands fa-weibo"></i>
+        </li>
+    </ul>
+</div>
+
+                        
+                    </div>
+                </div>
+
+                
+
+                
+                    <div class="post-nav border-box">
+                        
+                        
+                            <div class="next-post">
+                                <a class="next"
+                                   rel="next"
+                                   href="/develop/media-interface/"
+                                   title="视频会议中的音视频接口"
+                                >
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">视频会议中的音视频接口</span>
+                                        <span class="post-nav-item">Next posts</span>
+                                    </span>
+                                    <span class="right arrow-icon flex-center">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                    </div>
+                
+
+                
+                    
+
+
+
+
+
+
+                
+            </div>
+        </div>
+
+        
+    </div>
+</div>
+
+
+                
+            </div>
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="copyright-info info-item">
+        &copy;&nbsp;<span>2020</span>&nbsp;-&nbsp;2024
+        
+            &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">ZeroJiu</a>
+        
+    </div>
+
+    <div class="theme-info info-item">
+        Powered by&nbsp;<a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;&&nbsp;Theme&nbsp;<a class="keep-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep</a>
+    </div>
+
+    
+        
+        <div class="deploy-info info-item">
+            
+            This site is deployed on <span class="tooltip" data-tooltip-content="GitHub Pages"><img src="/images/brands/github.png"></span>
+            
+        </div>
+    
+
+    
+        <div class="count-info info-item">
+            
+
+            
+                <span class="count-item border-box uv">
+                    <span class="item-type border-box">Unique Visitor</span>
+                    <span class="item-value border-box uv" id="busuanzi_value_site_uv"></span>
+                </span>
+            
+
+            
+                <span class="count-item border-box pv">
+                    <span class="item-type border-box">Page View</span>
+                    <span class="item-value border-box pv" id="busuanzi_value_site_pv"></span>
+                </span>
+            
+        </div>
+    
+
+    
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="post-tools-list border-box">
+        <!-- PC encrypt again -->
+        
+
+        <!-- PC TOC show toggle -->
+        
+
+        <!-- PC go comment -->
+        
+
+        <!-- PC full screen -->
+        <li class="tools-item flex-center full-screen">
+            <i class="fa-solid fa-expand"></i>
+        </li>
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container border-box ">
+    <ul class="side-tools-list side-tools-show-handle border-box">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-toggle-theme-mode flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list border-box">
+        
+
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        <li class="tools-item tool-scroll-to-top flex-center show-arrow">
+            <i class="arrow fas fa-arrow-up"></i>
+            <span class="percent"></span>
+        </li>
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="Search..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+</main>
+
+
+
+<!-- common -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/utils.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/header-shrink.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/back2top.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/toggle-theme.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/code-block.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/main.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/libs/anime.min.js"></script>
+
+<!-- local-search -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/local-search.min.js"></script>
+
+
+<!-- lazyload -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/lazyload.min.js"></script>
+
+
+<div class="pjax">
+    <!-- home page -->
+    
+
+    <!-- post page -->
+    
+        <!-- post-helper -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/post/post-helper.min.js"></script>
+
+        <!-- toc -->
+        
+
+        <!-- copyright-info -->
+        
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/post/copyright-info.min.js"></script>
+        
+
+        <!-- share -->
+        
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/post/share.min.js"></script>
+        
+    
+
+    <!-- categories page -->
+    
+
+    <!-- links page -->
+    
+
+    <!-- photos page -->
+    
+
+    <!-- tools page -->
+    
+</div>
+
+<!-- mermaid -->
+
+    
+<script src="//cdn.jsdelivr.net/npm/mermaid@10.5.0/dist/mermaid.min.js"></script>
+
+    <script data-pjax>
+      if (window.mermaid) {
+        mermaid.init()
+      }
+    </script>
+
+
+
+
+
+
+<!-- pjax -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/libs/pjax.min.js"></script>
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        window.pjax = new Pjax({
+            selectors: [
+                'head title',
+                '.page-container',
+                '.pjax'
+            ],
+            history: true,
+            debug: false,
+            cacheBust: false,
+            timeout: 0,
+            analytics: false,
+            currentUrlFullReload: false,
+            scrollRestoration: false,
+        });
+
+        document.addEventListener('pjax:send', () => {
+            KEEP.utils.pjaxProgressBarStart()
+        });
+
+        document.addEventListener('pjax:complete', () => {
+            KEEP.utils.pjaxProgressBarEnd()
+            window.pjax.executeScripts(document.querySelectorAll('script[data-pjax], .pjax script'))
+            KEEP.initExecute()
+        });
+    });
+</script>
+
+
+
+
+</body>
+</html>

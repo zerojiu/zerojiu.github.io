@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="ZeroJiu">
+    
+    <title>
+        
+            Linux常用的10组命令、6个快捷操作、九个常用符号详解 |
+        
+        小熊糖否
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+        <link rel="shortcut icon" href="/images/logo.ico">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/font/css/fontawesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/font/css/regular.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/font/css/solid.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/font/css/brands.min.css">
+    
+    <script class="keep-theme-configurations">
+    const KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"example.com","root":"/","language":"en","path":"search.xml"}
+    KEEP.theme_config = {"base_info":{"primary_color":"#c0392b","title":"小熊糖否","author":"ZeroJiu","avatar":"/images/author.jpg","logo":"/images/logo.ico","favicon":"/images/logo.ico"},"menu":{"home":"/","archives":"/archives","tags":"/tags","about":"/about"},"first_screen":{"enable":true,"background_img":"/images/bg.svg","background_img_dark":"/images/bg.svg","description":"True mastery of any skill takes a lifetime.","hitokoto":false},"social_contact":{"enable":true,"links":{"github":"https://github.com/zerojiu","weixin":null,"qq":null,"weibo":null,"zhihu":null,"twitter":null,"x":null,"facebook":null,"email":"xpringlee@gmail.com"}},"scroll":{"progress_bar":true,"percent":false,"hide_header":true},"home":{"announcement":null,"category":true,"tag":true,"post_datetime":"created"},"post":{"author_badge":{"enable":true,"level_badge":false,"custom_badge":["愚昧之巅","绝望之谷","开悟之坡","大师领域"]},"word_count":{"wordcount":true,"min2read":true},"datetime_format":"YYYY-MM-DD HH:mm:ss","copyright_info":true,"share":true,"img_align":"center","reward":{"enable":false,"img_link":null,"text":null}},"code_block":{"tools":{"enable":true,"style":"default"},"highlight_theme":"default"},"toc":{"enable":false,"number":false,"expand_all":true,"init_open":false,"layout":"right"},"website_count":{"busuanzi_count":{"enable":true,"site_uv":true,"site_pv":true,"page_pv":true}},"local_search":{"enable":true,"preload":true},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.36"},"waline":{"server_url":null,"reaction":false,"version":"3.2.1"},"giscus":{"repo":null,"repo_id":null,"category":"Announcements","category_id":null,"reactions_enabled":false},"artalk":{"server":null},"disqus":{"shortname":null}},"rss":{"enable":true},"lazyload":{"enable":true},"cdn":{"enable":true,"provider":"cdnjs"},"pjax":{"enable":true},"footer":{"since":2020,"word_count":false,"site_deploy":{"enable":true,"provider":"github","url":null},"record":{"enable":false,"list":[{"code":null,"link":null}]}},"inject":{"enable":false,"css":[null],"js":[null]},"root":"","source_data":{},"version":"4.1.5"}
+    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"}
+    KEEP.language_code_block = {"copy":"Copy code","copied":"Copied","fold":"Fold code block","folded":"Folded"}
+    KEEP.language_copy_copyright = {"copy":"Copy copyright info","copied":"Copied","title":"Original post title","author":"Original post author","link":"Original post link"}
+  </script>
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+        <span class="scroll-progress-bar"></span>
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <i class="pjax-progress-icon fas fa-circle-notch fa-spin"></i>
+    
+</div>
+
+
+
+<main class="page-container border-box">
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left border-box">
+            
+                <a class="logo-image border-box" href="/">
+                    <img src="/images/logo.ico">
+                </a>
+            
+            <a class="site-name border-box" href="/">
+               小熊糖否
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        
+                        <li class="menu-item">
+                            <a class=""
+                               href="/"
+                            >
+                                
+                                HOME
+                            </a>
+                        </li>
+                    
+                        
+                        <li class="menu-item">
+                            <a class=""
+                               href="/archives"
+                            >
+                                
+                                ARCHIVES
+                            </a>
+                        </li>
+                    
+                        
+                        <li class="menu-item">
+                            <a class=""
+                               href="/tags"
+                            >
+                                
+                                TAGS
+                            </a>
+                        </li>
+                    
+                        
+                        <li class="menu-item">
+                            <a class=""
+                               href="/about"
+                            >
+                                
+                                ABOUT
+                            </a>
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="fas search fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/"
+                    >HOME</a>
+                </li>
+            
+                
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/archives"
+                    >ARCHIVES</a>
+                </li>
+            
+                
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/tags"
+                    >TAGS</a>
+                </li>
+            
+                
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/about"
+                    >ABOUT</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+                
+
+                    
+<div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+        <div class="post-content-container border-box">
+            
+                <div class="post-content-top border-box"
+                     style="height: 13.8rem"
+                >
+                    <div class="cover-post-title">
+                        Linux常用的10组命令、6个快捷操作、九个常用符号详解
+                    </div>
+                    <img class="post-cover" src="/images/tags/linux.jpg"
+                         onerror="this.style.display='none'"
+                    >
+                </div>
+            
+
+            <div class="post-content-bottom border-box has-cover">
+                
+
+                
+                    <div class="post-header border-box">
+                        
+                            <div class="avatar-box border-box">
+                                <img src="/images/author.jpg">
+                            </div>
+                        
+                        <div class="info-box">
+                            <div class="author border-box">
+                                <span class="name">ZeroJiu</span>
+                                
+                                    <span class="author-badge">大师领域</span>
+                                
+                            </div>
+                            <div class="meta-info border-box">
+                                
+
+<div class="post-meta-info-container border-box post">
+    <div class="post-meta-info border-box">
+        
+
+        
+            <span class="meta-info-item post-create-date">
+                <i class="icon fa-solid fa-calendar-plus"></i>&nbsp;
+                <span class="datetime">2016-09-11 14:59:07</span>
+            </span>
+
+            <span class="meta-info-item post-update-date">
+                <i class="icon fa-solid fa-file-pen"></i>&nbsp;
+                <span class="datetime" data-updated="Fri Jul 19 2024 21:19:42 GMT+0800">2024-07-19 21:19:42</span>
+            </span>
+        
+
+        
+            <span class="meta-info-item post-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul class="post-category-ul">
+                    
+                            <li class="category-item"><a href="/categories/Develop/">Develop</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="post-tag meta-info-item border-box">
+                <ul class="post-tag-ul">
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Linux/">Linux</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+            <span class="meta-info-item post-wordcount">
+                <i class="icon fas fa-file-word"></i>&nbsp;<span>2.9k Words</span>
+            </span>
+        
+        
+            <span class="meta-info-item post-min2read">
+                <i class="icon fas fa-clock"></i>&nbsp;<span>11 Mins</span>
+            </span>
+        
+        
+            <span class="meta-info-item post-pv">
+                <i class="icon fas fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+            </span>
+        
+    </div>
+
+    
+</div>
+
+                            </div>
+                        </div>
+                    </div>
+                
+
+                <div class="post-content keep-markdown-body ">
+                    
+
+                    
+                         <blockquote><p>衡量一个人是否真正的自信，就看他是否能真心为他人的成功而毫无芥蒂地感到高兴。</p>
+<footer><strong>李笑来</strong><cite>新生——七年就是一辈子</cite></footer></blockquote>
+<p>Linux命令繁多，需要掌握和不需要掌握的都很多，我们需要在掌握一些基本命令的前提下，才能更高效的使用Linux，并开展后续深入的学习。<span id="more"></span></p>
+<h2 id="ls" tabindex="-1">ls</h2>
+<p>Linux <code>ls（list）命令</code>用于显示指定工作目录下之内容（列出目前工作目录所含之文件及子目录)。</p>
+<p>对于ls命令，我们需要注意下面几个参数与使用组合。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">ls</span>                <span class="comment"># 显示当前目录信息</span></span><br><span class="line">$ <span class="built_in">ls</span> testdir        <span class="comment"># 显示testdir目录信息</span></span><br><span class="line">$ <span class="built_in">ls</span> -a             <span class="comment"># 显示目录下的一切文件，包含以.起始的隐藏文件或文件夹</span></span><br><span class="line">$ <span class="built_in">ls</span> -l             <span class="comment"># 显示文件的具体信息，包括文件形态、权限、拥有者、文件大小等信息</span></span><br><span class="line">$ <span class="built_in">ls</span> | grep <span class="built_in">dirname</span> <span class="comment"># 显示文件/文件夹名包含“dirname”的文件或者文件夹</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注意：在Linux中，文件以“.”开头的就是隐藏文件，并且每个文件，文件夹，设备或者命令都是以文件对待。</p>
+</blockquote>
+<h2 id="cd" tabindex="-1">cd</h2>
+<p>Linux <code>cd（change directory）命令</code>用于切换当前工作目录至 dirName(目录参数)。</p>
+<p>对于cd命令，需要和一些快捷符号联系在一起操作。我们可以用<code>pwd命令</code>来显示当前目录。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cd</span>    <span class="comment"># 切换到家目录</span></span><br><span class="line">$ <span class="built_in">cd</span> ~  <span class="comment"># 切换到家目录</span></span><br><span class="line">$ <span class="built_in">cd</span> /  <span class="comment"># 切换到根目录</span></span><br><span class="line">$ <span class="built_in">cd</span> -  <span class="comment"># 切换到上一个工作目录</span></span><br><span class="line">$ <span class="built_in">cd</span> .  <span class="comment"># 切换到当前目录</span></span><br><span class="line">$ <span class="built_in">cd</span> .. <span class="comment"># 切换到当前目录上一层目录</span></span><br></pre></td></tr></table></figure>
+<h2 id="cp%2Fmv%2Frm%2Ftouch%2Fmkdir" tabindex="-1">cp/mv/rm/touch/mkdir</h2>
+<h3 id="%E4%BD%9C%E7%94%A8" tabindex="-1">作用</h3>
+<ul>
+<li>Linux <code>cp命令</code>主要用于复制文件或目录。</li>
+<li>Linux <code>rm命令</code>用于删除一个文件或者目录。</li>
+<li>Linux <code>mv命令</code>用来为文件或目录改名、或将文件或目录移入其它位置。</li>
+<li>Linux <code>touch命令</code>用于修改文件或者目录的时间属性，包括存取时间和更改时间。若文件不存在，系统会建立一个新的文件。</li>
+<li>Linux <code>mkdir命令</code>用于建立名称为 dirName 之子目录。</li>
+</ul>
+<h3 id="%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B" tabindex="-1">使用示例</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># cp</span></span><br><span class="line">$ <span class="built_in">cp</span> testfile1 testfile2</span><br><span class="line">$ <span class="built_in">cp</span> -v testfile1 testfile2  <span class="comment"># 显示拷贝详情</span></span><br><span class="line"><span class="string">&#x27;testfile1&#x27;</span> -&gt; <span class="string">&#x27;testfile2&#x27;</span></span><br><span class="line">$ <span class="built_in">cp</span> –r testdir/ newtestdir  <span class="comment"># 若给出的源文件是一个目录文件，此时将复制该目录下所有的子目录和文件。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># mv</span></span><br><span class="line">$ <span class="built_in">mv</span> testfile1 testfile2 <span class="comment"># 将源文件名改为目标文件名</span></span><br><span class="line">$ <span class="built_in">mv</span> testfile testdir    <span class="comment"># 将文件移动到目标目录</span></span><br><span class="line">$ <span class="built_in">mv</span> testdir1/ testdir2  <span class="comment"># 目标目录已存在，将源目录移动到目标目录；目标目录不存在则改名</span></span><br><span class="line">$ <span class="built_in">mv</span> testdir testfile    <span class="comment"># 出错：将目录移动到目标文件</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># rm</span></span><br><span class="line">$ <span class="built_in">rm</span> -i testfile  <span class="comment"># 删除前逐一询问确认</span></span><br><span class="line"><span class="built_in">rm</span>: remove regular empty file <span class="string">&#x27;testfile1&#x27;</span>? y</span><br><span class="line"></span><br><span class="line">$ <span class="built_in">rm</span> -f testfile <span class="comment"># 即使原档案属性设为唯读，亦直接删除，无需逐一确认</span></span><br><span class="line"></span><br><span class="line">$ <span class="built_in">rm</span> testdir <span class="comment"># 删除文件可以直接使用rm命令，若删除目录则必须配合选项&quot;-r&quot;</span></span><br><span class="line"><span class="built_in">rm</span>: cannot remove <span class="string">&#x27;testdir&#x27;</span>: Is a directory</span><br><span class="line"></span><br><span class="line">$ <span class="built_in">rm</span> -ir testdir <span class="comment"># 将目录及以下之档案亦逐一删除 #</span></span><br><span class="line"><span class="built_in">rm</span>: remove directory <span class="string">&#x27;testdir&#x27;</span>? y</span><br><span class="line"></span><br><span class="line">$ <span class="built_in">rm</span> -rf * <span class="comment"># 删除当前目录下的所有文件及目录，无法恢复</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># touch</span></span><br><span class="line">$ <span class="built_in">touch</span> testfile <span class="comment"># 创建空白文件或者修改文件的时间属性</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># mkdir</span></span><br><span class="line">$ <span class="built_in">mkdir</span> testdir  <span class="comment"># 创建目录testdir</span></span><br><span class="line">$ <span class="built_in">mkdir</span> -p testdir1/testdir2 <span class="comment"># 在当前目录下的testdir1目录中创建一个目录testdir2，若testdir1目录不存在，则建立一个，不加-p会失败</span></span><br></pre></td></tr></table></figure>
+<h2 id="echo%2Fcat%2Fmore%2Fless" tabindex="-1">echo/cat/more/less</h2>
+<h3 id="%E4%BD%9C%E7%94%A8-1" tabindex="-1">作用</h3>
+<ul>
+<li>Linux <code>echo命令</code>用于显示输入的内容</li>
+<li>Linux <code>cat命令</code>用于把档案串连接后传到基本输出（屏幕或加 &gt; fileName 到另一个档案）</li>
+<li>Linux <code>more命令</code>以翻页形式显示文件内容，按空白键（space）就往下一页显示，按 b 键就会往回（back）一页显示</li>
+<li>Linux <code>less命令</code>与<code>more命令</code>功能正好相反</li>
+</ul>
+<h3 id="%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B-1" tabindex="-1">使用示例</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># echo</span></span><br><span class="line">$ <span class="built_in">echo</span> It is a <span class="built_in">test</span>.</span><br><span class="line">$ <span class="built_in">echo</span> <span class="string">&quot;\&quot;It is a test\&quot;&quot;</span></span><br><span class="line">$ <span class="built_in">read</span> name</span><br><span class="line">$ <span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$name</span> It is a test&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># cat</span></span><br><span class="line">$ <span class="built_in">cat</span> -n textfile1 &gt; textfile2 <span class="comment"># 把 textfile1 的档案内容加上行号后输入 textfile2 这个档案里</span></span><br><span class="line">$ <span class="built_in">cat</span> -b textfile1 textfile2 &gt;&gt; textfile3 <span class="comment"># 把 textfile1 和 textfile2 的档案内容加上行号（空白行不加）之后将内容附加到 textfile3 里。</span></span><br><span class="line">$ <span class="built_in">cat</span> /dev/null &gt; /etc/test.txt <span class="comment"># 清空/etc/test.txt档案内容</span></span><br><span class="line">$ <span class="built_in">cat</span> /dev/fd0 &gt; OUTFILE <span class="comment"># 用来制作镜像文件</span></span><br><span class="line">$ <span class="built_in">cat</span> IMG_FILE &gt; /dev/fd0 <span class="comment"># 把 image file 写到软碟</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># more</span></span><br><span class="line">$ more -s testfile <span class="comment"># 逐页显示 testfile 文档内容，如有连续两行以上空白行则以一行空白行显示。</span></span><br><span class="line">$ more +20 testfile <span class="comment"># 从第 20 行开始显示 testfile 之文档内容</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># less</span></span><br><span class="line">$ less log2013.log</span><br><span class="line">$ ps -ef |less  <span class="comment"># ps查看进程信息并通过less分页显示</span></span><br></pre></td></tr></table></figure>
+<h2 id="shutdown%2Fpoweroff%2Freboot" tabindex="-1">shutdown/poweroff/reboot</h2>
+<h3 id="%E4%BD%9C%E7%94%A8-2" tabindex="-1">作用</h3>
+<ul>
+<li>Linux <code>shutdown命令</code>可以用来进行关机程序，并且在关机以前传送讯息给所有使用者正在执行的程序，shutdown 也可以用来重开机。</li>
+<li>Linux <code>poweroff命令</code>立即执行关机指令</li>
+<li>Linux <code>reboot命令</code>立即执行重启指令</li>
+</ul>
+<h3 id="%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B-2" tabindex="-1">使用示例</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># shutdown</span></span><br><span class="line">$ <span class="built_in">sudo</span> shutdown -h now  <span class="comment"># 立刻关机</span></span><br><span class="line">$ <span class="built_in">sudo</span> shutdown +5 “System will shutdown after 5 minutes” <span class="comment"># 5分钟够关机并显示警告信息</span></span><br><span class="line">$ <span class="built_in">sudo</span> shutdown -r now <span class="comment"># 立刻重启</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># poweroff</span></span><br><span class="line">$ <span class="built_in">sudo</span> poweroff</span><br><span class="line"></span><br><span class="line"><span class="comment"># reboot</span></span><br><span class="line">$ <span class="built_in">sudo</span> reboot</span><br></pre></td></tr></table></figure>
+<h2 id="zip%2Funzip%2Fgzip%2Ftar" tabindex="-1">zip/unzip/gzip/tar</h2>
+<h3 id="%E4%BD%9C%E7%94%A8-3" tabindex="-1">作用</h3>
+<ul>
+<li>Linux <code>zip命令</code>用于压缩文件</li>
+<li>Linux <code>unzip命令</code>用于解压缩zip文件</li>
+<li>Linux <code>gzip命令</code>用于压缩文件</li>
+<li>Linux <code>tar命令</code>用于备份文件</li>
+</ul>
+<h3 id="%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B-3" tabindex="-1">使用示例</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># zip</span></span><br><span class="line">$ zip -v cp.zip a.c b.c c.c e.c  <span class="comment"># 压缩文件</span></span><br><span class="line">$ zip -r cp3.zip /root/          <span class="comment"># 压缩目录</span></span><br><span class="line">$ zip -dv cp.zip a.c             <span class="comment"># 从压缩文件中删除文件</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># unzip</span></span><br><span class="line">$ unzip -l abc.zip     <span class="comment"># 显示压缩文件信息</span></span><br><span class="line">$ unzip -v abc.zip     <span class="comment"># 解压文件</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># gzip</span></span><br><span class="line">$ gzip *     <span class="comment"># 压缩目录下的所有文件</span></span><br><span class="line">$ gzip -dv * <span class="comment"># 解压文件，并列出详细信息</span></span><br><span class="line">$ gzip -l *  <span class="comment"># 显示压缩文件的信息</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># tar</span></span><br><span class="line">$ tar -cvf test.tar /etc     <span class="comment"># 归档文件</span></span><br><span class="line">$ tar -xvf test.tar          <span class="comment"># 还原文件</span></span><br><span class="line">$ tar -tvf test.tar          <span class="comment"># 列出文件内容</span></span><br><span class="line">$ tar -czvf test.tar.gz /etc <span class="comment"># 归档并压缩文件</span></span><br><span class="line">$ tar -xzvf test.tar.gz      <span class="comment"># 还原并解压文件</span></span><br></pre></td></tr></table></figure>
+<h2 id="chmod%2Fchown%2Fchgrp" tabindex="-1">chmod/chown/chgrp</h2>
+<h3 id="%E4%BD%9C%E7%94%A8-4" tabindex="-1">作用</h3>
+<ul>
+<li>Linux/Unix 的文件调用权限分为三级 : 文件拥有者、群组、其他。利用 chmod 可以藉以控制文件如何被他人所调用。</li>
+<li>利用 chown 将指定文件的拥有者改为指定的用户或组，用户可以是用户名或者用户ID；组可以是组名或者组ID；文件是以空格分开的要改变权限的文件列表，支持通配符。</li>
+</ul>
+<h3 id="chmod%E5%8F%82%E6%95%B0%E5%90%AB%E4%B9%89" tabindex="-1">chmod参数含义</h3>
+<ul>
+<li>u 表示该文件的拥有者，g 表示与该文件的拥有者属于同一个群体(group)者，o 表示其他以外的人，a 表示这三者皆是。</li>
+<li>
+<ul>
+<li>表示增加权限、- 表示取消权限、= 表示唯一设定权限。</li>
+</ul>
+</li>
+<li>r 表示可读取，w 表示可写入，x 表示可执行，X 表示只有当该文件是个子目录或者该文件已经被设定过为可执行。</li>
+</ul>
+<h3 id="%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B-4" tabindex="-1">使用示例</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># chmod</span></span><br><span class="line">$ <span class="built_in">chmod</span> ugo+r file1.txt   <span class="comment"># 将文件 file1.txt 设为所有人皆可读取</span></span><br><span class="line">$ <span class="built_in">chmod</span> u+x ex1.py        <span class="comment"># 将 ex1.py 设定为只有该文件拥有者可以执行</span></span><br><span class="line">$ <span class="built_in">chmod</span> 777 file          <span class="comment">#</span></span><br><span class="line">$ <span class="built_in">chmod</span> abc file          <span class="comment"># a,b,c各为一个数字，分别表示User、Group、及Other的权限。r=4，w=2，x=1</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># chown</span></span><br><span class="line">$ <span class="built_in">chown</span> jessie:<span class="built_in">users</span> file1.txt   <span class="comment"># 将文件 file1.txt 的拥有者设为 users 群体的使用者 jessie</span></span><br></pre></td></tr></table></figure>
+<h2 id="yum%2Fapt%2Frpm" tabindex="-1">yum/apt/rpm</h2>
+<h3 id="%E4%BD%9C%E7%94%A8-5" tabindex="-1">作用</h3>
+<ul>
+<li>Linux <code>yum命令</code>是一个在Fedora和RedHat以及SUSE中的Shell前端软件包管理器</li>
+<li>Linux <code>apt命令</code>是一个为Debian系列系统（Ubuntu，Kubuntu等等）开发的高级包管理器</li>
+<li>Linux <code>rpm命令</code>是RPM软件包的管理工具</li>
+</ul>
+<h3 id="yum%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4" tabindex="-1">yum常用命令</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">命令</th>
+<th style="text-align:left">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">yum check-update</td>
+<td style="text-align:left">列出所有可更新的软件清单命令</td>
+</tr>
+<tr>
+<td style="text-align:center">yum update</td>
+<td style="text-align:left">更新所有软件命令</td>
+</tr>
+<tr>
+<td style="text-align:center">yum install &lt;package_name&gt;</td>
+<td style="text-align:left">仅安装指定的软件命令</td>
+</tr>
+<tr>
+<td style="text-align:center">yum update &lt;package_name&gt;</td>
+<td style="text-align:left">仅更新指定的软件命令</td>
+</tr>
+<tr>
+<td style="text-align:center">yum list</td>
+<td style="text-align:left">列出所有可安裝的软件清单命令</td>
+</tr>
+<tr>
+<td style="text-align:center">yum remove &lt;package_name&gt;</td>
+<td style="text-align:left">删除软件包命令</td>
+</tr>
+<tr>
+<td style="text-align:center">yum search <keyword></td>
+<td style="text-align:left">查找软件包命令</td>
+</tr>
+<tr>
+<td style="text-align:center">yum clean packages</td>
+<td style="text-align:left">清除缓存目录下的软件包</td>
+</tr>
+<tr>
+<td style="text-align:center">yum clean headers</td>
+<td style="text-align:left">清除缓存目录下的 headers</td>
+</tr>
+<tr>
+<td style="text-align:center">yum clean oldheaders</td>
+<td style="text-align:left">清除缓存目录下旧的 headers</td>
+</tr>
+<tr>
+<td style="text-align:center">yum clean all</td>
+<td style="text-align:left">清除缓存目录下的软件包及旧的headers</td>
+</tr>
+</tbody>
+</table>
+<h3 id="yum%E5%9B%BD%E5%86%85%E6%BA%90" tabindex="-1">yum国内源</h3>
+<blockquote>
+<p>具体帮助指南见<a class="link"   target="_blank" rel="noopener" href="http://mirrors.163.com/.help/centos.html" >163CentOS镜像使用帮助<i class="fas fa-external-link-alt"></i></a></p>
+</blockquote>
+<p>1、首先备份/etc/yum.repos.d/CentOS-Base.repo</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mv</span> /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup</span><br></pre></td></tr></table></figure>
+<p>2、下载对应版本repo文件, 放入/etc/yum.repos.d/</p>
+<ul>
+<li>CentOS5 ：<a class="link"   target="_blank" rel="noopener" href="http://mirrors.163.com/.help/CentOS5-Base-163.repo" >http://mirrors.163.com/.help/CentOS5-Base-163.repo<i class="fas fa-external-link-alt"></i></a></li>
+<li>CentOS6 ：<a class="link"   target="_blank" rel="noopener" href="http://mirrors.163.com/.help/CentOS6-Base-163.repo" >http://mirrors.163.com/.help/CentOS6-Base-163.repo<i class="fas fa-external-link-alt"></i></a></li>
+<li>CentOS7 ：<a class="link"   target="_blank" rel="noopener" href="http://mirrors.163.com/.help/CentOS7-Base-163.repo" >http://mirrors.163.com/.help/CentOS7-Base-163.repo<i class="fas fa-external-link-alt"></i></a></li>
+</ul>
+<p>3、运行以下命令生成缓存</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yum clean all</span><br><span class="line">yum makecache</span><br></pre></td></tr></table></figure>
+<h3 id="apt%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4" tabindex="-1">apt常用命令</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">命令</th>
+<th style="text-align:left">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">apt-cache pkgnames</td>
+<td style="text-align:left">列出所有的软件包</td>
+</tr>
+<tr>
+<td style="text-align:center">apt-cache search</td>
+<td style="text-align:left">查找软件包</td>
+</tr>
+<tr>
+<td style="text-align:center">apt-cache depends</td>
+<td style="text-align:left">显示软件包的依赖性关系</td>
+</tr>
+<tr>
+<td style="text-align:center">apt-get update</td>
+<td style="text-align:left">更新本地apt-get的本地数据库</td>
+</tr>
+<tr>
+<td style="text-align:center">apt-get install &lt;package_name&gt;</td>
+<td style="text-align:left">安装某个软件包及其相关软件包</td>
+</tr>
+<tr>
+<td style="text-align:center">apt-get remove package_name</td>
+<td style="text-align:left">删除该软件包，同时会删除依赖于它的软件包</td>
+</tr>
+<tr>
+<td style="text-align:center">apt-get clean</td>
+<td style="text-align:left">删除保存在缓存目录下(/var/cache/apt/archives)的被下载的软件包</td>
+</tr>
+<tr>
+<td style="text-align:center">apt-get upgrade &lt;package_name&gt;</td>
+<td style="text-align:left">升级指定的软件包，并升级其依赖的软件包</td>
+</tr>
+</tbody>
+</table>
+<h3 id="rpm%E5%B8%B8%E7%94%A8%E5%8F%82%E6%95%B0%E5%91%BD%E4%BB%A4" tabindex="-1">rpm常用参数命令</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">命令</th>
+<th style="text-align:left">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">rpm -q <package-name></td>
+<td style="text-align:left">查询程序是否安装</td>
+</tr>
+<tr>
+<td style="text-align:center">rpm -ivh <package-name>.rpm</td>
+<td style="text-align:left">安装rpm程序</td>
+</tr>
+<tr>
+<td style="text-align:center">rpm -e <package-name></td>
+<td style="text-align:left">卸载rpm程序</td>
+</tr>
+<tr>
+<td style="text-align:center">rpm -Uvh <package-name>.rpm</td>
+<td style="text-align:left">升级rpm程序</td>
+</tr>
+<tr>
+<td style="text-align:center">rpm -qpR <package-name>.rpm</td>
+<td style="text-align:left">查看程序依赖关系</td>
+</tr>
+<tr>
+<td style="text-align:center">rpm -ivh --relocate /=/opt/gaim <package-name>.rpm</td>
+<td style="text-align:left">指定安装目录</td>
+</tr>
+</tbody>
+</table>
+<h2 id="%E5%B8%B8%E7%94%A8%E5%B8%AE%E5%8A%A9%E5%91%BD%E4%BB%A4" tabindex="-1">常用帮助命令</h2>
+<h3 id="%E4%BD%9C%E7%94%A8-6" tabindex="-1">作用</h3>
+<ul>
+<li>Linux <code>man命令</code>用户查看帮助信息</li>
+<li>Linux <code>info命令</code>用于查看帮助信息</li>
+<li>Linux <code>help参数</code>用于查看帮助信息</li>
+<li>Linux <code>version参数</code>用于查看程序版本</li>
+<li>Linux <code>history命令</code>用于查看历史命令</li>
+<li>Linux <code>uname命令</code>用于显示系统信息</li>
+<li>Linux <code>who命令</code>用于查看当前用户登录状态</li>
+</ul>
+<h3 id="%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B-5" tabindex="-1">使用示例</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># man</span></span><br><span class="line">$ man <span class="built_in">ls</span>  <span class="comment"># 显示ls命令的使用手册</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># info</span></span><br><span class="line">$ info <span class="built_in">ls</span>  <span class="comment"># 查看ls命令信息</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># help</span></span><br><span class="line">$ <span class="built_in">ls</span> --<span class="built_in">help</span>  <span class="comment"># 查看ls命令帮助</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># version</span></span><br><span class="line">$ <span class="built_in">ls</span> --version <span class="comment"># 查看ls命令版本</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># history</span></span><br><span class="line">$ <span class="built_in">history</span> | grep ssh <span class="comment"># 查找历史命令，并列出包含ssh的项</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># uname</span></span><br><span class="line">$ <span class="built_in">uname</span> -a  <span class="comment"># 显示系统信息。</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="%E5%B8%B8%E7%94%A8%E7%B3%BB%E7%BB%9F%E5%91%BD%E4%BB%A4" tabindex="-1">常用系统命令</h2>
+<h3 id="%E4%BD%9C%E7%94%A8-7" tabindex="-1">作用</h3>
+<ul>
+<li>Linux <code>su</code>用于切换用户</li>
+<li>Linux <code>sudo</code>用于执行管理员权限操作</li>
+<li>Linux <code>passwd</code>用于改变用户密码</li>
+<li>Linux <code>exit</code>用于用于退出当前shell</li>
+</ul>
+<h3 id="%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B-6" tabindex="-1">使用示例</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># su</span></span><br><span class="line">$ su   <span class="comment"># su   不改变环境变量</span></span><br><span class="line">$ su - <span class="comment">#  su - 改变环境变量</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># sudo</span></span><br><span class="line">$ <span class="built_in">sudo</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># passwd</span></span><br><span class="line">$ passwd <span class="comment"># 用于改变用户密码</span></span><br></pre></td></tr></table></figure>
+<h2 id="6%E4%B8%AA%E5%BF%AB%E6%8D%B7%E6%93%8D%E4%BD%9C" tabindex="-1">6个快捷操作</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">操作</th>
+<th style="text-align:left">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">ctrl+alt+[F1]~[F7]</td>
+<td style="text-align:left">纯文本接口和图形界面切换</td>
+</tr>
+<tr>
+<td style="text-align:center">ctrl+r</td>
+<td style="text-align:left">反向搜索执行过的命令</td>
+</tr>
+<tr>
+<td style="text-align:center">ctrl+z</td>
+<td style="text-align:left">暂停某个程序</td>
+</tr>
+<tr>
+<td style="text-align:center">ctrl+c</td>
+<td style="text-align:left">中止某个程序</td>
+</tr>
+<tr>
+<td style="text-align:center">ctrl+d</td>
+<td style="text-align:left">键盘输入结束（EOF）</td>
+</tr>
+<tr>
+<td style="text-align:center">tab</td>
+<td style="text-align:left">命令和文档补全</td>
+</tr>
+</tbody>
+</table>
+<h2 id="%E4%B9%9D%E4%B8%AA%E5%B8%B8%E7%94%A8%E7%AC%A6%E5%8F%B7" tabindex="-1">九个常用符号</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">符号</th>
+<th style="text-align:left">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">/</td>
+<td style="text-align:left">根目录</td>
+</tr>
+<tr>
+<td style="text-align:center">~</td>
+<td style="text-align:left">家目录</td>
+</tr>
+<tr>
+<td style="text-align:center">-</td>
+<td style="text-align:left">上一个工作目录</td>
+</tr>
+<tr>
+<td style="text-align:center">.</td>
+<td style="text-align:left">当前目录</td>
+</tr>
+<tr>
+<td style="text-align:center">…</td>
+<td style="text-align:left">当前目录上一层目录</td>
+</tr>
+<tr>
+<td style="text-align:center">&amp;</td>
+<td style="text-align:left">放在启动参数后面表示设置此进程为后台进程</td>
+</tr>
+<tr>
+<td style="text-align:center">!</td>
+<td style="text-align:left">从历史记录中使用命令号来运行命令，譬如!233</td>
+</tr>
+<tr>
+<td style="text-align:center">#</td>
+<td style="text-align:left">root用户提示符</td>
+</tr>
+<tr>
+<td style="text-align:center">$</td>
+<td style="text-align:left">一般用户提示符</td>
+</tr>
+</tbody>
+</table>
+<h2 id="linux%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F" tabindex="-1">Linux环境变量</h2>
+<p>环境变量和其他命令结合在一起使用，需要使用<code>$</code>符号作为前缀一起使用。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ LANG=en_US</span><br><span class="line">$ <span class="built_in">echo</span> <span class="variable">$LANG</span></span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">变量名</th>
+<th style="text-align:left">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">LANG</td>
+<td style="text-align:left">当前语系</td>
+</tr>
+<tr>
+<td style="text-align:center">PATH</td>
+<td style="text-align:left">当前环境路径</td>
+</tr>
+</tbody>
+</table>
+<h2 id="%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5" tabindex="-1">参考链接</h2>
+<ul>
+<li><a class="link"   target="_blank" rel="noopener" href="http://www.runoob.com/linux" >linux命令大全<i class="fas fa-external-link-alt"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="http://www.oschina.net/translate/useful-linux-commands-for-newbies" >对 Linux 新手非常有用的 20 个命令<i class="fas fa-external-link-alt"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="http://man.linuxde.net/rpm" >Linux命令大全<i class="fas fa-external-link-alt"></i></a></li>
+</ul>
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/katex/dist/katex.min.css">
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/markdown-it-texmath/css/texmath.min.css">
+
+                    
+                </div>
+
+                
+                        
+<div class="post-copyright-info-container border-box">
+    <div class="copyright-info-content border-box">
+        <div class="copyright-info-top border-box">
+            <div class="copyright-post-title border-box text-ellipsis">
+                Linux常用的10组命令、6个快捷操作、九个常用符号详解
+            </div>
+
+            <div class="copyright-post-link border-box text-ellipsis">
+                develop/linux-common-command-details/
+            </div>
+        </div>
+
+        <div class="copyright-info-bottom border-box">
+            <div class="copyright-post-author bottom-item">
+                <div class="type">
+                    Author
+                </div>
+                <div class="content">ZeroJiu</div>
+            </div>
+
+            <div class="post-time bottom-item">
+                <div class="type">
+                    Published
+                </div>
+                <div class="content">2016-09-11 14:59</div>
+            </div>
+
+
+            <div class="post-license bottom-item">
+                <div class="type">
+                    License
+                </div>
+                <div class="content tooltip" data-tooltip-content="CC BY-NC-SA 4.0">
+                    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed" target="_blank">
+                        
+                            <i class="fa-brands fa-creative-commons"></i>
+                            <i class="fa-brands fa-creative-commons-by"></i>
+                            <i class="fa-brands fa-creative-commons-nc"></i>
+                            <i class="fa-brands fa-creative-commons-sa"></i>
+                        
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <i class="copyright-bg fa-solid fa-copyright"></i>
+    </div>
+    <div class="copy-copyright-info flex-center tooltip" data-tooltip-content="Copy copyright info" data-tooltip-offset-y="-2px">
+        <i class="fa-solid fa-copy"></i>
+    </div>
+</div>
+
+                
+
+                <div class="post-bottom-tags-and-share border-box">
+                    <div>
+                        
+                            <ul class="post-tags-box border-box">
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Linux/">Linux</a>
+                                    </li>
+                                
+                            </ul>
+                        
+                    </div>
+                    <div>
+                        
+                            <div class="post-share-container border-box">
+    <ul class="share-list-wrap border-box">
+        <li class="qq share-item border-box flex-center tooltip"
+            data-tooltip-content="Share to QQ"
+        >
+            <i class="fa-brands fa-qq"></i>
+        </li>
+        <li class="wechat share-item border-box flex-center tooltip tooltip-img"
+            data-tooltip-content="Share to WeChat"
+            data-tooltip-img-tip="Scan by WeChat"
+            data-tooltip-img-style="background-color: #fff; top: -10px; padding: 0.6rem 0.6rem 0.1rem 0.6rem;"
+        >
+            <i class="fa-brands fa-weixin"></i>
+        </li>
+        <li class="weibo share-item border-box flex-center tooltip"
+            data-tooltip-content="Share to WeiBo"
+        >
+            <i class="fa-brands fa-weibo"></i>
+        </li>
+    </ul>
+</div>
+
+                        
+                    </div>
+                </div>
+
+                
+
+                
+                    <div class="post-nav border-box">
+                        
+                            <div class="prev-post">
+                                <a class="prev"
+                                   rel="prev"
+                                   href="/develop/cpp-thread-hello-world/"
+                                   title="C++并发编程0——欢迎来到多线程的世界"
+                                >
+                                    <span class="left arrow-icon flex-center">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </span>
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">C++并发编程0——欢迎来到多线程的世界</span>
+                                        <span class="post-nav-item">Prev posts</span>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                        
+                            <div class="next-post">
+                                <a class="next"
+                                   rel="next"
+                                   href="/timecapsule/no-more-waiting/"
+                                   title="我不在等以后了"
+                                >
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">我不在等以后了</span>
+                                        <span class="post-nav-item">Next posts</span>
+                                    </span>
+                                    <span class="right arrow-icon flex-center">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                    </div>
+                
+
+                
+                    
+
+
+
+
+
+
+                
+            </div>
+        </div>
+
+        
+    </div>
+</div>
+
+
+                
+            </div>
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="copyright-info info-item">
+        &copy;&nbsp;<span>2020</span>&nbsp;-&nbsp;2024
+        
+            &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">ZeroJiu</a>
+        
+    </div>
+
+    <div class="theme-info info-item">
+        Powered by&nbsp;<a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;&&nbsp;Theme&nbsp;<a class="keep-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep</a>
+    </div>
+
+    
+        
+        <div class="deploy-info info-item">
+            
+            This site is deployed on <span class="tooltip" data-tooltip-content="GitHub Pages"><img src="/images/brands/github.png"></span>
+            
+        </div>
+    
+
+    
+        <div class="count-info info-item">
+            
+
+            
+                <span class="count-item border-box uv">
+                    <span class="item-type border-box">Unique Visitor</span>
+                    <span class="item-value border-box uv" id="busuanzi_value_site_uv"></span>
+                </span>
+            
+
+            
+                <span class="count-item border-box pv">
+                    <span class="item-type border-box">Page View</span>
+                    <span class="item-value border-box pv" id="busuanzi_value_site_pv"></span>
+                </span>
+            
+        </div>
+    
+
+    
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="post-tools-list border-box">
+        <!-- PC encrypt again -->
+        
+
+        <!-- PC TOC show toggle -->
+        
+
+        <!-- PC go comment -->
+        
+
+        <!-- PC full screen -->
+        <li class="tools-item flex-center full-screen">
+            <i class="fa-solid fa-expand"></i>
+        </li>
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container border-box ">
+    <ul class="side-tools-list side-tools-show-handle border-box">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-toggle-theme-mode flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list border-box">
+        
+
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        <li class="tools-item tool-scroll-to-top flex-center show-arrow">
+            <i class="arrow fas fa-arrow-up"></i>
+            <span class="percent"></span>
+        </li>
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="Search..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+</main>
+
+
+
+<!-- common -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/utils.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/header-shrink.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/back2top.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/toggle-theme.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/code-block.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/main.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/libs/anime.min.js"></script>
+
+<!-- local-search -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/local-search.min.js"></script>
+
+
+<!-- lazyload -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/lazyload.min.js"></script>
+
+
+<div class="pjax">
+    <!-- home page -->
+    
+
+    <!-- post page -->
+    
+        <!-- post-helper -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/post/post-helper.min.js"></script>
+
+        <!-- toc -->
+        
+
+        <!-- copyright-info -->
+        
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/post/copyright-info.min.js"></script>
+        
+
+        <!-- share -->
+        
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/post/share.min.js"></script>
+        
+    
+
+    <!-- categories page -->
+    
+
+    <!-- links page -->
+    
+
+    <!-- photos page -->
+    
+
+    <!-- tools page -->
+    
+</div>
+
+<!-- mermaid -->
+
+    
+<script src="//cdn.jsdelivr.net/npm/mermaid@10.5.0/dist/mermaid.min.js"></script>
+
+    <script data-pjax>
+      if (window.mermaid) {
+        mermaid.init()
+      }
+    </script>
+
+
+
+
+
+
+<!-- pjax -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/libs/pjax.min.js"></script>
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        window.pjax = new Pjax({
+            selectors: [
+                'head title',
+                '.page-container',
+                '.pjax'
+            ],
+            history: true,
+            debug: false,
+            cacheBust: false,
+            timeout: 0,
+            analytics: false,
+            currentUrlFullReload: false,
+            scrollRestoration: false,
+        });
+
+        document.addEventListener('pjax:send', () => {
+            KEEP.utils.pjaxProgressBarStart()
+        });
+
+        document.addEventListener('pjax:complete', () => {
+            KEEP.utils.pjaxProgressBarEnd()
+            window.pjax.executeScripts(document.querySelectorAll('script[data-pjax], .pjax script'))
+            KEEP.initExecute()
+        });
+    });
+</script>
+
+
+
+
+</body>
+</html>

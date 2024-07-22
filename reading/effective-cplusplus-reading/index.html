@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="ZeroJiu">
+    
+    <title>
+        
+            如何设计C++类——《Effective C++》读后感 |
+        
+        小熊糖否
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+        <link rel="shortcut icon" href="/images/logo.ico">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/font/css/fontawesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/font/css/regular.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/font/css/solid.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/font/css/brands.min.css">
+    
+    <script class="keep-theme-configurations">
+    const KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"example.com","root":"/","language":"en","path":"search.xml"}
+    KEEP.theme_config = {"base_info":{"primary_color":"#c0392b","title":"小熊糖否","author":"ZeroJiu","avatar":"/images/author.jpg","logo":"/images/logo.ico","favicon":"/images/logo.ico"},"menu":{"home":"/","archives":"/archives","tags":"/tags","about":"/about"},"first_screen":{"enable":true,"background_img":"/images/bg.svg","background_img_dark":"/images/bg.svg","description":"True mastery of any skill takes a lifetime.","hitokoto":false},"social_contact":{"enable":true,"links":{"github":"https://github.com/zerojiu","weixin":null,"qq":null,"weibo":null,"zhihu":null,"twitter":null,"x":null,"facebook":null,"email":"xpringlee@gmail.com"}},"scroll":{"progress_bar":true,"percent":false,"hide_header":true},"home":{"announcement":null,"category":true,"tag":true,"post_datetime":"created"},"post":{"author_badge":{"enable":true,"level_badge":false,"custom_badge":["愚昧之巅","绝望之谷","开悟之坡","大师领域"]},"word_count":{"wordcount":true,"min2read":true},"datetime_format":"YYYY-MM-DD HH:mm:ss","copyright_info":true,"share":true,"img_align":"center","reward":{"enable":false,"img_link":null,"text":null}},"code_block":{"tools":{"enable":true,"style":"default"},"highlight_theme":"default"},"toc":{"enable":false,"number":false,"expand_all":true,"init_open":false,"layout":"right"},"website_count":{"busuanzi_count":{"enable":true,"site_uv":true,"site_pv":true,"page_pv":true}},"local_search":{"enable":true,"preload":true},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.36"},"waline":{"server_url":null,"reaction":false,"version":"3.2.1"},"giscus":{"repo":null,"repo_id":null,"category":"Announcements","category_id":null,"reactions_enabled":false},"artalk":{"server":null},"disqus":{"shortname":null}},"rss":{"enable":true},"lazyload":{"enable":true},"cdn":{"enable":true,"provider":"cdnjs"},"pjax":{"enable":true},"footer":{"since":2020,"word_count":false,"site_deploy":{"enable":true,"provider":"github","url":null},"record":{"enable":false,"list":[{"code":null,"link":null}]}},"inject":{"enable":false,"css":[null],"js":[null]},"root":"","source_data":{},"version":"4.1.5"}
+    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"}
+    KEEP.language_code_block = {"copy":"Copy code","copied":"Copied","fold":"Fold code block","folded":"Folded"}
+    KEEP.language_copy_copyright = {"copy":"Copy copyright info","copied":"Copied","title":"Original post title","author":"Original post author","link":"Original post link"}
+  </script>
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+        <span class="scroll-progress-bar"></span>
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <i class="pjax-progress-icon fas fa-circle-notch fa-spin"></i>
+    
+</div>
+
+
+
+<main class="page-container border-box">
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left border-box">
+            
+                <a class="logo-image border-box" href="/">
+                    <img src="/images/logo.ico">
+                </a>
+            
+            <a class="site-name border-box" href="/">
+               小熊糖否
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        
+                        <li class="menu-item">
+                            <a class=""
+                               href="/"
+                            >
+                                
+                                HOME
+                            </a>
+                        </li>
+                    
+                        
+                        <li class="menu-item">
+                            <a class=""
+                               href="/archives"
+                            >
+                                
+                                ARCHIVES
+                            </a>
+                        </li>
+                    
+                        
+                        <li class="menu-item">
+                            <a class=""
+                               href="/tags"
+                            >
+                                
+                                TAGS
+                            </a>
+                        </li>
+                    
+                        
+                        <li class="menu-item">
+                            <a class=""
+                               href="/about"
+                            >
+                                
+                                ABOUT
+                            </a>
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="fas search fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/"
+                    >HOME</a>
+                </li>
+            
+                
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/archives"
+                    >ARCHIVES</a>
+                </li>
+            
+                
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/tags"
+                    >TAGS</a>
+                </li>
+            
+                
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/about"
+                    >ABOUT</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+                
+
+                    
+<div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+        <div class="post-content-container border-box">
+            
+                <div class="post-content-top border-box"
+                     style="height: 13.8rem"
+                >
+                    <div class="cover-post-title">
+                        如何设计C++类——《Effective C++》读后感
+                    </div>
+                    <img class="post-cover" src="/images/tags/cpp1.png"
+                         onerror="this.style.display='none'"
+                    >
+                </div>
+            
+
+            <div class="post-content-bottom border-box has-cover">
+                
+
+                
+                    <div class="post-header border-box">
+                        
+                            <div class="avatar-box border-box">
+                                <img src="/images/author.jpg">
+                            </div>
+                        
+                        <div class="info-box">
+                            <div class="author border-box">
+                                <span class="name">ZeroJiu</span>
+                                
+                                    <span class="author-badge">大师领域</span>
+                                
+                            </div>
+                            <div class="meta-info border-box">
+                                
+
+<div class="post-meta-info-container border-box post">
+    <div class="post-meta-info border-box">
+        
+
+        
+            <span class="meta-info-item post-create-date">
+                <i class="icon fa-solid fa-calendar-plus"></i>&nbsp;
+                <span class="datetime">2017-03-14 00:02:00</span>
+            </span>
+
+            <span class="meta-info-item post-update-date">
+                <i class="icon fa-solid fa-file-pen"></i>&nbsp;
+                <span class="datetime" data-updated="Fri Jul 19 2024 21:24:17 GMT+0800">2024-07-19 21:24:17</span>
+            </span>
+        
+
+        
+            <span class="meta-info-item post-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul class="post-category-ul">
+                    
+                            <li class="category-item"><a href="/categories/Reading/">Reading</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="post-tag meta-info-item border-box">
+                <ul class="post-tag-ul">
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/CPP/">CPP</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/OOP/">OOP</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/BookList/">BookList</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+            <span class="meta-info-item post-wordcount">
+                <i class="icon fas fa-file-word"></i>&nbsp;<span>5.8k Words</span>
+            </span>
+        
+        
+            <span class="meta-info-item post-min2read">
+                <i class="icon fas fa-clock"></i>&nbsp;<span>22 Mins</span>
+            </span>
+        
+        
+            <span class="meta-info-item post-pv">
+                <i class="icon fas fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+            </span>
+        
+    </div>
+
+    
+</div>
+
+                            </div>
+                        </div>
+                    </div>
+                
+
+                <div class="post-content keep-markdown-body ">
+                    
+
+                    
+                         <p>一直以来，使用C++面向对象机制，主要是为了其封装和多态特性。往往设计类时，只是为了功能的堆砌，没有考虑的更加深入。</p>
+<p>之前也阅读过《Effective C++》，只是那时是在学生时代。如今工作了，重新阅读，有不少新的感悟。最关键的是，能从更高的视角去设计程序，之前杂乱无序的点与点，逐渐连接成一条条线。希望后续能够成面、成立体。<span id="more"></span></p>
+<p>回到正题：如何设计C<ins>类？当然，更合理的表述应该是：如何设计高效、优雅的C</ins>类？（菜鸟的思考）</p>
+<blockquote>
+<p>注意：我们并不是要设计一个程序，或者一个大的模块，我们考虑的更加具体，具体到其中的一点。</p>
+</blockquote>
+<h2 id="%E6%88%91%E4%BB%AC%E9%9C%80%E8%A6%81%E5%AE%9E%E7%8E%B0%E5%93%AA%E4%BA%9B%E5%8A%9F%E8%83%BD%EF%BC%9F" tabindex="-1">我们需要实现哪些功能？</h2>
+<p>“先谋后动”，在设计具体类时，必须要清楚下面几点：</p>
+<p>1、设计该类的目的</p>
+<p>清晰的概念远比模棱两口的理解，更能帮助我们深入分析问题。有时候我们觉得我就是需要实现这个功能罢了，只要能用就好了。然而，多和产品经理或技术经理沟通，有可能出现意想不到的结果：</p>
+<ul>
+<li>该功能没有我们想到那么复杂，并不需要自己设计；</li>
+<li>该功能比我们想到的更加复杂，我们需要考虑更多正确性、高效性、扩展性、维护性等方面的额问题。</li>
+</ul>
+<p>2、使用该类的场景</p>
+<p>不同的使用场景，相同功能类的设计需求是不一样的。譬如，设计一个视频解码类，如果使用场景为视频播放器，那我们设计的类必须要考虑不同的编码格式；但如果使用场景为视频会议，我们设计的类就不需要考虑太多编码格式的问题，反而需要针对某种格式进行效率优化。</p>
+<p>3、潜在的扩展方向</p>
+<p>程序不是一成不变的，外界事物不停的变化，催生不同的需求。如果我们的程序不可扩展，那每次需求变更，之前的工作都白费了。类的设计一定要考虑到，未来潜在的扩展方向。如果我们无法确定潜在的扩展方向，至少留下可扩展的接口，不要把一切行为、属性都写死。</p>
+<h2 id="%E5%A6%82%E4%BD%95%E6%9E%84%E9%80%A0%E6%9E%90%E6%9E%84%E3%80%81%E5%A6%82%E4%BD%95%E6%8B%B7%E8%B4%9D%E8%B5%8B%E5%80%BC%EF%BC%9F" tabindex="-1">如何构造析构、如何拷贝赋值？</h2>
+<p>C<ins>类的构造析构和拷贝赋值是设计C</ins>类时最基本的要点，有不少细节部分需要考虑：</p>
+<ul>
+<li>构造函数：合成的默认构造函数、默认构造函数、default关键词、explicit关键字、类型转换、延迟初始化、单例模式</li>
+<li>析构函数：默认析构函数、虚析构函数</li>
+<li>拷贝构造函数：深拷贝/浅拷贝、禁止拷贝</li>
+<li>赋值构造函数：深拷贝/浅拷贝、禁止拷贝</li>
+</ul>
+<p>除了上面的细节部分，我们需要明确几个准则：</p>
+<ul>
+<li>除非默认操作非你所需，否则请用<code>=default</code>来定义构造析构函数；</li>
+<li>除非编译器合成为你所需，否则请用<code>=delete</code>来定义赋值拷贝函数；</li>
+<li>除非类不可能成为基类，否则请将析构函数定义为<code>virtual</code>；</li>
+<li>构造与析构过程中，不调用virtual函数、析构函数不能抛出异常。</li>
+<li>拷贝构造复制需要处理<code>深拷贝</code>和<code>浅拷贝</code>，赋值操作需要额外考虑<code>自我赋值</code>。</li>
+</ul>
+<h3 id="%E6%98%BE%E5%BC%8F%E5%88%9D%E5%A7%8B%E5%8C%96%E5%92%8C%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2" tabindex="-1">显式初始化和类型转换</h3>
+<blockquote>
+<p>首先表明我的立场：<strong>建议单参数构造函数都声明为explicit，拒绝隐式类型转换，除非你有意要隐式转换。</strong></p>
+</blockquote>
+<p>显式初始化主要针对于单参数构造函数，用<code>explicit</code>关键字来声明构造函数——拒绝隐式类型转换。在C++中，单参数的构造函数主要承担两个功能：对象构造、类型转换。</p>
+<p>这儿强调<code>单参数</code>，是由于多个实参的构造函数不能用于执行隐式转换，所以无须将这些构造函数声明为explicit，但你若是非要声明也是可以的。同时，我们只能在类内声明explicit关键词，不能再类外部重复声明。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">String</span>&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">explicit</span> <span class="title">String</span><span class="params">(<span class="type">int</span> n)</span></span>;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="keyword">explicit</span> <span class="title">String::String</span><span class="params">(<span class="type">int</span> n)</span> </span>&#123; &#125; <span class="comment">/* error */</span></span><br><span class="line">String str = <span class="number">3</span>; <span class="comment">/* error */</span></span><br><span class="line"><span class="function">String <span class="title">str</span><span class="params">(<span class="number">3</span>)</span></span>;  <span class="comment">/*  ok   */</span></span><br></pre></td></tr></table></figure>
+<p>使用隐式类型转换需要注意的是<strong>编译器只会自动执行一步类型转换</strong>，从《C++ Primer》中摘取一个例子来看看：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">SalesData</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">SalesData</span>(<span class="type">const</span> std::string &amp;s);</span><br><span class="line">    <span class="function">SalesData&amp; <span class="title">combine</span><span class="params">(SalesData)</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">SalesData data;</span><br><span class="line">data.<span class="built_in">combine</span>(<span class="string">&quot;99-99-99-99&quot;</span>); <span class="comment">/* error: cannot transfer &quot;99-99-99-99&quot; to std::string to SalesData at one time*/</span></span><br><span class="line">data.<span class="built_in">combine</span>(std::<span class="built_in">string</span>(<span class="string">&quot;99-99-99-99&quot;</span>)); <span class="comment">/* ok: transfer std::string to SalesData */</span></span><br></pre></td></tr></table></figure>
+<p>很多时候，隐式的类型转换逻辑上是合理的，我们设计上需要实现一个隐式转换，是可以接受的。很多编译器会自动将类型转换操作转换成对象构造操作。譬如将整形转换成年龄：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Age</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Age</span>(<span class="type">int</span> age);    </span><br><span class="line">&#125;;</span><br><span class="line">Age age = <span class="number">12</span>; <span class="comment">/* ok, same as Age age(12) */</span></span><br></pre></td></tr></table></figure>
+<p>然而大多数隐式类型转换常常会带来逻辑上的错误，而且这种错误一旦发生很难查询，所以并不推荐使用隐式转换——<em>除非你是有意为之，否则都使用显式构造</em>。</p>
+<blockquote>
+<p><code>explicit</code>之所以被导入到C++，是为了提供程序员一种方法，使他们能够制止”单一参数的constructor”被当作一个conversion运算符。</p>
+</blockquote>
+<p>《C++ Primer》课后习题中有一题很好的阐述了——何时需要隐式转换、何时需要避免隐式转换：</p>
+<blockquote>
+<p>std::vector将其单参数构造函数定义成explicit的，而std::string则不是，你觉得原因何在？<br>
+std::string接受的单参数是const char*类型，如果我们得到了一个常量指针，则把它看做std::string对象是自然而然的过程，编译器自动把参数类型转换成类类型也非常符合逻辑，因此我们无须指定为explicit。与std::string相反，std::vector接受的单参数是int类型，这个参数的原意是指定std::vector的容量。如果我们在本来需要std::vector的地方提供一个int值并且希望这个int值自动转换成std::vector，则这个过程显得比较牵强，因此把std::vector的单参数构造函数定义成explicit的更加合理。</p>
+</blockquote>
+<p>C<ins>的标准模板库是学习C</ins>理论实践的好地方，总结下标准库中用explicit修饰的构造函数：</p>
+<ul>
+<li>接受一个容量参数的std::vector构造函数是explicit的。</li>
+<li>接受一个指针参数的std::shared_ptr/std::auto_ptr构造函数是explicit的。</li>
+<li>接受一个std::string参数的std::sstream构造函数是explicit的</li>
+<li>接受一个std::string或C-String参数的std::fstream构造函数是explicit的</li>
+</ul>
+<h3 id="%E8%99%9A%E5%87%BD%E6%95%B0%E8%A1%A8" tabindex="-1">虚函数表</h3>
+<p>虚函数表在构造函数中建立，在析构函数中销毁，因此构造函数不可能为虚函数，而析构函数可以为虚函数。同时，调用派生类构造函数，首先会出发基类的构造函数，如果基类的构造函数调用了一个虚函数，该虚函数此时并不具备多态特性。也就是——绝不要在构造和析构过程中调用虚函数。</p>
+<h3 id="%E8%99%9A%E6%9E%90%E6%9E%84%E5%87%BD%E6%95%B0" tabindex="-1">虚析构函数</h3>
+<p>带有多态性质的基类应该声明一个virtual析构函数，如果class带有任何virtual函数，其就应该拥有一个virtual析构函数。默认情况下，类的析构函数是非虚函数，如果基类的析构函数是虚函数，则派生类的析构函数也都是虚函数。对于多态性质的基类，如果不声明虚析构函数，则会导致内存泄漏，看看下面代码：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Ball</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Ball</span>();</span><br><span class="line">    ~<span class="built_in">Ball</span>()</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="type">uint32_t</span> _circle;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">BasketBall</span> : <span class="keyword">public</span> Ball &#123;</span><br><span class="line">&#125;</span><br><span class="line">Ball *ball = <span class="keyword">new</span> <span class="built_in">BasketBall</span>();</span><br><span class="line"><span class="keyword">delete</span> ball; <span class="comment">/* 由于Ball的析构函数非虚，ball中属于Ball类部分的成员不会被析构 */</span></span><br></pre></td></tr></table></figure>
+<p>当然，如果class一定不会用作基类使用，或者即使是作为基类使用，也不会定义virtual函数，那么是可以不用价格基类声明为virtual的。</p>
+<h3 id="%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F" tabindex="-1">单例模式</h3>
+<p>如果程序中某个类只允许有一个实例，这个时候就需要使用到单例模式。单例模式Wrapper有很多实现，譬如Boost中的singleton，Poco中的SingletonHold。我们来看看Poco中对单例Wrapper的实现：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">class</span> <span class="title class_">S</span>&gt;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SingletonHolder</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">SingletonHolder</span>():</span><br><span class="line">        _pS(<span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ~<span class="built_in">SingletonHolder</span>()</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">delete</span> _pS;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function">S* <span class="title">get</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="function">FastMutex::ScopedLock <span class="title">lock</span><span class="params">(_m)</span></span>;</span><br><span class="line">        <span class="keyword">if</span> (!_pS) _pS = <span class="keyword">new</span> S;</span><br><span class="line">        <span class="keyword">return</span> _pS;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    S* _pS;</span><br><span class="line">    FastMutex _m;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>看看Poco::SingletonHolder的代码，S类型的实例仅仅创建一次。如果我们需要将单例嵌入到自己的代码逻辑中，可以按照下面代码实现：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Singleton</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">static</span> Singleton* <span class="title">getInstance</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> _s;</span><br><span class="line">    &#125;   </span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="built_in">Singleton</span>();</span><br><span class="line">    ~<span class="built_in">Singleton</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">class</span> <span class="title class_">Release</span> &#123;</span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">        ~<span class="built_in">Release</span>()</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">delete</span> _s;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="type">static</span> Singleton *_s;</span><br><span class="line">    <span class="type">static</span> Release r;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">Singleton* Singleton::_s = <span class="keyword">new</span> <span class="built_in">Singleton</span>();</span><br><span class="line">Singleton::Release Singleton::r;</span><br></pre></td></tr></table></figure>
+<p>下文中延迟初始化那一节也是一种单例模式的实现。</p>
+<h3 id="%E6%B7%B1%E6%8B%B7%E8%B4%9D%E3%80%81%E6%B5%85%E6%8B%B7%E8%B4%9D" tabindex="-1">深拷贝、浅拷贝</h3>
+<p>如果一个类拥有资源，当这个类的对象发生复制过程的时候，资源重新分配，这个过程就是深拷贝，反之，没有重新分配资源，就是浅拷贝。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Test</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Test</span>() : <span class="built_in">p</span>(<span class="keyword">new</span> std::<span class="built_in">string</span>(<span class="string">&quot;Test&quot;</span>)) &#123; &#125;</span><br><span class="line">    ~<span class="built_in">Test</span>() &#123; <span class="keyword">delete</span> p; &#125;</span><br><span class="line">    <span class="built_in">Test</span>(<span class="type">const</span> Test&amp; t) &#123;</span><br><span class="line">        p = <span class="keyword">new</span> std::<span class="built_in">string</span>(*t.p); <span class="comment">/* 如果这儿不进行深拷贝，析构时则会有多个对象重复删除p */</span></span><br><span class="line">    &#125;</span><br><span class="line">    Test&amp; <span class="keyword">operator</span>= (<span class="type">const</span> Test t) &#123;</span><br><span class="line">        <span class="built_in">swap</span>(t);</span><br><span class="line">        <span class="keyword">return</span> *<span class="keyword">this</span>;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    std::string *p;    </span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h3 id="%E7%A6%81%E6%AD%A2%E6%8B%B7%E8%B4%9D" tabindex="-1">禁止拷贝</h3>
+<p>如果我们不需要编译器为我们实现默认拷贝构造函数，我们需要主动地驳回编译器这一默认的行为。通常的做法有三种：</p>
+<ul>
+<li>将相应的成员函数（这里是拷贝构造函数/赋值构造函数）声明为private，并不予实现；</li>
+<li>将函数声明为delete；</li>
+<li>继承一个不允许该操作的基类。</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">UnCopyable</span> &#123;</span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line">    <span class="built_in">UnCopyable</span>();</span><br><span class="line">    ~<span class="built_in">UnCopyable</span>();</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="built_in">UnCopyable</span>(<span class="type">const</span> UnCopyable&amp;);</span><br><span class="line">    UnCopyable&amp; <span class="keyword">operator</span>=(<span class="type">const</span> UnCopyable&amp;)；</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Impl</span> : <span class="keyword">public</span> UnCopyable &#123; &#125;;</span><br></pre></td></tr></table></figure>
+<h3 id="%E5%BB%B6%E8%BF%9F%E5%88%9D%E5%A7%8B%E5%8C%96" tabindex="-1">延迟初始化</h3>
+<p>延迟初始化是一个很有用的概念。一个对象的延迟初始化（也称延迟实例化）意味着该对象的创建将会延迟至第一次使用该对象时。延迟初始化主要用于提高性能，避免浪费计算，并减少程序内存要求。</p>
+<blockquote>
+<p><strong>尽量将对象的定义延迟到第一次使用，甚至是直到能够给它初值实参为止。</strong></p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">LazyInstance</span> &#123;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function">LazyInstance&amp; <span class="title">getInstance</span><span class="params">(<span class="type">int</span> param)</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="type">static</span> LazyInstance <span class="title">instance</span><span class="params">(param)</span></span>;</span><br><span class="line">    <span class="keyword">return</span> instance;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上述代码中，instance实例对象直到getInstance()函数被第一次调用时，才会进行初始化。对比下列代码：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">LazyInstance</span> &#123;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="type">static</span> LazyInstance instance;</span><br></pre></td></tr></table></figure>
+<p>instance实例对象是静态成员，会在程序一开始调用默认构造函数初始化。</p>
+<p>延迟初始化同时也解决了<code>跨编译单元中非局部静态成员的初始化次序不定</code>的问题——函数内局部静态对象会在第一次调用时被初始化。我们通过下列例子来说明该问题（摘自Effective C++）：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* FileSystem.cpp */</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">FileSystem</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">std::<span class="type">size_t</span> <span class="title">numDisks</span><span class="params">()</span> <span class="type">const</span></span>;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">extern</span> FileSystem tfs;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Directory.cpp */</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Directory</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Directory</span>(params);</span><br><span class="line">&#125;;</span><br><span class="line">Directory::<span class="built_in">Directory</span>(params) &#123;</span><br><span class="line">    std::<span class="type">size_t</span> disks = tfs.<span class="built_in">numDisks</span>();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">Director <span class="title">dir</span><span class="params">(tfs)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>由于FileSystem.cpp和Directory.cpp是两个编译单元，其初始化次序在C++标准中并没有被定义，我们无法确定tsf是否一定在dir初始化之前初始化。解决办法就是采用延迟初始化：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">FileSystem</span> &#123;&#125;;</span><br><span class="line"><span class="function">FileSystem&amp; <span class="title">tfs</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="type">static</span> FileSystem fs;</span><br><span class="line">    <span class="keyword">return</span> fs;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Directory</span> &#123;&#125;;</span><br><span class="line">Directory::<span class="built_in">Directory</span>(params) &#123;</span><br><span class="line">    std::<span class="type">size_t</span> disks = <span class="built_in">tfs</span>().<span class="built_in">numDisks</span>();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">Directory&amp; <span class="title">dir</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="type">static</span> Directory td;</span><br><span class="line">    <span class="keyword">return</span> td;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="%E6%8E%A5%E5%8F%A3%E8%AE%BE%E8%AE%A1%E9%9C%80%E8%A6%81%E8%80%83%E8%99%91%E5%93%AA%E4%BA%9B%E9%97%AE%E9%A2%98%EF%BC%9F" tabindex="-1">接口设计需要考虑哪些问题？</h2>
+<p>接口设计的原则就是<code>易用</code>。为了达到<code>易用</code>的目的，我们需要遵循下面准则，同时也要考虑下面问题：</p>
+<h3 id="%E6%8E%A5%E5%8F%A3%E4%B8%80%E8%87%B4%E5%87%86%E5%88%99" tabindex="-1">接口一致准则</h3>
+<blockquote>
+<p>除非有好理由，否则应该尽量令你的类的行为与内置类型一致。</p>
+</blockquote>
+<p>接口的一致性，主要体现在两点：</p>
+<ul>
+<li>相同操作，自定义类型的行为应该与内置类型一致；</li>
+<li>相同接口名，在同一自定义类型中，其功能、使用方式也应该一样；</li>
+</ul>
+<h3 id="%E8%AF%AF%E6%93%8D%E4%BD%9C%E9%98%B2%E5%BE%A1%E5%87%86%E5%88%99" tabindex="-1">误操作防御准则</h3>
+<p>考虑客户在使用该接口时，可能出现哪些错误，进行针对性防御设计。（如果防御编程消耗过大，就要仔细权衡了。）</p>
+<ul>
+<li>参数限定，譬如：
+<ul>
+<li>如果参数存在上下限、固定值集合（月份值），最好进行限定（新建月份类型）；</li>
+<li>如果是值传递，最好是改成常引用传递（内置类型、STL迭代器、函数对象除外）；</li>
+<li>如果不想改变参数值，最好声明常参数。</li>
+</ul>
+</li>
+<li>返回值限定，譬如：
+<ul>
+<li>const限定（防止试图修改返回值）；</li>
+<li>智能指针限定（防止内存泄漏）。</li>
+</ul>
+</li>
+</ul>
+<h3 id="%E7%A7%81%E6%9C%89%E8%BF%98%E6%98%AF%E5%85%AC%E6%9C%89%EF%BC%9F" tabindex="-1">私有还是公有？</h3>
+<p>为什么接口可以是私有呢？因为从广义来说，类的设计者也是类中成员的客户，私有的接口是面向类的设计者的。</p>
+<p>对于成员函数，主要分为三种：私有、继承、公有，其安排主要是根据这三者的区别来定，没有什么特殊的地方。</p>
+<p>对于数据成员，建议将所有数据成员声明为私有（考虑封装）。不管是类对象访问，还是派生类对象访问，都可以通过对应的getter/setter函数来操作。需要注意的是：protected并不比public更具封装性。</p>
+<h3 id="%E6%88%90%E5%91%98%E5%87%BD%E6%95%B0%E8%BF%98%E6%98%AF%E9%9D%9E%E6%88%90%E5%91%98%E5%87%BD%E6%95%B0%EF%BC%9F" tabindex="-1">成员函数还是非成员函数？</h3>
+<ul>
+<li>
+<p>如果接口必须要操作类私有成员，需要将接口声明为成员函数或友元函数。</p>
+</li>
+<li>
+<p>如果接口可以通过访问成员函数来进行所需操作，建议用<code>非成员、非友元函数</code>来替换成员函数。</p>
+</li>
+</ul>
+<p>因为这样做可以增加封装性、包括弹性和机能扩充性。这种<code>非成员、非友元函数</code>被称为便利函数，往往一个类会存在一系列不同的便利函数，功能相关的便利函数会被定义在同一个头文件内。</p>
+<ul>
+<li>如果接口的所有参数都需要进行类型转换，那么这个函数必须是非成员函数。</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Rational</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="type">const</span> Rational <span class="keyword">operator</span>* (<span class="type">const</span> Rational &amp;rhs) <span class="type">const</span>;    </span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function">Rational <span class="title">oneEight</span><span class="params">(<span class="number">1</span>, <span class="number">8</span>)</span>, <span class="title">oneHalf</span><span class="params">(<span class="number">1</span>, <span class="number">2</span>)</span></span>;</span><br><span class="line">Rational result = oneHalf * oneEight; <span class="comment">/* ok */</span></span><br><span class="line">result = oneHalf * <span class="number">2</span>; <span class="comment">/* ok */</span></span><br><span class="line">result = <span class="number">2</span> * oneHalf; <span class="comment">/* error */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* non-member */</span></span><br><span class="line"><span class="type">const</span> Rational <span class="keyword">operator</span>*(<span class="type">const</span> Rational &amp;lhs, <span class="type">const</span> Rational &amp;rhs);</span><br></pre></td></tr></table></figure>
+<h3 id="%E6%98%AF%E5%90%A6%E9%9C%80%E8%A6%81%E4%B8%BAinline%E5%87%BD%E6%95%B0%EF%BC%9F" tabindex="-1">是否需要为inline函数？</h3>
+<p>需要明确的是：inline只是对编译器的一个申请，并不是强制命令。将函数定义于class定义式内是隐喻inline的，定义于class定义式外需要显式声明为inline。通常inline函数被放置在头文件内。</p>
+<p>如果编译器无法将你要求的函数inline化，其通常会给你一个警告信息。下列函数往往是非inline的：</p>
+<ul>
+<li>函数内部包含循环体；</li>
+<li>构造函数/析构函数/虚函数；</li>
+<li>存在被改变的可能：内联函数被改变，所有用到内联函数的程序都必须重新编译，而非内联函数只需要连接就行了。</li>
+</ul>
+<p>对于是否需要为inline函数的建议是：<em>将大多数inline函数限制在小型、被频繁调用的函数身上，同时不要因为函数模板出现在头文件，就将其声明为inline。</em></p>
+<h3 id="%E6%8E%A5%E5%8F%A3%E4%B8%8E%E5%AE%9E%E7%8E%B0%E5%88%86%E7%A6%BB" tabindex="-1">接口与实现分离</h3>
+<p>接口与实现分离能够将编译依存性最小化，采用Handles Classes和Interface Classes能够很好地实现——相依于声明，不要相依于定义式。<strong>程序库头文件应该以完全且仅有声明式的形式存在，这种做法不论是否涉及template都适用。</strong></p>
+<p>如果我们按照一般的C++教材上的方式现实代码，编译依存关系会导致很严重的重新编译和连接：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* Person.h*/</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;Data.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;Address.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Person</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Person</span>(<span class="type">const</span> std::string&amp; name, <span class="type">const</span> Data&amp; birthday, <span class="type">const</span> Address&amp; addr);</span><br><span class="line">    <span class="function">std::string <span class="title">name</span><span class="params">()</span> <span class="type">const</span></span>;</span><br><span class="line">    <span class="function">std::string <span class="title">birthDate</span><span class="params">()</span> <span class="type">const</span></span>;</span><br><span class="line">    <span class="function">std::string <span class="title">address</span><span class="params">()</span> <span class="type">const</span></span>;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    std::string _name;</span><br><span class="line">    Data        _birth;</span><br><span class="line">    Address     _addr;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>上面代码，如果Data.h中的内容或其依赖的内容有任何改变，所有包含Person.h头文件的源文件都需要重新编译和连接。</p>
+<p>Handles Classes利用pimpl idiom（pointer to implementation）思想，利用该思想来重写上面代码：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* Person.h */</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;memory&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">PersonImpl</span>;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Data</span>;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Address</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Person</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Person</span>(<span class="type">const</span> std::string&amp; name, <span class="type">const</span> Data&amp; birthday, <span class="type">const</span> Address&amp; addr);</span><br><span class="line">    <span class="function">std::string <span class="title">name</span><span class="params">()</span> <span class="type">const</span></span>;</span><br><span class="line">    <span class="function">std::string <span class="title">birthDate</span><span class="params">()</span> <span class="type">const</span></span>;</span><br><span class="line">    <span class="function">std::string <span class="title">address</span><span class="params">()</span> <span class="type">const</span></span>;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    std::shared_ptr&lt;PersonImpl&gt; pImpl;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* PersonImpl.h */</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;Data.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;Address.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">PersonImpl</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Person</span>(<span class="type">const</span> std::string&amp; name, <span class="type">const</span> Data&amp; birthday, <span class="type">const</span> Address&amp; addr);</span><br><span class="line">    <span class="function">std::string <span class="title">name</span><span class="params">()</span> <span class="type">const</span></span>;</span><br><span class="line">    <span class="function">std::string <span class="title">birthDate</span><span class="params">()</span> <span class="type">const</span></span>;</span><br><span class="line">    <span class="function">std::string <span class="title">address</span><span class="params">()</span> <span class="type">const</span></span>;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    std::string _name;</span><br><span class="line">    Data        _birth;</span><br><span class="line">    Address     _addr;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Person.cxx */</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;Person.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;PersonImpl.h&quot;</span></span></span><br><span class="line"></span><br><span class="line">Person::<span class="built_in">Person</span>(<span class="type">const</span> std::string&amp; name, <span class="type">const</span> Data&amp; birthday, <span class="type">const</span> Address&amp; addr)</span><br><span class="line">    : <span class="built_in">pImpl</span>(<span class="keyword">new</span> <span class="built_in">PersonImpl</span>(name, birthday, addr)) &#123; &#125;</span><br><span class="line"><span class="function">std::string <span class="title">Person::name</span><span class="params">()</span> <span class="type">const</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    retur pImpl-&gt;<span class="built_in">name</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Interface Classes利用抽象基类和多态的特性，将接口定义在接口类中，而具体实现使用具体类，改写Person代码如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* PersonI.h */</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;memory&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Data</span>;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Address</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">PersonI</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="keyword">virtual</span> ~<span class="built_in">PersonI</span>();</span><br><span class="line">    <span class="function"><span class="type">static</span> std::shared_ptr&lt;PersonI&gt; <span class="title">create</span><span class="params">(<span class="type">const</span> std::string &amp;name, <span class="type">const</span> Data &amp;birthday, <span class="type">const</span> Address &amp;addr)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> std::string <span class="title">name</span><span class="params">()</span> <span class="type">const</span> </span>= <span class="number">0</span>;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> std::string <span class="title">birthDate</span><span class="params">()</span> <span class="type">const</span> </span>= <span class="number">0</span>;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> std::string <span class="title">address</span><span class="params">()</span> <span class="type">const</span> </span>= <span class="number">0</span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* PersonImpl.h */</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;PersonI.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;Data.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;Address.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">PersonImpl</span> : <span class="keyword">public</span> PersonI &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Person</span>(<span class="type">const</span> std::string&amp; name, <span class="type">const</span> Data&amp; birthday, <span class="type">const</span> Address&amp; addr);</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> std::string <span class="title">name</span><span class="params">()</span> <span class="type">const</span> <span class="keyword">override</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> std::string <span class="title">birthDate</span><span class="params">()</span> <span class="type">const</span> <span class="keyword">override</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> std::string <span class="title">address</span><span class="params">()</span> <span class="type">const</span> <span class="keyword">override</span></span>;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    std::string _name;</span><br><span class="line">    Data        _birth;</span><br><span class="line">    Address     _addr;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* PersonImpl.cxx */</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;PersonImpl.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function">std::shared_ptr&lt;PersonI&gt; <span class="title">create</span><span class="params">(<span class="type">const</span> std::string &amp;name, <span class="type">const</span> Data &amp;birthday, <span class="type">const</span> Address &amp;addr)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> std::<span class="built_in">shared_ptr</span>&lt;PersonI&gt;(<span class="keyword">new</span> <span class="built_in">PersonImpl</span>(name, birthday, addr));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>两种改写方法都存在一定的代价，一般程序库头文件推荐使用Interface Classes。</p>
+</blockquote>
+<h2 id="%E6%8E%A5%E5%8F%A3%E5%AE%9E%E7%8E%B0%E9%9C%80%E8%A6%81%E8%80%83%E8%99%91%E5%93%AA%E4%BA%9B%E9%97%AE%E9%A2%98%EF%BC%9F" tabindex="-1">接口实现需要考虑哪些问题？</h2>
+<h3 id="%E8%BF%94%E5%9B%9E%E5%80%BC" tabindex="-1">返回值</h3>
+<ul>
+<li>绝不要返回指向一个函数局部自动对象的指针或引用。</li>
+<li>绝不要返回指向一个函数内部堆对象的引用，除非你能完全杜绝内存泄漏问题。</li>
+<li>绝不要返回指向一个函数局部静态对象的指针或引用，如果有可能同时需要多个这样的对象。</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span>&amp; <span class="title">getStatic</span><span class="params">(<span class="type">int</span> param)</span> </span>&#123;</span><br><span class="line">    <span class="type">static</span> <span class="type">int</span> test;</span><br><span class="line">    test += param;</span><br><span class="line">    <span class="keyword">return</span> test;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span>(<span class="built_in">getStatic</span>(param1) == <span class="built_in">getStatic</span>(param2)) &#123; ... &#125; <span class="comment">// 总是相等</span></span><br></pre></td></tr></table></figure>
+<p>注意：第三种情况，并不是要我们完全不要返回，譬如我们需要某类型的唯一实例，返回函数局部静态变量是可行的：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Person&amp; <span class="title">getPerson</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">static</span> Person p;</span><br><span class="line">    <span class="keyword">return</span> p;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>避免返回对象内部成分（私有成员：数据和函数）的句柄（指针或引用），例外：operator[]。</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Rect</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">Point&amp; <span class="title">getPoint</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> _point; &#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    Point _point;</span><br><span class="line">&#125;;</span><br><span class="line">Point t;</span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">const</span> Rect r;</span><br><span class="line">    t = r.<span class="built_in">getPoint</span>();</span><br><span class="line">    t.<span class="built_in">setX</span>(<span class="number">100</span>); <span class="comment">/* 我们更改了常对象内部的值 */</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="type">int</span> x = t.<span class="built_in">getX</span>(); <span class="comment">/* r已被析构，t现在为空悬指针了，wops... */</span></span><br></pre></td></tr></table></figure>
+<h3 id="%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2" tabindex="-1">类型转换</h3>
+<p>优良的C++代码很少使用转型，但是也无法完全摆脱转型。考虑使用转型时，需要遵守下列准则：</p>
+<ul>
+<li>尝试使用无需转型操作的设计替代转型动作，譬如：使用类的多态特性取代dynamic_cast转型；</li>
+<li>将转型操作隐藏在某个函数背后，如果需要转型时，调用该函数，而不是直接将转型操作放进代码内；</li>
+<li>使用C++新式转型操作取代旧式转型操作。</li>
+</ul>
+<p>转型操作有时很难避免，因此我们需要清楚的掌握四种转型操作（static_cast、const_cast、reinterpret_cast、dynamic_cast）的差异与缺陷：</p>
+<ul>
+<li><code>dynamic_cast</code>：影响程序效率，同时也是程序异常的潜在因素，尽量拒绝使用dynamic_cast转型操作；</li>
+<li><code>const_cast</code>：去除常量性，如果需要获取常量性，需要使用static_cast；</li>
+<li><code>reinterpret_cast</code>：不可移植，在指针转换的时候可以使用，但是要慎用；</li>
+<li><code>static_cast</code>：上面三种转型之外的转型操作都可以由static_cast来负责。</li>
+</ul>
+<blockquote>
+<p>转型操作切记试图揣摩编译器中对象的布局，因为对象的布局是随着不同的编译器而不同的。</p>
+</blockquote>
+<h3 id="%E8%B5%84%E6%BA%90%E9%87%8A%E6%94%BE" tabindex="-1">资源释放</h3>
+<p>通过良好的接口实现，<strong>接口使用者，无须考虑资源释放等问题</strong>。资源释放问题可以通过智能指针很好的解决。使用std::shared_ptr和删除器，我们能很好的解决资源释放问题。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">std::shared_ptr&lt;Resource&gt; <span class="title">res</span><span class="params">(getResource(), releaseResource)</span></span>;</span><br></pre></td></tr></table></figure>
+<h3 id="%E5%BC%82%E5%B8%B8%E5%AE%89%E5%85%A8" tabindex="-1">异常安全</h3>
+<p>当异常被抛出后，异常安全的函数不会泄露任何资源，也不允许数据败坏。异常安全函数能够提供下列三种保证之一：</p>
+<ul>
+<li>基本承诺：如果异常被抛出，程序内的任何事物都保持在有效状态下（并不保证是原来的状态）。</li>
+<li>强烈保证：如果异常被抛出，如果函数成功，就会完全成功，如果函数失败，就会恢复到调用函数之前的状态。</li>
+<li>不抛保证：绝不抛出异常，程序总能完成它们原先承诺的功能。</li>
+</ul>
+<blockquote>
+<p>我们推荐：对于C++函数，需要提供强烈保证，尽量不抛保证。</p>
+</blockquote>
+<p>为了完成异常安全保证，我们需要知道哪些操作不抛异常，哪些操作会抛出异常，哪些操作有助于异常安全保证：</p>
+<ul>
+<li>作用于内置类型身上的所有操作都是nothrow保证的；</li>
+<li>动态内存如果无法找到足够内存以满足需求会抛出bad_alloc异常；</li>
+<li>swap函数提供不抛保证，利用<em>copy-and-swap</em>特性能够很轻松的完成强烈异常保证（当然也存在例外）；</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">PMImpl</span> &#123;</span><br><span class="line">    std::shared_ptr&lt;Image&gt; _image;</span><br><span class="line">    <span class="type">int</span> imageChanges;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Menu</span> &#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    Mutex _mutex;</span><br><span class="line">    std::shared_ptr&lt;PMImpl&gt; _pImpl;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">Menu::change</span><span class="params">(std::istream&amp; src)</span> </span>&#123;</span><br><span class="line">    <span class="function">Lock <span class="title">m</span><span class="params">(&amp;_mutex)</span></span>;</span><br><span class="line">    <span class="function">std::shared_ptr&lt;PMImpl&gt; <span class="title">p</span><span class="params">(<span class="keyword">new</span> PMImpl(*_pImpl);</span></span></span><br><span class="line"><span class="params"><span class="function">    p-&gt;_image.reset(<span class="keyword">new</span> Image(src));</span></span></span><br><span class="line"><span class="params"><span class="function">    ++p-&gt;imageChanges;</span></span></span><br><span class="line"><span class="params"><span class="function">    std::swap(_pImpl, p);</span></span></span><br><span class="line"><span class="params"><span class="function">&#125;</span></span></span><br></pre></td></tr></table></figure>
+<p>有时候我们是做不到强烈异常保证的，譬如消耗过大、程序结构复杂、历史代码等，这个时候就需要退而取其次——基本保证。函数提供的异常安全性保证通常最高只等于其所调用的各个函数的异常安全保证中的最弱者。所以，即使我们努力的保证了自己写的代码是强烈异常安全的，我们还是可能调用非此保证的代码。</p>
+<blockquote>
+<p>标准库版本的swap函数时不抛出异常的，如果我们需要自己实现swap函数，也务必要保证其不抛出异常——因为swap的一个最好的应用是帮助classes提供强烈的异常安全性保证。</p>
+</blockquote>
+<p>我们还需要注意一定：<strong>构造函数和析构函数一定不能抛出异常，否则会导致资源泄漏。</strong></p>
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/katex/dist/katex.min.css">
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/markdown-it-texmath/css/texmath.min.css">
+
+                    
+                </div>
+
+                
+                        
+<div class="post-copyright-info-container border-box">
+    <div class="copyright-info-content border-box">
+        <div class="copyright-info-top border-box">
+            <div class="copyright-post-title border-box text-ellipsis">
+                如何设计C++类——《Effective C++》读后感
+            </div>
+
+            <div class="copyright-post-link border-box text-ellipsis">
+                reading/effective-cplusplus-reading/
+            </div>
+        </div>
+
+        <div class="copyright-info-bottom border-box">
+            <div class="copyright-post-author bottom-item">
+                <div class="type">
+                    Author
+                </div>
+                <div class="content">ZeroJiu</div>
+            </div>
+
+            <div class="post-time bottom-item">
+                <div class="type">
+                    Published
+                </div>
+                <div class="content">2017-03-14 00:02</div>
+            </div>
+
+
+            <div class="post-license bottom-item">
+                <div class="type">
+                    License
+                </div>
+                <div class="content tooltip" data-tooltip-content="CC BY-NC-SA 4.0">
+                    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed" target="_blank">
+                        
+                            <i class="fa-brands fa-creative-commons"></i>
+                            <i class="fa-brands fa-creative-commons-by"></i>
+                            <i class="fa-brands fa-creative-commons-nc"></i>
+                            <i class="fa-brands fa-creative-commons-sa"></i>
+                        
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <i class="copyright-bg fa-solid fa-copyright"></i>
+    </div>
+    <div class="copy-copyright-info flex-center tooltip" data-tooltip-content="Copy copyright info" data-tooltip-offset-y="-2px">
+        <i class="fa-solid fa-copy"></i>
+    </div>
+</div>
+
+                
+
+                <div class="post-bottom-tags-and-share border-box">
+                    <div>
+                        
+                            <ul class="post-tags-box border-box">
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/CPP/">CPP</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/OOP/">OOP</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/BookList/">BookList</a>
+                                    </li>
+                                
+                            </ul>
+                        
+                    </div>
+                    <div>
+                        
+                            <div class="post-share-container border-box">
+    <ul class="share-list-wrap border-box">
+        <li class="qq share-item border-box flex-center tooltip"
+            data-tooltip-content="Share to QQ"
+        >
+            <i class="fa-brands fa-qq"></i>
+        </li>
+        <li class="wechat share-item border-box flex-center tooltip tooltip-img"
+            data-tooltip-content="Share to WeChat"
+            data-tooltip-img-tip="Scan by WeChat"
+            data-tooltip-img-style="background-color: #fff; top: -10px; padding: 0.6rem 0.6rem 0.1rem 0.6rem;"
+        >
+            <i class="fa-brands fa-weixin"></i>
+        </li>
+        <li class="weibo share-item border-box flex-center tooltip"
+            data-tooltip-content="Share to WeiBo"
+        >
+            <i class="fa-brands fa-weibo"></i>
+        </li>
+    </ul>
+</div>
+
+                        
+                    </div>
+                </div>
+
+                
+
+                
+                    <div class="post-nav border-box">
+                        
+                            <div class="prev-post">
+                                <a class="prev"
+                                   rel="prev"
+                                   href="/develop/codec-yuv-rgb/"
+                                   title="视频像素格式YUV和RGB"
+                                >
+                                    <span class="left arrow-icon flex-center">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </span>
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">视频像素格式YUV和RGB</span>
+                                        <span class="post-nav-item">Prev posts</span>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                        
+                            <div class="next-post">
+                                <a class="next"
+                                   rel="next"
+                                   href="/develop/time/"
+                                   title="计算机世界中的时间"
+                                >
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">计算机世界中的时间</span>
+                                        <span class="post-nav-item">Next posts</span>
+                                    </span>
+                                    <span class="right arrow-icon flex-center">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                    </div>
+                
+
+                
+                    
+
+
+
+
+
+
+                
+            </div>
+        </div>
+
+        
+    </div>
+</div>
+
+
+                
+            </div>
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="copyright-info info-item">
+        &copy;&nbsp;<span>2020</span>&nbsp;-&nbsp;2024
+        
+            &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">ZeroJiu</a>
+        
+    </div>
+
+    <div class="theme-info info-item">
+        Powered by&nbsp;<a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;&&nbsp;Theme&nbsp;<a class="keep-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep</a>
+    </div>
+
+    
+        
+        <div class="deploy-info info-item">
+            
+            This site is deployed on <span class="tooltip" data-tooltip-content="GitHub Pages"><img src="/images/brands/github.png"></span>
+            
+        </div>
+    
+
+    
+        <div class="count-info info-item">
+            
+
+            
+                <span class="count-item border-box uv">
+                    <span class="item-type border-box">Unique Visitor</span>
+                    <span class="item-value border-box uv" id="busuanzi_value_site_uv"></span>
+                </span>
+            
+
+            
+                <span class="count-item border-box pv">
+                    <span class="item-type border-box">Page View</span>
+                    <span class="item-value border-box pv" id="busuanzi_value_site_pv"></span>
+                </span>
+            
+        </div>
+    
+
+    
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="post-tools-list border-box">
+        <!-- PC encrypt again -->
+        
+
+        <!-- PC TOC show toggle -->
+        
+
+        <!-- PC go comment -->
+        
+
+        <!-- PC full screen -->
+        <li class="tools-item flex-center full-screen">
+            <i class="fa-solid fa-expand"></i>
+        </li>
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container border-box ">
+    <ul class="side-tools-list side-tools-show-handle border-box">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-toggle-theme-mode flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list border-box">
+        
+
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        <li class="tools-item tool-scroll-to-top flex-center show-arrow">
+            <i class="arrow fas fa-arrow-up"></i>
+            <span class="percent"></span>
+        </li>
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="Search..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+</main>
+
+
+
+<!-- common -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/utils.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/header-shrink.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/back2top.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/toggle-theme.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/code-block.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/main.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/libs/anime.min.js"></script>
+
+<!-- local-search -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/local-search.min.js"></script>
+
+
+<!-- lazyload -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/lazyload.min.js"></script>
+
+
+<div class="pjax">
+    <!-- home page -->
+    
+
+    <!-- post page -->
+    
+        <!-- post-helper -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/post/post-helper.min.js"></script>
+
+        <!-- toc -->
+        
+
+        <!-- copyright-info -->
+        
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/post/copyright-info.min.js"></script>
+        
+
+        <!-- share -->
+        
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/post/share.min.js"></script>
+        
+    
+
+    <!-- categories page -->
+    
+
+    <!-- links page -->
+    
+
+    <!-- photos page -->
+    
+
+    <!-- tools page -->
+    
+</div>
+
+<!-- mermaid -->
+
+    
+<script src="//cdn.jsdelivr.net/npm/mermaid@10.5.0/dist/mermaid.min.js"></script>
+
+    <script data-pjax>
+      if (window.mermaid) {
+        mermaid.init()
+      }
+    </script>
+
+
+
+
+
+
+<!-- pjax -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/libs/pjax.min.js"></script>
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        window.pjax = new Pjax({
+            selectors: [
+                'head title',
+                '.page-container',
+                '.pjax'
+            ],
+            history: true,
+            debug: false,
+            cacheBust: false,
+            timeout: 0,
+            analytics: false,
+            currentUrlFullReload: false,
+            scrollRestoration: false,
+        });
+
+        document.addEventListener('pjax:send', () => {
+            KEEP.utils.pjaxProgressBarStart()
+        });
+
+        document.addEventListener('pjax:complete', () => {
+            KEEP.utils.pjaxProgressBarEnd()
+            window.pjax.executeScripts(document.querySelectorAll('script[data-pjax], .pjax script'))
+            KEEP.initExecute()
+        });
+    });
+</script>
+
+
+
+
+</body>
+</html>

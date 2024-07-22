@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="ZeroJiu">
+    
+    <title>
+        
+            视频会议中的音视频处理技术（Media Foundation） |
+        
+        小熊糖否
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+        <link rel="shortcut icon" href="/images/logo.ico">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/font/css/fontawesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/font/css/regular.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/font/css/solid.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/font/css/brands.min.css">
+    
+    <script class="keep-theme-configurations">
+    const KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"example.com","root":"/","language":"en","path":"search.xml"}
+    KEEP.theme_config = {"base_info":{"primary_color":"#c0392b","title":"小熊糖否","author":"ZeroJiu","avatar":"/images/author.jpg","logo":"/images/logo.ico","favicon":"/images/logo.ico"},"menu":{"home":"/","archives":"/archives","tags":"/tags","about":"/about"},"first_screen":{"enable":true,"background_img":"/images/bg.svg","background_img_dark":"/images/bg.svg","description":"True mastery of any skill takes a lifetime.","hitokoto":false},"social_contact":{"enable":true,"links":{"github":"https://github.com/zerojiu","weixin":null,"qq":null,"weibo":null,"zhihu":null,"twitter":null,"x":null,"facebook":null,"email":"xpringlee@gmail.com"}},"scroll":{"progress_bar":true,"percent":false,"hide_header":true},"home":{"announcement":null,"category":true,"tag":true,"post_datetime":"created"},"post":{"author_badge":{"enable":true,"level_badge":false,"custom_badge":["愚昧之巅","绝望之谷","开悟之坡","大师领域"]},"word_count":{"wordcount":true,"min2read":true},"datetime_format":"YYYY-MM-DD HH:mm:ss","copyright_info":true,"share":true,"img_align":"center","reward":{"enable":false,"img_link":null,"text":null}},"code_block":{"tools":{"enable":true,"style":"default"},"highlight_theme":"default"},"toc":{"enable":false,"number":false,"expand_all":true,"init_open":false,"layout":"right"},"website_count":{"busuanzi_count":{"enable":true,"site_uv":true,"site_pv":true,"page_pv":true}},"local_search":{"enable":true,"preload":true},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.36"},"waline":{"server_url":null,"reaction":false,"version":"3.2.1"},"giscus":{"repo":null,"repo_id":null,"category":"Announcements","category_id":null,"reactions_enabled":false},"artalk":{"server":null},"disqus":{"shortname":null}},"rss":{"enable":true},"lazyload":{"enable":true},"cdn":{"enable":true,"provider":"cdnjs"},"pjax":{"enable":true},"footer":{"since":2020,"word_count":false,"site_deploy":{"enable":true,"provider":"github","url":null},"record":{"enable":false,"list":[{"code":null,"link":null}]}},"inject":{"enable":false,"css":[null],"js":[null]},"root":"","source_data":{},"version":"4.1.5"}
+    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"}
+    KEEP.language_code_block = {"copy":"Copy code","copied":"Copied","fold":"Fold code block","folded":"Folded"}
+    KEEP.language_copy_copyright = {"copy":"Copy copyright info","copied":"Copied","title":"Original post title","author":"Original post author","link":"Original post link"}
+  </script>
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+        <span class="scroll-progress-bar"></span>
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <i class="pjax-progress-icon fas fa-circle-notch fa-spin"></i>
+    
+</div>
+
+
+
+<main class="page-container border-box">
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left border-box">
+            
+                <a class="logo-image border-box" href="/">
+                    <img src="/images/logo.ico">
+                </a>
+            
+            <a class="site-name border-box" href="/">
+               小熊糖否
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        
+                        <li class="menu-item">
+                            <a class=""
+                               href="/"
+                            >
+                                
+                                HOME
+                            </a>
+                        </li>
+                    
+                        
+                        <li class="menu-item">
+                            <a class=""
+                               href="/archives"
+                            >
+                                
+                                ARCHIVES
+                            </a>
+                        </li>
+                    
+                        
+                        <li class="menu-item">
+                            <a class=""
+                               href="/tags"
+                            >
+                                
+                                TAGS
+                            </a>
+                        </li>
+                    
+                        
+                        <li class="menu-item">
+                            <a class=""
+                               href="/about"
+                            >
+                                
+                                ABOUT
+                            </a>
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="fas search fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/"
+                    >HOME</a>
+                </li>
+            
+                
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/archives"
+                    >ARCHIVES</a>
+                </li>
+            
+                
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/tags"
+                    >TAGS</a>
+                </li>
+            
+                
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/about"
+                    >ABOUT</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+                
+
+                    
+<div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+        <div class="post-content-container border-box">
+            
+                <div class="post-content-top border-box"
+                     style="height: 13.8rem"
+                >
+                    <div class="cover-post-title">
+                        视频会议中的音视频处理技术（Media Foundation）
+                    </div>
+                    <img class="post-cover" src="/images/tags/auvi.jpg"
+                         onerror="this.style.display='none'"
+                    >
+                </div>
+            
+
+            <div class="post-content-bottom border-box has-cover">
+                
+
+                
+                    <div class="post-header border-box">
+                        
+                            <div class="avatar-box border-box">
+                                <img src="/images/author.jpg">
+                            </div>
+                        
+                        <div class="info-box">
+                            <div class="author border-box">
+                                <span class="name">ZeroJiu</span>
+                                
+                                    <span class="author-badge">大师领域</span>
+                                
+                            </div>
+                            <div class="meta-info border-box">
+                                
+
+<div class="post-meta-info-container border-box post">
+    <div class="post-meta-info border-box">
+        
+
+        
+            <span class="meta-info-item post-create-date">
+                <i class="icon fa-solid fa-calendar-plus"></i>&nbsp;
+                <span class="datetime">2016-12-25 00:24:21</span>
+            </span>
+
+            <span class="meta-info-item post-update-date">
+                <i class="icon fa-solid fa-file-pen"></i>&nbsp;
+                <span class="datetime" data-updated="Fri Jul 19 2024 21:18:44 GMT+0800">2024-07-19 21:18:44</span>
+            </span>
+        
+
+        
+            <span class="meta-info-item post-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul class="post-category-ul">
+                    
+                            <li class="category-item"><a href="/categories/Develop/">Develop</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="post-tag meta-info-item border-box">
+                <ul class="post-tag-ul">
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Media/">Media</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Win32/">Win32</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+            <span class="meta-info-item post-wordcount">
+                <i class="icon fas fa-file-word"></i>&nbsp;<span>2.3k Words</span>
+            </span>
+        
+        
+            <span class="meta-info-item post-min2read">
+                <i class="icon fas fa-clock"></i>&nbsp;<span>7 Mins</span>
+            </span>
+        
+        
+            <span class="meta-info-item post-pv">
+                <i class="icon fas fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+            </span>
+        
+    </div>
+
+    
+</div>
+
+                            </div>
+                        </div>
+                    </div>
+                
+
+                <div class="post-content keep-markdown-body ">
+                    
+
+                    
+                         <p>在视频会议中，最基础的的部分应该就是音视频数据的处理了。对于音视频数据的处理，主要是在客户端，涉及到音视频采集、编解码、视频渲染等相关技术。<span id="more"></span>本文接下来的篇幅，会逐点细述这几个相关的技术点。本文所涉及的技术主要是Windows平台下，其他平台请Google。另外，本文的重点在于视频方面，音频暂不详述，同时本文并没有详细的代码，只重点阐述如何实现。</p>
+<h2 id="%E5%AA%92%E4%BD%93%E6%B5%81" tabindex="-1">媒体流</h2>
+<p>对于视频会议来说，客户端的处理内容主要是媒体流：</p>
+<ul>
+<li>音频输入流</li>
+<li>音频输出流</li>
+<li>视频输入流</li>
+<li>视频输出流</li>
+</ul>
+<p>音频输入流的来源主要有麦克风采集和系统，视频输入流的来源主要是摄像头采集和屏幕录制。而对于音视频的输出，主要是通过扬声器、耳机、显示器等设备。</p>
+<h2 id="%E8%A7%86%E9%A2%91%E9%87%87%E9%9B%86" tabindex="-1">视频采集</h2>
+<p>视频采集的主要作用是为视频输入流产生视频数据。一般的笔记本都会自带摄像头，通过<code>Windows Media Foundation</code>提供的API函数<code>MFEnumDeviceSources</code>，我们能够遍历可使用的摄像头。该函数的具体使用方法见<a class="link"   target="_blank" rel="noopener" href="https://msdn.microsoft.com/en-us/library/windows/desktop/dd388503" >链接<i class="fas fa-external-link-alt"></i></a>。</p>
+<p>每个摄像头都会支持很多格式——不同的分辨率、帧率。一般情况下，我们都会想要一个合适的视频格式。这个格式摄像头有可能不支持，所以在实现摄像头采集时，需要根据我们想要的格式，选择一个最佳匹配。可以按照以下两种匹配原则：</p>
+<ul>
+<li>寻找各个属性都最接近的格式</li>
+<li>寻找各个属性都相同的格式（帧率大于所需帧率也满足情况）</li>
+</ul>
+<p>摄像头支持的视频格式可以通过<code>Presentation Descriptors</code>来获取，有关<code>Presentation Descriptors</code>的具体使用方法见<a class="link"   target="_blank" rel="noopener" href="https://msdn.microsoft.com/en-us/library/windows/desktop/ms698961" >链接<i class="fas fa-external-link-alt"></i></a></p>
+<p>摄像头数据的输出采取异步操作，需要实现<code>IMFSourceReaderCallback</code>接口，并且在<code>OnReadSample</code>函数里输出采集到的视频数据。异步操作的设置需要将<code>MFCreateSourceReaderFromMediaSource</code>的IMFAttributes参数的属性<code>MF_SOURCE_READER_ASYNC_CALLBACK</code>设置为<code>IMFSourceReaderCallback</code>接口的具体实现。</p>
+<p>视频采集的具体实现可以参照github上的<a class="link"   target="_blank" rel="noopener" href="https://github.com/roxlu/video_capture" >video_capture项目<i class="fas fa-external-link-alt"></i></a>。该项目实现了Windows/Linux/Mac三个平台下的摄像头采集操作。如果不想了解实现细节，可以直接使用这个开源项目。</p>
+<h2 id="%E8%A7%86%E9%A2%91%E7%BC%96%E7%A0%81" tabindex="-1">视频编码</h2>
+<p>视频编码支持不少的格式：H263、H264、H265、VP8、VP9，这里重点是目前使用的较为普遍的H264格式。</p>
+<p>在Windows下，H264编解码有不少实现，开源的有OpenH264、x264，FFMpeg软编软解使用的应该是x264，硬编硬解应该是对应的显卡商提供的库。Media Foundation较为全面的集成了软编、软解、硬编、硬解、硬件加速编解码。</p>
+<p>我在多台PC上测试，发现一个现象：Media Foundation支持H264的软编解、硬编、硬件加速解码，却不支持硬解解码。暂且没有找到为什么不支持，不过对于上述几个编解码的支持，已经够我们在Windows平台下开发高性能的视频会议程序了。</p>
+<p>如果需要使用软件编解码，推荐使用OpenH264，因为其实跨平台的，并且在Win7下的支持也做的很好。Media Foundation只能在Windows下使用，并且对于实时数据来说，其仅在Win8以上，才做到了较好的支持。如果Win7就像用Media Foundation，有可能还需要在深入的研究下MSDN的文档——非实时场景挺好用，实时场景稍微欠缺。</p>
+<p>我们使用Media Foundation，是因为其硬件编解码能力。使用Media Foundation硬编功能主要按照以下步骤：</p>
+<p>1、初始化<code>COM组件</code>和<code>Media Foundation组件</code>；</p>
+<p>2、调用MFTEnumEx枚举硬件编码<code>IMFTransform</code>，调用ActivateObject激活对应硬件编码器。这里需要注意：</p>
+<ul>
+<li>硬件编码器采用异步模型，需要设置属性<code>MF_TRANSFORM_ASYNC_UNLOCK</code>为TRUE来解锁硬件编码器；</li>
+<li>硬件编码器的输入视频格式为<code>MFVideoFormat_NV12</code>，很多摄像头输出的是YUV、RGB24，需要进行转码，可使用<code>libyuv</code>开源库；</li>
+<li>记住调用<code>CoTaskMemFree</code>进行内存释放。</li>
+</ul>
+<p>3、设置CodecApi，CodecApi主要用来控制编码器的细节属性；</p>
+<ul>
+<li>通过<code>QueryInterface</code>函数可以获取编码器的CodecApi接口实例；</li>
+<li>为了高质量，需要设置<code>CODECAPI_AVEncCommonRateControlMode</code>为<code>eAVEncCommonRateControlMode_Quality</code>；</li>
+<li>为了设置低时延，需要设置<code>CODECAPI_AVLowLatencyMode</code>属性为<code>VARIANT_TRUE</code>；</li>
+</ul>
+<p>4、设置输入输出MediaType</p>
+<ul>
+<li>这个比较好设置，按照输入和输出参数设置就行了，但是输入格式必须要设置为<code>MFVideoFormat_NV12</code>（<em>应该是必须吧，使用时还是需要对照MSDN来设置</em>）</li>
+</ul>
+<p>5、初始化事件生成器，由于硬件编码是异步的，因此我们需要获取异步事件，必须要先初始化异步事件生成器。</p>
+<p>6、发送初始化消息给MFT，包括下面两个消息：</p>
+<ul>
+<li><code>MFT_MESSAGE_NOTIFY_BEGIN_STREAMING</code></li>
+<li><code>MFT_MESSAGE_NOTIFY_START_OF_STREAM</code></li>
+</ul>
+<blockquote>
+<p>上面是正式硬件编码的准备工作，下面便是编解码的处理过程。</p>
+</blockquote>
+<p>7、将输入NV12格式视频数据填充到ISample中</p>
+<p>8、通过事件产生器，获取异步事件，根据事件类型向编码器输入数据和输出数据，事件类型如下：</p>
+<ul>
+<li><code>METransformNeedInput</code>：需要输入视频数据</li>
+<li><code>METransformHaveOutput</code>：需要输出视频数据</li>
+</ul>
+<p>9、对应需要输入视频数据时，需要调用<code>ProcessInput</code>方法来处理输入视频数据，对应需要输出视频数据时，需要调用<code>ProcessOutput</code>方法来处理输出视频数据。</p>
+<ul>
+<li>上述调用时一一对应的，出现一次NeedInput调用一次ProcessInput，出现一次HaveOutput调用一次ProcessOutput</li>
+<li>有时候会不需要输入数据，这个时候要等待NeedInput事件，在等待过程中，也需要及时的处理数据输出</li>
+<li>也有可能一次需要多个输入数据，这就需要用数组将数据保存起来，分别输入。</li>
+</ul>
+<p>10、我们前面设置了输出流Media Type，可是在真正的流输出的时候，Media Type有可能改变，也就是ProcessOutput返回错误<code>MF_E_TRANSFORM_STREAM_CHANGE</code>。</p>
+<ul>
+<li>这个时候，我们需要正确的处理流变化——调用<code>GetOutputAvailableType</code>，并重新设置流格式</li>
+<li>并不会因为流格式变化而造成丢帧</li>
+</ul>
+<p>11、硬件编码结束的时候，需要发送下列消息给MFT，防止出现丢帧：</p>
+<ul>
+<li><code>MFT_MESSAGE_NOTIFY_END_OF_STREAM</code></li>
+<li><code>MFT_MESSAGE_COMMAND_DRAIN</code></li>
+</ul>
+<p>上面两个消息发送完之后，硬件编码器会将存储在编码器内部尚未输出的帧，全部输出，保证了输入帧数和输出帧数一致。</p>
+<p>12、调用<code>IMFShutdown</code>接口的shutdown函数来关闭硬件编码器。</p>
+<p>实现上述十二个流程，便能实现一个基本的硬件编码器，需要注意，记得释放内存，否则会导致资源泄露——内存爆了。</p>
+<blockquote>
+<p>对于<code>MFT_OUTPUT_DATA_BUFFER</code>接口来说，需要释放两个资源：<code>pEvents</code>和<code>pSample</code>。</p>
+</blockquote>
+<h2 id="%E8%A7%86%E9%A2%91%E8%A7%A3%E7%A0%81" tabindex="-1">视频解码</h2>
+<p>对于视频解码，目前实现了Media Foundation硬件解码和硬件加速解码，我的机器仅支持H264的硬件加速解码，并不支持硬件解码，所以硬件解码未做测试。硬件解码和硬件加速解码是不一定的，虽然都使用了GPU的性能，但是硬件加速只是将部分解码工作放在GPU那里执行。</p>
+<p>硬件加速解码可以认为是软件解码器和硬件解码器的结合，其编码模式遵从软件解码器的编码模式。所以如果想要Media Foundation的软件解码也可以参照下面的步骤。</p>
+<p>1、初始化硬件加速解码器，我们需要判断该解码器是否支持<code>MF_SA_D3D_AWARE</code>属性，支持这个属性表明该解码器支持硬件加速；</p>
+<ul>
+<li>对于支持硬件加速的解码器，可以将<code>CODECAPI_AVDecVideoAcceleration_H264</code>属性设置为TRUE来启动硬件加速</li>
+<li>同时设置<code>CODECAPI_AVLowLatencyMode</code>来启动低时延模式</li>
+</ul>
+<p>2、创建D3D设备管理器，并发送给MFT</p>
+<ul>
+<li>通过<code>MFT_MESSAGE_SET_D3D_MANAGER</code>消息发送给硬件加速编码器</li>
+</ul>
+<p>3、设置输入输出类型，这里需要设置的属性并不多，具体可以参考MSDN上</p>
+<p>4、软件编码是采用同步模式，所以不需要异步事件发生器。对于输入数据调用ProcessInput，进而直接得到ProcessOutput输出数据</p>
+<ul>
+<li>如果不设置低时延模式，ProcessOutput会一直返回NeedMoreInput，直到等到足够的输入。对于，非实时场景无所谓，对于实时场景影响很大。</li>
+</ul>
+<p>5、ProcessOutput输出时，也有可能会出现流格式变化</p>
+<ul>
+<li>这个时候，需要遍历可用的输入流，找到合适的输出格式，并重新设置。</li>
+</ul>
+<p>上述步骤描述较为简单，和视频编码步骤一致的都省略了，没有细述的请参考视频编码一节。</p>
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/katex/dist/katex.min.css">
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/markdown-it-texmath/css/texmath.min.css">
+
+                    
+                </div>
+
+                
+                        
+<div class="post-copyright-info-container border-box">
+    <div class="copyright-info-content border-box">
+        <div class="copyright-info-top border-box">
+            <div class="copyright-post-title border-box text-ellipsis">
+                视频会议中的音视频处理技术（Media Foundation）
+            </div>
+
+            <div class="copyright-post-link border-box text-ellipsis">
+                develop/audio-video-process/
+            </div>
+        </div>
+
+        <div class="copyright-info-bottom border-box">
+            <div class="copyright-post-author bottom-item">
+                <div class="type">
+                    Author
+                </div>
+                <div class="content">ZeroJiu</div>
+            </div>
+
+            <div class="post-time bottom-item">
+                <div class="type">
+                    Published
+                </div>
+                <div class="content">2016-12-25 00:24</div>
+            </div>
+
+
+            <div class="post-license bottom-item">
+                <div class="type">
+                    License
+                </div>
+                <div class="content tooltip" data-tooltip-content="CC BY-NC-SA 4.0">
+                    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed" target="_blank">
+                        
+                            <i class="fa-brands fa-creative-commons"></i>
+                            <i class="fa-brands fa-creative-commons-by"></i>
+                            <i class="fa-brands fa-creative-commons-nc"></i>
+                            <i class="fa-brands fa-creative-commons-sa"></i>
+                        
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <i class="copyright-bg fa-solid fa-copyright"></i>
+    </div>
+    <div class="copy-copyright-info flex-center tooltip" data-tooltip-content="Copy copyright info" data-tooltip-offset-y="-2px">
+        <i class="fa-solid fa-copy"></i>
+    </div>
+</div>
+
+                
+
+                <div class="post-bottom-tags-and-share border-box">
+                    <div>
+                        
+                            <ul class="post-tags-box border-box">
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Media/">Media</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Win32/">Win32</a>
+                                    </li>
+                                
+                            </ul>
+                        
+                    </div>
+                    <div>
+                        
+                            <div class="post-share-container border-box">
+    <ul class="share-list-wrap border-box">
+        <li class="qq share-item border-box flex-center tooltip"
+            data-tooltip-content="Share to QQ"
+        >
+            <i class="fa-brands fa-qq"></i>
+        </li>
+        <li class="wechat share-item border-box flex-center tooltip tooltip-img"
+            data-tooltip-content="Share to WeChat"
+            data-tooltip-img-tip="Scan by WeChat"
+            data-tooltip-img-style="background-color: #fff; top: -10px; padding: 0.6rem 0.6rem 0.1rem 0.6rem;"
+        >
+            <i class="fa-brands fa-weixin"></i>
+        </li>
+        <li class="weibo share-item border-box flex-center tooltip"
+            data-tooltip-content="Share to WeiBo"
+        >
+            <i class="fa-brands fa-weibo"></i>
+        </li>
+    </ul>
+</div>
+
+                        
+                    </div>
+                </div>
+
+                
+
+                
+                    <div class="post-nav border-box">
+                        
+                            <div class="prev-post">
+                                <a class="prev"
+                                   rel="prev"
+                                   href="/develop/mysql-basic/"
+                                   title="MySQL初识"
+                                >
+                                    <span class="left arrow-icon flex-center">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </span>
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">MySQL初识</span>
+                                        <span class="post-nav-item">Prev posts</span>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                        
+                            <div class="next-post">
+                                <a class="next"
+                                   rel="next"
+                                   href="/develop/cmake-create-qt5-project/"
+                                   title="使用CMake构建Qt5工程指南"
+                                >
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">使用CMake构建Qt5工程指南</span>
+                                        <span class="post-nav-item">Next posts</span>
+                                    </span>
+                                    <span class="right arrow-icon flex-center">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                    </div>
+                
+
+                
+                    
+
+
+
+
+
+
+                
+            </div>
+        </div>
+
+        
+    </div>
+</div>
+
+
+                
+            </div>
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="copyright-info info-item">
+        &copy;&nbsp;<span>2020</span>&nbsp;-&nbsp;2024
+        
+            &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">ZeroJiu</a>
+        
+    </div>
+
+    <div class="theme-info info-item">
+        Powered by&nbsp;<a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;&&nbsp;Theme&nbsp;<a class="keep-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep</a>
+    </div>
+
+    
+        
+        <div class="deploy-info info-item">
+            
+            This site is deployed on <span class="tooltip" data-tooltip-content="GitHub Pages"><img src="/images/brands/github.png"></span>
+            
+        </div>
+    
+
+    
+        <div class="count-info info-item">
+            
+
+            
+                <span class="count-item border-box uv">
+                    <span class="item-type border-box">Unique Visitor</span>
+                    <span class="item-value border-box uv" id="busuanzi_value_site_uv"></span>
+                </span>
+            
+
+            
+                <span class="count-item border-box pv">
+                    <span class="item-type border-box">Page View</span>
+                    <span class="item-value border-box pv" id="busuanzi_value_site_pv"></span>
+                </span>
+            
+        </div>
+    
+
+    
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="post-tools-list border-box">
+        <!-- PC encrypt again -->
+        
+
+        <!-- PC TOC show toggle -->
+        
+
+        <!-- PC go comment -->
+        
+
+        <!-- PC full screen -->
+        <li class="tools-item flex-center full-screen">
+            <i class="fa-solid fa-expand"></i>
+        </li>
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container border-box ">
+    <ul class="side-tools-list side-tools-show-handle border-box">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-toggle-theme-mode flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list border-box">
+        
+
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        <li class="tools-item tool-scroll-to-top flex-center show-arrow">
+            <i class="arrow fas fa-arrow-up"></i>
+            <span class="percent"></span>
+        </li>
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="Search..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+</main>
+
+
+
+<!-- common -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/utils.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/header-shrink.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/back2top.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/toggle-theme.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/code-block.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/main.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/libs/anime.min.js"></script>
+
+<!-- local-search -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/local-search.min.js"></script>
+
+
+<!-- lazyload -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/lazyload.min.js"></script>
+
+
+<div class="pjax">
+    <!-- home page -->
+    
+
+    <!-- post page -->
+    
+        <!-- post-helper -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/post/post-helper.min.js"></script>
+
+        <!-- toc -->
+        
+
+        <!-- copyright-info -->
+        
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/post/copyright-info.min.js"></script>
+        
+
+        <!-- share -->
+        
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/post/share.min.js"></script>
+        
+    
+
+    <!-- categories page -->
+    
+
+    <!-- links page -->
+    
+
+    <!-- photos page -->
+    
+
+    <!-- tools page -->
+    
+</div>
+
+<!-- mermaid -->
+
+    
+<script src="//cdn.jsdelivr.net/npm/mermaid@10.5.0/dist/mermaid.min.js"></script>
+
+    <script data-pjax>
+      if (window.mermaid) {
+        mermaid.init()
+      }
+    </script>
+
+
+
+
+
+
+<!-- pjax -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/libs/pjax.min.js"></script>
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        window.pjax = new Pjax({
+            selectors: [
+                'head title',
+                '.page-container',
+                '.pjax'
+            ],
+            history: true,
+            debug: false,
+            cacheBust: false,
+            timeout: 0,
+            analytics: false,
+            currentUrlFullReload: false,
+            scrollRestoration: false,
+        });
+
+        document.addEventListener('pjax:send', () => {
+            KEEP.utils.pjaxProgressBarStart()
+        });
+
+        document.addEventListener('pjax:complete', () => {
+            KEEP.utils.pjaxProgressBarEnd()
+            window.pjax.executeScripts(document.querySelectorAll('script[data-pjax], .pjax script'))
+            KEEP.initExecute()
+        });
+    });
+</script>
+
+
+
+
+</body>
+</html>

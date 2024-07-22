@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="ZeroJiu">
+    
+    <title>
+        
+            C++并发编程2——为共享数据加锁 |
+        
+        小熊糖否
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+        <link rel="shortcut icon" href="/images/logo.ico">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/font/css/fontawesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/font/css/regular.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/font/css/solid.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/font/css/brands.min.css">
+    
+    <script class="keep-theme-configurations">
+    const KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"example.com","root":"/","language":"en","path":"search.xml"}
+    KEEP.theme_config = {"base_info":{"primary_color":"#c0392b","title":"小熊糖否","author":"ZeroJiu","avatar":"/images/author.jpg","logo":"/images/logo.ico","favicon":"/images/logo.ico"},"menu":{"home":"/","archives":"/archives","tags":"/tags","about":"/about"},"first_screen":{"enable":true,"background_img":"/images/bg.svg","background_img_dark":"/images/bg.svg","description":"True mastery of any skill takes a lifetime.","hitokoto":false},"social_contact":{"enable":true,"links":{"github":"https://github.com/zerojiu","weixin":null,"qq":null,"weibo":null,"zhihu":null,"twitter":null,"x":null,"facebook":null,"email":"xpringlee@gmail.com"}},"scroll":{"progress_bar":true,"percent":false,"hide_header":true},"home":{"announcement":null,"category":true,"tag":true,"post_datetime":"created"},"post":{"author_badge":{"enable":true,"level_badge":false,"custom_badge":["愚昧之巅","绝望之谷","开悟之坡","大师领域"]},"word_count":{"wordcount":true,"min2read":true},"datetime_format":"YYYY-MM-DD HH:mm:ss","copyright_info":true,"share":true,"img_align":"center","reward":{"enable":false,"img_link":null,"text":null}},"code_block":{"tools":{"enable":true,"style":"default"},"highlight_theme":"default"},"toc":{"enable":false,"number":false,"expand_all":true,"init_open":false,"layout":"right"},"website_count":{"busuanzi_count":{"enable":true,"site_uv":true,"site_pv":true,"page_pv":true}},"local_search":{"enable":true,"preload":true},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.36"},"waline":{"server_url":null,"reaction":false,"version":"3.2.1"},"giscus":{"repo":null,"repo_id":null,"category":"Announcements","category_id":null,"reactions_enabled":false},"artalk":{"server":null},"disqus":{"shortname":null}},"rss":{"enable":true},"lazyload":{"enable":true},"cdn":{"enable":true,"provider":"cdnjs"},"pjax":{"enable":true},"footer":{"since":2020,"word_count":false,"site_deploy":{"enable":true,"provider":"github","url":null},"record":{"enable":false,"list":[{"code":null,"link":null}]}},"inject":{"enable":false,"css":[null],"js":[null]},"root":"","source_data":{},"version":"4.1.5"}
+    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"}
+    KEEP.language_code_block = {"copy":"Copy code","copied":"Copied","fold":"Fold code block","folded":"Folded"}
+    KEEP.language_copy_copyright = {"copy":"Copy copyright info","copied":"Copied","title":"Original post title","author":"Original post author","link":"Original post link"}
+  </script>
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+        <span class="scroll-progress-bar"></span>
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <i class="pjax-progress-icon fas fa-circle-notch fa-spin"></i>
+    
+</div>
+
+
+
+<main class="page-container border-box">
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left border-box">
+            
+                <a class="logo-image border-box" href="/">
+                    <img src="/images/logo.ico">
+                </a>
+            
+            <a class="site-name border-box" href="/">
+               小熊糖否
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        
+                        <li class="menu-item">
+                            <a class=""
+                               href="/"
+                            >
+                                
+                                HOME
+                            </a>
+                        </li>
+                    
+                        
+                        <li class="menu-item">
+                            <a class=""
+                               href="/archives"
+                            >
+                                
+                                ARCHIVES
+                            </a>
+                        </li>
+                    
+                        
+                        <li class="menu-item">
+                            <a class=""
+                               href="/tags"
+                            >
+                                
+                                TAGS
+                            </a>
+                        </li>
+                    
+                        
+                        <li class="menu-item">
+                            <a class=""
+                               href="/about"
+                            >
+                                
+                                ABOUT
+                            </a>
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="fas search fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/"
+                    >HOME</a>
+                </li>
+            
+                
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/archives"
+                    >ARCHIVES</a>
+                </li>
+            
+                
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/tags"
+                    >TAGS</a>
+                </li>
+            
+                
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/about"
+                    >ABOUT</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+                
+
+                    
+<div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+        <div class="post-content-container border-box">
+            
+                <div class="post-content-top border-box"
+                     style="height: 13.8rem"
+                >
+                    <div class="cover-post-title">
+                        C++并发编程2——为共享数据加锁
+                    </div>
+                    <img class="post-cover" src="/images/tags/concurrency.svg"
+                         onerror="this.style.display='none'"
+                    >
+                </div>
+            
+
+            <div class="post-content-bottom border-box has-cover">
+                
+
+                
+                    <div class="post-header border-box">
+                        
+                            <div class="avatar-box border-box">
+                                <img src="/images/author.jpg">
+                            </div>
+                        
+                        <div class="info-box">
+                            <div class="author border-box">
+                                <span class="name">ZeroJiu</span>
+                                
+                                    <span class="author-badge">大师领域</span>
+                                
+                            </div>
+                            <div class="meta-info border-box">
+                                
+
+<div class="post-meta-info-container border-box post">
+    <div class="post-meta-info border-box">
+        
+
+        
+            <span class="meta-info-item post-create-date">
+                <i class="icon fa-solid fa-calendar-plus"></i>&nbsp;
+                <span class="datetime">2016-09-27 17:38:25</span>
+            </span>
+
+            <span class="meta-info-item post-update-date">
+                <i class="icon fa-solid fa-file-pen"></i>&nbsp;
+                <span class="datetime" data-updated="Fri Jul 19 2024 21:23:22 GMT+0800">2024-07-19 21:23:22</span>
+            </span>
+        
+
+        
+            <span class="meta-info-item post-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul class="post-category-ul">
+                    
+                            <li class="category-item"><a href="/categories/Develop/">Develop</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="post-tag meta-info-item border-box">
+                <ul class="post-tag-ul">
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/CPP/">CPP</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Thread/">Thread</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+            <span class="meta-info-item post-wordcount">
+                <i class="icon fas fa-file-word"></i>&nbsp;<span>3.8k Words</span>
+            </span>
+        
+        
+            <span class="meta-info-item post-min2read">
+                <i class="icon fas fa-clock"></i>&nbsp;<span>16 Mins</span>
+            </span>
+        
+        
+            <span class="meta-info-item post-pv">
+                <i class="icon fas fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+            </span>
+        
+    </div>
+
+    
+</div>
+
+                            </div>
+                        </div>
+                    </div>
+                
+
+                <div class="post-content keep-markdown-body ">
+                    
+
+                    
+                         <blockquote>
+<p>找到问题的解决办法，而不是找蹩脚的接口。</p>
+</blockquote>
+<p>在应届生面试的时候，很多面试官都会问——“多线程如何共享资源”。在操作系统层面上可以给出若干关键词答案，但是在语言层面，这个问题考虑的就没有那么简单了。<span id="more"></span>同时，很多人会将多线程数据共享和线程同步混淆。有关线程同步，我们会在接下来的章节里着重阐述。本文主要聚焦于保护共享数据，首先从加锁入手，进而扩展到加锁无法解决的问题，最后会给出一些其他保护方案。</p>
+<h2 id="%E5%8F%82%E6%95%B0%E5%85%A5%E6%A0%88" tabindex="-1">参数入栈</h2>
+<p>一个存放参数的栈数据结构，相同函数的参数必须要在栈中相连，我们来实现这个功能，看下面代码：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stack&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">MutexTest</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">MutexTest</span>(): <span class="built_in">m_charStack</span>() &#123; &#125;</span><br><span class="line">    ~<span class="built_in">MutexTest</span>() &#123; &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">Push</span><span class="params">(<span class="type">int</span> n, <span class="type">char</span> c)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; ++i)</span><br><span class="line">        &#123;</span><br><span class="line">            m_charStack.<span class="built_in">push</span>(c);</span><br><span class="line">            std::cout &lt;&lt; c;</span><br><span class="line">        &#125;</span><br><span class="line">        std::cout &lt;&lt; std::endl;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    std::stack&lt;<span class="type">char</span>&gt; m_charStack;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">MutexTest test;</span><br><span class="line"><span class="function">std::thread <span class="title">mutexTestThread1</span><span class="params">(&amp;MutexTest::Push, &amp;test, <span class="number">10</span>, <span class="string">&#x27;a&#x27;</span>)</span></span>;</span><br><span class="line"><span class="function">std::thread <span class="title">mutexTestThread2</span><span class="params">(&amp;MutexTest::Push, &amp;test, <span class="number">10</span>, <span class="string">&#x27;b&#x27;</span>)</span></span>;</span><br><span class="line"></span><br><span class="line">mutexTestThread<span class="number">1.</span><span class="built_in">join</span>();</span><br><span class="line">mutexTestThread<span class="number">2.</span><span class="built_in">join</span>();</span><br></pre></td></tr></table></figure>
+<p>上面这段代码的执行结果是不确定的，这是因为**我们无法预测线程的执行顺序，多个线程共享同一个数据栈存在竞态条件（Race Condition）。**所以我们可能得到下面的执行结果，所有的参数都是交叉在一起的，这不是我们想要的结果。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">aabbbbbbbaaaaaaaabbb</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><code>竞态条件</code>是多线程编程的噩梦，为什么会出现竞态条件可以自行百度，我们主要是为了解决这个问题。让最终执行的结果为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">aaaaaaaaaa</span><br><span class="line">bbbbbbbbbb</span><br></pre></td></tr></table></figure>
+<h2 id="%E5%8F%82%E6%95%B0%E5%85%A5%E6%A0%88%E4%BF%9D%E6%8A%A4" tabindex="-1">参数入栈保护</h2>
+<p><code>std::mutex</code>是C<ins>11提供的数据加锁类，C</ins>中通过实例化 std::mutex 创建互斥量，通过调用成员函数lock()进行上锁，unlock()进行解锁。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">MutexTest</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">MutexTest</span>(): <span class="built_in">m_mutex</span>(), <span class="built_in">m_charStack</span>() &#123; &#125;</span><br><span class="line">    ~<span class="built_in">MutexTest</span>() &#123; &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">Push</span><span class="params">(<span class="type">int</span> n, <span class="type">char</span> c)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="built_in">m_mutex</span>().<span class="built_in">lock</span>();</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; ++i)</span><br><span class="line">        &#123;</span><br><span class="line">            m_charStack.<span class="built_in">push</span>(c);</span><br><span class="line">            std::cout &lt;&lt; c;</span><br><span class="line">        &#125;</span><br><span class="line">        std::cout &lt;&lt; std::endl;</span><br><span class="line">        <span class="built_in">m_mutex</span>().<span class="built_in">unlock</span>();</span><br><span class="line">    &#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    std::mutex       m_mutex;</span><br><span class="line">    std::stack&lt;<span class="type">char</span>&gt; m_charStack;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>这段代码和上面的不同点就是使用std::mutex，在访问m_charStack之前上锁，其他线程就必须要等待解锁后才能访问m_charStack。如果我们忘记解锁，那么m_charStack就再也无法被访问了，所以有必要用RAII类<code>std::lock_guard</code>进行封装——构造时上锁，析构时解锁。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">MutexTest::Push</span><span class="params">(<span class="type">int</span> n, <span class="type">char</span> c)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="function">std::lock_guard&lt;std::mutex&gt; <span class="title">lg</span><span class="params">(m_mutex)</span></span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; ++i)</span><br><span class="line">    &#123;</span><br><span class="line">        m_charStack.<span class="built_in">push</span>(c);</span><br><span class="line">        std::cout &lt;&lt; c;</span><br><span class="line">    &#125;</span><br><span class="line">    std::cout &lt;&lt; std::endl;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>C++还提供了<code>std::unique_lock</code>锁，相对于<code>std::lock_guard</code>，该锁提供了更好地上锁和解锁灵活性控制。<code>std::unique_lock</code>以独占所有权的方式来管理mutex对象的上锁和解锁操作。我们来看看其用法</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;iostream&gt;   </span><br><span class="line">#include &lt;thread&gt;   </span><br><span class="line">#include &lt;mutex&gt;      </span><br><span class="line"></span><br><span class="line">std::mutex foo,bar;</span><br><span class="line"></span><br><span class="line">void task_a () &#123;</span><br><span class="line">  /* simultaneous lock (prevents deadlock) */</span><br><span class="line">  std::lock (foo,bar);         </span><br><span class="line">  std::unique_lock&lt;std::mutex&gt; lck1 (foo,std::adopt_lock);</span><br><span class="line">  std::unique_lock&lt;std::mutex&gt; lck2 (bar,std::adopt_lock);</span><br><span class="line">  std::cout &lt;&lt; &quot;task a\n&quot;;</span><br><span class="line">  /* (unlocked automatically on destruction of lck1 and lck2) */</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void task_b () &#123;</span><br><span class="line">  /* foo.lock(); bar.lock(); // replaced by: */</span><br><span class="line">  std::unique_lock&lt;std::mutex&gt; lck1, lck2;</span><br><span class="line">  lck1 = std::unique_lock&lt;std::mutex&gt;(bar,std::defer_lock);</span><br><span class="line">  lck2 = std::unique_lock&lt;std::mutex&gt;(foo,std::defer_lock);</span><br><span class="line">  /* simultaneous lock (prevents deadlock) */</span><br><span class="line">  std::lock (lck1,lck2);       </span><br><span class="line">  std::cout &lt;&lt; &quot;task b\n&quot;;</span><br><span class="line">  /* (unlocked automatically on destruction of lck1 and lck2) */</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">int main ()</span><br><span class="line">&#123;</span><br><span class="line">  std::thread th1 (task_a);</span><br><span class="line">  std::thread th2 (task_b);</span><br><span class="line"></span><br><span class="line">  th1.join();</span><br><span class="line">  th2.join();</span><br><span class="line"></span><br><span class="line">  return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>现在我们终于得到了我们想要的结果，可惜在很多时候加锁并不是解决数据共享的万能药。std::mutex并不能完全解决保护数据的问题。存在好几种情况，即使我们已经使用了互斥量，数据还是被破坏了。</p>
+<ul>
+<li>将被保护数据暴露到互斥量作用域之外</li>
+<li>被保护数据的访问接口本身就存在竞态条件（条件竞争）</li>
+</ul>
+<h2 id="%E4%B8%8D%E8%A6%81%E6%9A%B4%E9%9C%B2%E4%BD%A0%E7%9A%84%E6%95%B0%E6%8D%AE" tabindex="-1">不要暴露你的数据</h2>
+<p>来看下面例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">struct protected_data</span><br><span class="line">&#123;</span><br><span class="line">    char data[100];</span><br><span class="line">&#125;</span><br><span class="line">class MutexTest</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    template&lt;typename Function&gt;</span><br><span class="line">    void process(Function func)</span><br><span class="line">    &#123;</span><br><span class="line">        std::lock_guard&lt;std::mutex&gt; guard&lt;m_dataMutex&gt;;        </span><br><span class="line">        func(m_data);</span><br><span class="line">    &#125;</span><br><span class="line">private:</span><br><span class="line">    std::mutex            m_dataMutex;</span><br><span class="line">    struct protected_data m_data;</span><br><span class="line">&#125;</span><br><span class="line">struct protected_data *pData;</span><br><span class="line">void inject(Data &amp;data)</span><br><span class="line">&#123;</span><br><span class="line">    pData = &amp;data;</span><br><span class="line">&#125;</span><br><span class="line">/* 即使process没有显式传出，但是还是被inject传出 */</span><br><span class="line">/* process执行完后，pData能在无锁的情况下访问数据 */</span><br><span class="line">void Test()</span><br><span class="line">&#123;</span><br><span class="line">    process(inject);</span><br><span class="line">    for(int i = 0; i &lt; 100; ++i)</span><br><span class="line">    &#123;</span><br><span class="line">        pData.data[i] = i;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">std::thread mutexTestThread1(Test);</span><br><span class="line">std::thread mutexTestThread2(Test);</span><br></pre></td></tr></table></figure>
+<p>我想不到比较好的例子来说明这个问题，上面的例子是基于C++并发编程上面改编的例子，其也能说明问题：<strong>在上锁后执行了用户定义的函数，将被保护数据传递到互斥锁作用域之外</strong>。</p>
+<p>这个场景，<code>mutexTestThread1</code>解锁，<code>mutexTestThread2</code>上锁后，<code>mutexTestThread2</code>仍然无法独占被保护数据。pData总是获取到了被保护的数据，并在<code>mutexTestThread2</code>访问数据时修改该数据。</p>
+<p>这种代码看起来很正常，也很不容易被发现，但是背后的错误逻辑是致命的，数据常常被莫名修改，奔溃也有可能随之而来。</p>
+<blockquote>
+<p><strong>切勿将受保护数据的指针或引用传递到互斥锁作用域之外，无论是函数返回值，还是存储在外部可见内存，亦或是以参数的形式传递到用户提供的函数中去。</strong></p>
+</blockquote>
+<h2 id="%E8%B0%A8%E6%85%8E%E7%9A%84%E8%AE%BE%E8%AE%A1%E4%BD%A0%E7%9A%84%E6%95%B0%E6%8D%AE%E6%8E%A5%E5%8F%A3" tabindex="-1">谨慎的设计你的数据接口</h2>
+<p>来看下面例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">std::deque&lt;int&gt; intDeque(1, 10);</span><br><span class="line">std::stack&lt;int&gt; intStack(intDeque);</span><br><span class="line">void Process()</span><br><span class="line">&#123;</span><br><span class="line">    if(!intStack.empty())</span><br><span class="line">    &#123;</span><br><span class="line">        const int value = intStack.top();</span><br><span class="line">        intStack.pop();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">std::thread t1(Process);</span><br><span class="line">std::thread t2(Process);</span><br></pre></td></tr></table></figure>
+<p>即使top()操作和pop()操作都已经上锁，也无法解决条件竞争的问题。</p>
+<p>假设栈的实现中对数据的访问已加锁，在单线程情况下，上面程序可以无误执行，但是在多线程情况下，就有可能出现异常。**调用空stack的top()是未定义行为。**在多线程情况下，intStack.empty()操作获取的结果是不可靠的。</p>
+<p>上述例子中intStack栈只有一个元素，如果线程t1和t2的执行顺序如下，就会出现未定义行为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">// example 1</span><br><span class="line">t1: intStack.empty() /* one element in intStack */</span><br><span class="line">t1: intStack.top()   /* one element in intStack */</span><br><span class="line">t2: intStack.empty() /* one element in intStack */</span><br><span class="line">t1: intStack.pop()   /* no element in intStack  */</span><br><span class="line">t2: intStack.top()   /* undefined behavior, intStack is empty() */</span><br></pre></td></tr></table></figure>
+<p>即使不出现未定义行为，也有可能出现非预期行为——处理同一份数据多次：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">/* example 2 */</span><br><span class="line">t1: intStack.empty() /* one element in intStack */</span><br><span class="line">t2: intStack.empty() /* one element in intStack */</span><br><span class="line">t1: intStack.top()   /* handle this data */</span><br><span class="line">t2: intStack.top()   /* handle this data again */</span><br></pre></td></tr></table></figure>
+<p>要解决上述问题，就需要接口设计上有较大的改动，最好的操作是重新设计接口</p>
+<ul>
+<li>1、重新设计接口实现：top()接口内提供异常机制，当栈大小为零时，抛出异常</li>
+<li>2、重新设计接口功能：将pop()和top()操作合并</li>
+</ul>
+<p>第1种方案并不能解决example 2，所以推荐重新设计接口功能。一个线程安全的栈类定义如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">template&lt;typename T&gt;</span><br><span class="line">class Stack</span><br><span class="line">&#123;</span><br><span class="line">private:</span><br><span class="line">    std::stack&lt;T&gt;      m_data;</span><br><span class="line">    mutable std::mutex m_mutex;</span><br><span class="line">public:</span><br><span class="line">    Stack(): m_data(std::stack&lt;int&gt;())&#123;&#125;</span><br><span class="line">    Stack(const Stack&amp; other)</span><br><span class="line">    &#123;</span><br><span class="line">        std::lock_guard&lt;std::mutex&gt; lock(other.m);</span><br><span class="line">        data = other.data;</span><br><span class="line">    &#125;</span><br><span class="line">    Stack&amp; operator=(const Stack&amp;) = delete;</span><br><span class="line">    void push(T new_value)</span><br><span class="line">    &#123;</span><br><span class="line">        std::lock_guard&lt;std::mutex&gt; lock(m);</span><br><span class="line">        data.push(new_value);</span><br><span class="line">    &#125;</span><br><span class="line">    std::shared_ptr&lt;T&gt; pop()</span><br><span class="line">    &#123;</span><br><span class="line">        std::lock_guard&lt;std::mutex&gt; lock(m);</span><br><span class="line">        if(data.empty()) nullptr;</span><br><span class="line">        const std::shared_ptr&lt;T&gt; res(std::make_shared&lt;T&gt;(data.top()));</span><br><span class="line">        data.pop();</span><br><span class="line">        return res;</span><br><span class="line">    &#125;</span><br><span class="line">    void pop(T&amp; value)</span><br><span class="line">    &#123;</span><br><span class="line">        std::lock_guard&lt;std::mutex&gt; lock(m);</span><br><span class="line">        if(data.empty()) return nullptr;</span><br><span class="line">        value=data.top();</span><br><span class="line">        data.pop();</span><br><span class="line">    &#125;</span><br><span class="line">    bool empty() const</span><br><span class="line">    &#123;</span><br><span class="line">        std::lock_guard&lt;std::mutex&gt; lock(m);</span><br><span class="line">        return data.empty();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>栈操作为什么需要先top()后pop()，而不直接pop()时返回数据？这是为了防止pop()时的拷贝操作失败，导致数据丢失。</p>
+</blockquote>
+<p>如果不重新设计接口，在使用的时候加锁也能解决这个问题：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">std::mutex stackMutex;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">Process</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="function">std::lock_gurad&lt;std::mutex&gt; <span class="title">guard</span><span class="params">(statckMutex)</span></span>;</span><br><span class="line">    <span class="keyword">if</span>(!intStack.<span class="built_in">empty</span>())</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="type">const</span> <span class="type">int</span> value = intStack.<span class="built_in">top</span>();</span><br><span class="line">        intStack.<span class="built_in">pop</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上述两种可能导致加锁失效的竞态条件场景，需要我们在组织代码或设计接口时精雕细琢，在很多场景下，提供线程安全的代码是很有必要的。</p>
+<h2 id="%E6%AD%BB%E9%94%81" tabindex="-1">死锁</h2>
+<p>使用多线程，我们会遇到死锁问题，即使没有加锁，也是有可能出现死锁，必须要按照一定的规范来涉及代码，才能有效的避免死锁问题。</p>
+<p>死锁的概念略去不说，死锁有可能发生在使用多个互斥量的场景下，也可能存在没有使用互斥量的场景：</p>
+<ul>
+<li>两个线程都在等待对方释放互斥量</li>
+<li>两个线程都调用了对方的join()函数</li>
+</ul>
+<p>为了解决<strong>两个线程都在等待对方释放互斥量</strong>导致的死锁问题，C++11提供了若干机制：</p>
+<ul>
+<li>std::lock()函数</li>
+<li>std::unique_lock类</li>
+</ul>
+<h2 id="%E9%94%81%E4%BD%8F%E6%89%80%E6%9C%89%E4%BA%92%E6%96%A5%E9%87%8F" tabindex="-1">锁住所有互斥量</h2>
+<p>只要将互斥量作为参数传递给std::lock()，std::lock()就能够锁住多个互斥量。std::lock()并未指定解锁和上锁的顺序，其能够保证：</p>
+<ul>
+<li>std::lock()执行成功时，所有互斥量都已经被上锁，并且没有死锁问题</li>
+<li>std::lock()执行失败时，已被其上锁的互斥量都会被解锁</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span>       <span class="comment">/* std::cout */</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;thread&gt;</span>         <span class="comment">/* std::thread */</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;mutex&gt;</span>          <span class="comment">/* std::mutex, std::lock */</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">some_big_object</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">some_big_object</span>(<span class="type">int</span> a) :<span class="built_in">x</span>(a) &#123;&#125;</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">Print</span><span class="params">()</span></span>&#123; std::cout &lt;&lt; x &lt;&lt; std::endl; &#125;</span><br><span class="line"> <span class="keyword">private</span>:</span><br><span class="line">    <span class="type">int</span> x;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">X</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">  some_big_object&amp; some_detail;</span><br><span class="line">  std::mutex m;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="built_in">X</span>(some_big_object &amp; sd):<span class="built_in">some_detail</span>(sd)&#123;&#125;</span><br><span class="line">  <span class="function"><span class="keyword">friend</span> <span class="type">void</span> <span class="title">swap</span><span class="params">(X&amp; lhs, X&amp; rhs)</span></span></span><br><span class="line"><span class="function">  </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(&amp;lhs==&amp;rhs)</span><br><span class="line">      <span class="keyword">return</span>;</span><br><span class="line">    std::<span class="built_in">lock</span>(lhs.m,rhs.m);</span><br><span class="line">    <span class="function">std::lock_guard&lt;std::mutex&gt; <span class="title">lock_a</span><span class="params">(lhs.m,std::adopt_lock)</span></span>;</span><br><span class="line">    <span class="function">std::lock_guard&lt;std::mutex&gt; <span class="title">lock_b</span><span class="params">(rhs.m,std::adopt_lock)</span></span>;</span><br><span class="line">    std::<span class="built_in">swap</span>(lhs.some_detail,rhs.some_detail);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">class</span> T&gt;</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">swap</span><span class="params">(T&amp; lhs,T&amp; rhs)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span>&lt;&gt;</span><br><span class="line"><span class="type">void</span> <span class="built_in">swap</span>&lt;some_big_object&gt;(some_big_object &amp;x, some_big_object &amp;y)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="function">X <span class="title">a</span><span class="params">(x)</span>, <span class="title">b</span><span class="params">(y)</span></span>;</span><br><span class="line">    <span class="built_in">swap</span>(a, b);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span> <span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="function">some_big_object <span class="title">a</span><span class="params">(<span class="number">1</span>)</span>,<span class="title">b</span><span class="params">(<span class="number">2</span>)</span></span>;</span><br><span class="line">    a.<span class="built_in">Print</span>(), b.<span class="built_in">Print</span>();</span><br><span class="line">    <span class="built_in">swap</span>(a,b);</span><br><span class="line">    a.<span class="built_in">Print</span>(), b.<span class="built_in">Print</span>();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面一段代码使用了模板的偏特化特性，这里不需要深究，只需要知道swap(a, b)最终会调用X类的swap友元函数。在该友元函数中，std::lock()函数锁住两个互斥量，std::lock_guard负责unlock两个互斥量，如果不调用std::lock_guard()，需要手动unlock()。<code>std::adopt_lock</code>参数表示互斥量已经上锁，这里仅仅是不会重复上锁。下面两个例子起到相同作用。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* example 1 */</span></span><br><span class="line">std::mutex mtx;</span><br><span class="line">std::<span class="built_in">lock</span>(mtx); <span class="comment">// have to lock before the next sentence</span></span><br><span class="line"><span class="function">std::lock_guard&lt;std::mutex&gt; <span class="title">guard</span><span class="params">(mtx, std::adopt_lock)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* example 2 */</span></span><br><span class="line">std::mutex mtx;</span><br><span class="line">std::<span class="built_in">lock</span>(mtx);</span><br><span class="line">mtx.<span class="built_in">unlock</span>();</span><br></pre></td></tr></table></figure>
+<h2 id="%E9%81%BF%E5%85%8D%E6%AD%BB%E9%94%81%E7%9A%84%E4%B8%80%E7%82%B9%E5%BB%BA%E8%AE%AE" tabindex="-1">避免死锁的一点建议</h2>
+<p>C++并发编程中给出了几点避免死锁的进阶指导：</p>
+<ul>
+<li>1、避免嵌套锁</li>
+<li>2、避免在持有锁时调用用户提供的代码</li>
+<li>3、使用固定顺序获取锁</li>
+<li>4、使用锁的层次结构</li>
+</ul>
+<p>前三个建议看字面意思就可以了，我们这里主要阐述锁的层次结构。层次锁需要遵守如下原则：</p>
+<blockquote>
+<p>当代码试图对一个互斥量上锁，在该层锁已被低层持有时，上锁是不允许的。</p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">hierarchical_mutex <span class="title">high_level_mutex</span><span class="params">(<span class="number">10000</span>)</span></span>;</span><br><span class="line"><span class="function">hierarchical_mutex <span class="title">low_level_mutex</span><span class="params">(<span class="number">7000</span>)</span></span>;</span><br><span class="line"><span class="function">hierarchical_mutex <span class="title">low_level_mutex</span><span class="params">(<span class="number">5000</span>)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">do_low_level_stuff</span><span class="params">()</span></span>;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">low_level_func</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="function">std::lock_guard&lt;hierarchical_mutex&gt; <span class="title">lk</span><span class="params">(low_level_mutex)</span></span>;</span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">do_low_level_stuff</span>();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">high_level_stuff</span><span class="params">(<span class="type">int</span> some_param)</span></span>;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">high_level_func</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="function">std::lock_guard&lt;hierarchical_mutex&gt; <span class="title">lk</span><span class="params">(high_level_mutex)</span></span>;</span><br><span class="line">  <span class="built_in">high_level_stuff</span>(<span class="built_in">low_level_func</span>());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">middle_level_stuff</span><span class="params">(<span class="type">int</span> some_param)</span></span>;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">middle_level_func</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="function">std::lock_guard&lt;hierarchical_mutex&gt; <span class="title">lk</span><span class="params">(middle_level_mutex)</span></span>;</span><br><span class="line">  <span class="built_in">middle_level_stuff</span>(<span class="built_in">high_level_stuff</span>());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">high_level_func</span>();</span><br><span class="line">    <span class="built_in">middle_level_func</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>按照层次锁的原则，high_level_func()能够正确执行，而middle_level_func()不能正确执行：</p>
+<ul>
+<li>high_level_func()先获取到高层级的锁，然后获取到低层级的锁，符合原则</li>
+<li>middle_level_func()先获取低层级的锁，然后获取到高层级的锁，不符合原则</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">hierarchical_mutex</span></span><br><span class="line">&#123;</span><br><span class="line">  std::mutex internal_mutex;</span><br><span class="line">  <span class="type">unsigned</span> <span class="type">long</span> <span class="type">const</span> hierarchy_value;</span><br><span class="line">  <span class="type">unsigned</span> <span class="type">long</span> previous_hierarchy_value;</span><br><span class="line">  <span class="type">static</span> <span class="keyword">thread_local</span> <span class="type">unsigned</span> <span class="type">long</span> this_thread_hierarchy_value;</span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">check_for_hierarchy_violation</span><span class="params">()</span></span></span><br><span class="line"><span class="function">  </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(this_thread_hierarchy_value &lt;= hierarchy_value)</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="keyword">throw</span> std::<span class="built_in">logic_error</span>(“mutex hierarchy violated”);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">update_hierarchy_value</span><span class="params">()</span></span></span><br><span class="line"><span class="function">  </span>&#123;</span><br><span class="line">    previous_hierarchy_value=this_thread_hierarchy_value;</span><br><span class="line">    this_thread_hierarchy_value=hierarchy_value;</span><br><span class="line">  &#125;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="function"><span class="keyword">explicit</span> <span class="title">hierarchical_mutex</span><span class="params">(<span class="type">unsigned</span> <span class="type">long</span> value)</span>:</span></span><br><span class="line"><span class="function">      hierarchy_value(value),</span></span><br><span class="line"><span class="function">      previous_hierarchy_value(<span class="number">0</span>)</span></span><br><span class="line"><span class="function">  &#123;</span>&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">lock</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">check_for_hierarchy_violation</span>();</span><br><span class="line">    internal_mutex.<span class="built_in">lock</span>();</span><br><span class="line">    <span class="built_in">update_hierarchy_value</span>();</span><br><span class="line">    &#125;</span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">unlock</span><span class="params">()</span></span></span><br><span class="line"><span class="function">  </span>&#123;</span><br><span class="line">    this_thread_hierarchy_value=previous_hierarchy_value;</span><br><span class="line">    internal_mutex.<span class="built_in">unlock</span>();</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="type">bool</span> <span class="title">try_lock</span><span class="params">()</span></span></span><br><span class="line"><span class="function">  </span>&#123;</span><br><span class="line">    <span class="built_in">check_for_hierarchy_violation</span>();</span><br><span class="line">    <span class="keyword">if</span>(!internal_mutex.<span class="built_in">try_lock</span>())</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    <span class="built_in">update_hierarchy_value</span>();</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125; &#125;;</span><br><span class="line"><span class="function"><span class="keyword">thread_local</span> <span class="type">unsigned</span> <span class="type">long</span> <span class="title">hierarchical_mutex::this_thread_hierarchy_value</span><span class="params">(ULONG_MAX)</span></span>;</span><br></pre></td></tr></table></figure>
+<h2 id="%E4%BF%9D%E6%8A%A4%E5%85%B1%E4%BA%AB%E6%95%B0%E6%8D%AE%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96%E8%BF%87%E7%A8%8B" tabindex="-1">保护共享数据的初始化过程</h2>
+<p>为了防止共享数据初始化时数据被破坏，C++提供了std::once_flag和std::call_once来保证共享数据初始化的正确性。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">/* using mutex */</span><br><span class="line">std::shared_ptr&lt;some_resource&gt; resource_ptr;</span><br><span class="line">std::mutex resource_mutex;</span><br><span class="line">void foo()</span><br><span class="line">&#123;</span><br><span class="line">    std::unique_lock&lt;std::mutex&gt; lk(resource_mutex);</span><br><span class="line">    if(!resource_ptr)</span><br><span class="line">    &#123;</span><br><span class="line">        resource_ptr.reset(new some_resource);</span><br><span class="line">    &#125;</span><br><span class="line">    lk.unlock();</span><br><span class="line">    resource_ptr-&gt;do_something();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">/* using call_once */</span><br><span class="line">std::shared_ptr&lt;some_resource&gt; resource_ptr;</span><br><span class="line">std::once_flag resource_flag;</span><br><span class="line"></span><br><span class="line">void int_resource()</span><br><span class="line">&#123;</span><br><span class="line">    resource_ptr.reset(new some_resource);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void foo()</span><br><span class="line">&#123;</span><br><span class="line">    std::call_once(resource_flag, init_resource);</span><br><span class="line">    resource_ptr-&gt;do_something();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="%E4%BF%9D%E6%8A%A4%E5%BE%88%E5%B0%91%E6%9B%B4%E6%96%B0%E7%9A%84%E6%95%B0%E6%8D%AE%E9%87%8F" tabindex="-1">保护很少更新的数据量</h2>
+<p>对于这种共享数据可以采用“读者-写着锁”，其允许两种不同的使用方式：一个作者线程独占访问和共享访问，让多个读者线程并发访问。</p>
+<p>C++标准并没有提供相关的解决方案，我们可以使用boost::shared_mutex来做同步。对于更新操作，可以使<br>
+用<code>std::lock_guard&lt;boost::shared_mutex&gt;</code>和<code>std::unique_lock&lt;boost::shared_mutex&gt;</code>进行上锁；对于访问操作，可以使用<code>boost::shared_lock&lt;boost::shared_mutex&gt;</code>获取共享访问权。我们来看下面例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;map&gt;</span><br><span class="line">#include &lt;string&gt;</span><br><span class="line">#include &lt;mutex&gt;</span><br><span class="line">#include &lt;boost/thread/shared_mutex.hpp&gt;</span><br><span class="line">class dns_entry;</span><br><span class="line">class dns_cache</span><br><span class="line">&#123;</span><br><span class="line">  std::map&lt;std::string,dns_entry&gt; entries;</span><br><span class="line">  mutable boost::shared_mutex entry_mutex;</span><br><span class="line">public:</span><br><span class="line">  dns_entry find_entry(std::string const&amp; domain) const</span><br><span class="line">  &#123;</span><br><span class="line">    boost::shared_lock&lt;boost::shared_mutex&gt; lk(entry_mutex);</span><br><span class="line">    std::map&lt;std::string,dns_entry&gt;::const_iterator const it=</span><br><span class="line">       entries.find(domain);</span><br><span class="line">    return (it==entries.end())?dns_entry():it-&gt;second;</span><br><span class="line">  &#125;</span><br><span class="line">  void update_or_add_entry(std::string const&amp; domain,</span><br><span class="line">                           dns_entry const&amp; dns_details)</span><br><span class="line">  &#123;</span><br><span class="line">    std::lock_guard&lt;boost::shared_mutex&gt; lk(entry_mutex);</span><br><span class="line">    entries[domain]=dns_details;</span><br><span class="line">&#125; &#125;;</span><br></pre></td></tr></table></figure>
+<p>上面代码，find_entry()使用了<code>boost::shared_lock&lt;&gt;</code>实例来保护器共享和只读权限；update_or_add_entry()使用<code>std::lock_guard&lt;&gt;</code>实例来独占访问权限。</p>
+<h2 id="%E5%B5%8C%E5%A5%97%E9%94%81" tabindex="-1">嵌套锁</h2>
+<p>对于一个已经上锁的互斥量多次上锁，会出现未定义行为。然而对于嵌套锁<code>std::recursive_mutex</code>来说，多次上锁不会出现问题。</p>
+<p>在互斥量锁住其他线程前,你必须释放你拥有的所有 锁,所以当你调用lock()三次时,你也必须调用unlock()三次。正确使<br>
+用 std::lock_guard<a class="link"   href="std::recursive_mutex" >std::recursive_mutex<i class="fas fa-external-link-alt"></i></a> 和 std::unique_lock<a class="link"   href="std::recursice_mutex" >std::recursice_mutex<i class="fas fa-external-link-alt"></i></a> 可以帮我们处理这些问题。</p>
+<p>大多数情况下，嵌套锁是用在可被多线程并发访问的类上，所以其拥有一个互斥量保护其成员数据。每个公共成员函数 都会对互斥量上锁,然后完成对应的功能,之后再解锁互斥量。不过,有时一个公共成员函 数会调用另一个公共函数作为其操作的一部分。</p>
+<p>不过上面提高的方案是不推荐的，推荐的做法是——从中提取出一个函数作为类的私有成员, 并且让所有成员函数都对其进行调用,这个私有成员函数不会对互斥量进行上锁(在调用前必 须获得锁)。</p>
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/katex/dist/katex.min.css">
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/markdown-it-texmath/css/texmath.min.css">
+
+                    
+                </div>
+
+                
+                        
+<div class="post-copyright-info-container border-box">
+    <div class="copyright-info-content border-box">
+        <div class="copyright-info-top border-box">
+            <div class="copyright-post-title border-box text-ellipsis">
+                C++并发编程2——为共享数据加锁
+            </div>
+
+            <div class="copyright-post-link border-box text-ellipsis">
+                develop/cpp-thread-data-sharing/
+            </div>
+        </div>
+
+        <div class="copyright-info-bottom border-box">
+            <div class="copyright-post-author bottom-item">
+                <div class="type">
+                    Author
+                </div>
+                <div class="content">ZeroJiu</div>
+            </div>
+
+            <div class="post-time bottom-item">
+                <div class="type">
+                    Published
+                </div>
+                <div class="content">2016-09-27 17:38</div>
+            </div>
+
+
+            <div class="post-license bottom-item">
+                <div class="type">
+                    License
+                </div>
+                <div class="content tooltip" data-tooltip-content="CC BY-NC-SA 4.0">
+                    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed" target="_blank">
+                        
+                            <i class="fa-brands fa-creative-commons"></i>
+                            <i class="fa-brands fa-creative-commons-by"></i>
+                            <i class="fa-brands fa-creative-commons-nc"></i>
+                            <i class="fa-brands fa-creative-commons-sa"></i>
+                        
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <i class="copyright-bg fa-solid fa-copyright"></i>
+    </div>
+    <div class="copy-copyright-info flex-center tooltip" data-tooltip-content="Copy copyright info" data-tooltip-offset-y="-2px">
+        <i class="fa-solid fa-copy"></i>
+    </div>
+</div>
+
+                
+
+                <div class="post-bottom-tags-and-share border-box">
+                    <div>
+                        
+                            <ul class="post-tags-box border-box">
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/CPP/">CPP</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Thread/">Thread</a>
+                                    </li>
+                                
+                            </ul>
+                        
+                    </div>
+                    <div>
+                        
+                            <div class="post-share-container border-box">
+    <ul class="share-list-wrap border-box">
+        <li class="qq share-item border-box flex-center tooltip"
+            data-tooltip-content="Share to QQ"
+        >
+            <i class="fa-brands fa-qq"></i>
+        </li>
+        <li class="wechat share-item border-box flex-center tooltip tooltip-img"
+            data-tooltip-content="Share to WeChat"
+            data-tooltip-img-tip="Scan by WeChat"
+            data-tooltip-img-style="background-color: #fff; top: -10px; padding: 0.6rem 0.6rem 0.1rem 0.6rem;"
+        >
+            <i class="fa-brands fa-weixin"></i>
+        </li>
+        <li class="weibo share-item border-box flex-center tooltip"
+            data-tooltip-content="Share to WeiBo"
+        >
+            <i class="fa-brands fa-weibo"></i>
+        </li>
+    </ul>
+</div>
+
+                        
+                    </div>
+                </div>
+
+                
+
+                
+                    <div class="post-nav border-box">
+                        
+                            <div class="prev-post">
+                                <a class="prev"
+                                   rel="prev"
+                                   href="/develop/win-add-version-info-to-app/"
+                                   title="如何给应用程序加版本信息"
+                                >
+                                    <span class="left arrow-icon flex-center">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </span>
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">如何给应用程序加版本信息</span>
+                                        <span class="post-nav-item">Prev posts</span>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                        
+                            <div class="next-post">
+                                <a class="next"
+                                   rel="next"
+                                   href="/develop/cpp-thread-manager/"
+                                   title="C++并发编程1——让我们开始管理线程"
+                                >
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">C++并发编程1——让我们开始管理线程</span>
+                                        <span class="post-nav-item">Next posts</span>
+                                    </span>
+                                    <span class="right arrow-icon flex-center">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                    </div>
+                
+
+                
+                    
+
+
+
+
+
+
+                
+            </div>
+        </div>
+
+        
+    </div>
+</div>
+
+
+                
+            </div>
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="copyright-info info-item">
+        &copy;&nbsp;<span>2020</span>&nbsp;-&nbsp;2024
+        
+            &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">ZeroJiu</a>
+        
+    </div>
+
+    <div class="theme-info info-item">
+        Powered by&nbsp;<a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;&&nbsp;Theme&nbsp;<a class="keep-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep</a>
+    </div>
+
+    
+        
+        <div class="deploy-info info-item">
+            
+            This site is deployed on <span class="tooltip" data-tooltip-content="GitHub Pages"><img src="/images/brands/github.png"></span>
+            
+        </div>
+    
+
+    
+        <div class="count-info info-item">
+            
+
+            
+                <span class="count-item border-box uv">
+                    <span class="item-type border-box">Unique Visitor</span>
+                    <span class="item-value border-box uv" id="busuanzi_value_site_uv"></span>
+                </span>
+            
+
+            
+                <span class="count-item border-box pv">
+                    <span class="item-type border-box">Page View</span>
+                    <span class="item-value border-box pv" id="busuanzi_value_site_pv"></span>
+                </span>
+            
+        </div>
+    
+
+    
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="post-tools-list border-box">
+        <!-- PC encrypt again -->
+        
+
+        <!-- PC TOC show toggle -->
+        
+
+        <!-- PC go comment -->
+        
+
+        <!-- PC full screen -->
+        <li class="tools-item flex-center full-screen">
+            <i class="fa-solid fa-expand"></i>
+        </li>
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container border-box ">
+    <ul class="side-tools-list side-tools-show-handle border-box">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-toggle-theme-mode flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list border-box">
+        
+
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        <li class="tools-item tool-scroll-to-top flex-center show-arrow">
+            <i class="arrow fas fa-arrow-up"></i>
+            <span class="percent"></span>
+        </li>
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="Search..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+</main>
+
+
+
+<!-- common -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/utils.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/header-shrink.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/back2top.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/toggle-theme.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/code-block.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/main.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/libs/anime.min.js"></script>
+
+<!-- local-search -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/local-search.min.js"></script>
+
+
+<!-- lazyload -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/lazyload.min.js"></script>
+
+
+<div class="pjax">
+    <!-- home page -->
+    
+
+    <!-- post page -->
+    
+        <!-- post-helper -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/post/post-helper.min.js"></script>
+
+        <!-- toc -->
+        
+
+        <!-- copyright-info -->
+        
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/post/copyright-info.min.js"></script>
+        
+
+        <!-- share -->
+        
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/post/share.min.js"></script>
+        
+    
+
+    <!-- categories page -->
+    
+
+    <!-- links page -->
+    
+
+    <!-- photos page -->
+    
+
+    <!-- tools page -->
+    
+</div>
+
+<!-- mermaid -->
+
+    
+<script src="//cdn.jsdelivr.net/npm/mermaid@10.5.0/dist/mermaid.min.js"></script>
+
+    <script data-pjax>
+      if (window.mermaid) {
+        mermaid.init()
+      }
+    </script>
+
+
+
+
+
+
+<!-- pjax -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/libs/pjax.min.js"></script>
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        window.pjax = new Pjax({
+            selectors: [
+                'head title',
+                '.page-container',
+                '.pjax'
+            ],
+            history: true,
+            debug: false,
+            cacheBust: false,
+            timeout: 0,
+            analytics: false,
+            currentUrlFullReload: false,
+            scrollRestoration: false,
+        });
+
+        document.addEventListener('pjax:send', () => {
+            KEEP.utils.pjaxProgressBarStart()
+        });
+
+        document.addEventListener('pjax:complete', () => {
+            KEEP.utils.pjaxProgressBarEnd()
+            window.pjax.executeScripts(document.querySelectorAll('script[data-pjax], .pjax script'))
+            KEEP.initExecute()
+        });
+    });
+</script>
+
+
+
+
+</body>
+</html>

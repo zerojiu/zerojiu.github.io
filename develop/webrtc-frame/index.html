@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="ZeroJiu">
+    
+    <title>
+        
+            WebRTC帧率调整策略 |
+        
+        小熊糖否
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+        <link rel="shortcut icon" href="/images/logo.ico">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/font/css/fontawesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/font/css/regular.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/font/css/solid.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/font/css/brands.min.css">
+    
+    <script class="keep-theme-configurations">
+    const KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"example.com","root":"/","language":"en","path":"search.xml"}
+    KEEP.theme_config = {"base_info":{"primary_color":"#c0392b","title":"小熊糖否","author":"ZeroJiu","avatar":"/images/author.jpg","logo":"/images/logo.ico","favicon":"/images/logo.ico"},"menu":{"home":"/","archives":"/archives","tags":"/tags","about":"/about"},"first_screen":{"enable":true,"background_img":"/images/bg.svg","background_img_dark":"/images/bg.svg","description":"True mastery of any skill takes a lifetime.","hitokoto":false},"social_contact":{"enable":true,"links":{"github":"https://github.com/zerojiu","weixin":null,"qq":null,"weibo":null,"zhihu":null,"twitter":null,"x":null,"facebook":null,"email":"xpringlee@gmail.com"}},"scroll":{"progress_bar":true,"percent":false,"hide_header":true},"home":{"announcement":null,"category":true,"tag":true,"post_datetime":"created"},"post":{"author_badge":{"enable":true,"level_badge":false,"custom_badge":["愚昧之巅","绝望之谷","开悟之坡","大师领域"]},"word_count":{"wordcount":true,"min2read":true},"datetime_format":"YYYY-MM-DD HH:mm:ss","copyright_info":true,"share":true,"img_align":"center","reward":{"enable":false,"img_link":null,"text":null}},"code_block":{"tools":{"enable":true,"style":"default"},"highlight_theme":"default"},"toc":{"enable":false,"number":false,"expand_all":true,"init_open":false,"layout":"right"},"website_count":{"busuanzi_count":{"enable":true,"site_uv":true,"site_pv":true,"page_pv":true}},"local_search":{"enable":true,"preload":true},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.36"},"waline":{"server_url":null,"reaction":false,"version":"3.2.1"},"giscus":{"repo":null,"repo_id":null,"category":"Announcements","category_id":null,"reactions_enabled":false},"artalk":{"server":null},"disqus":{"shortname":null}},"rss":{"enable":true},"lazyload":{"enable":true},"cdn":{"enable":true,"provider":"cdnjs"},"pjax":{"enable":true},"footer":{"since":2020,"word_count":false,"site_deploy":{"enable":true,"provider":"github","url":null},"record":{"enable":false,"list":[{"code":null,"link":null}]}},"inject":{"enable":false,"css":[null],"js":[null]},"root":"","source_data":{},"version":"4.1.5"}
+    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"}
+    KEEP.language_code_block = {"copy":"Copy code","copied":"Copied","fold":"Fold code block","folded":"Folded"}
+    KEEP.language_copy_copyright = {"copy":"Copy copyright info","copied":"Copied","title":"Original post title","author":"Original post author","link":"Original post link"}
+  </script>
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+        <span class="scroll-progress-bar"></span>
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <i class="pjax-progress-icon fas fa-circle-notch fa-spin"></i>
+    
+</div>
+
+
+
+<main class="page-container border-box">
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left border-box">
+            
+                <a class="logo-image border-box" href="/">
+                    <img src="/images/logo.ico">
+                </a>
+            
+            <a class="site-name border-box" href="/">
+               小熊糖否
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        
+                        <li class="menu-item">
+                            <a class=""
+                               href="/"
+                            >
+                                
+                                HOME
+                            </a>
+                        </li>
+                    
+                        
+                        <li class="menu-item">
+                            <a class=""
+                               href="/archives"
+                            >
+                                
+                                ARCHIVES
+                            </a>
+                        </li>
+                    
+                        
+                        <li class="menu-item">
+                            <a class=""
+                               href="/tags"
+                            >
+                                
+                                TAGS
+                            </a>
+                        </li>
+                    
+                        
+                        <li class="menu-item">
+                            <a class=""
+                               href="/about"
+                            >
+                                
+                                ABOUT
+                            </a>
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="fas search fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/"
+                    >HOME</a>
+                </li>
+            
+                
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/archives"
+                    >ARCHIVES</a>
+                </li>
+            
+                
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/tags"
+                    >TAGS</a>
+                </li>
+            
+                
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/about"
+                    >ABOUT</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+                
+
+                    
+<div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+        <div class="post-content-container border-box">
+            
+                <div class="post-content-top border-box"
+                     style="height: 13.8rem"
+                >
+                    <div class="cover-post-title">
+                        WebRTC帧率调整策略
+                    </div>
+                    <img class="post-cover" src="/images/tags/webrtc.png"
+                         onerror="this.style.display='none'"
+                    >
+                </div>
+            
+
+            <div class="post-content-bottom border-box has-cover">
+                
+
+                
+                    <div class="post-header border-box">
+                        
+                            <div class="avatar-box border-box">
+                                <img src="/images/author.jpg">
+                            </div>
+                        
+                        <div class="info-box">
+                            <div class="author border-box">
+                                <span class="name">ZeroJiu</span>
+                                
+                                    <span class="author-badge">大师领域</span>
+                                
+                            </div>
+                            <div class="meta-info border-box">
+                                
+
+<div class="post-meta-info-container border-box post">
+    <div class="post-meta-info border-box">
+        
+
+        
+            <span class="meta-info-item post-create-date">
+                <i class="icon fa-solid fa-calendar-plus"></i>&nbsp;
+                <span class="datetime">2017-12-09 12:36:45</span>
+            </span>
+
+            <span class="meta-info-item post-update-date">
+                <i class="icon fa-solid fa-file-pen"></i>&nbsp;
+                <span class="datetime" data-updated="Fri Jul 19 2024 21:20:02 GMT+0800">2024-07-19 21:20:02</span>
+            </span>
+        
+
+        
+            <span class="meta-info-item post-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul class="post-category-ul">
+                    
+                            <li class="category-item"><a href="/categories/Develop/">Develop</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="post-tag meta-info-item border-box">
+                <ul class="post-tag-ul">
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/WebRTC/">WebRTC</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Transport/">Transport</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+            <span class="meta-info-item post-wordcount">
+                <i class="icon fas fa-file-word"></i>&nbsp;<span>4.2k Words</span>
+            </span>
+        
+        
+            <span class="meta-info-item post-min2read">
+                <i class="icon fas fa-clock"></i>&nbsp;<span>17 Mins</span>
+            </span>
+        
+        
+            <span class="meta-info-item post-pv">
+                <i class="icon fas fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+            </span>
+        
+    </div>
+
+    
+</div>
+
+                            </div>
+                        </div>
+                    </div>
+                
+
+                <div class="post-content keep-markdown-body ">
+                    
+
+                    
+                         <p>与实时视频相关参数包含：帧率、码率、时延、抖动等。帧率体现了视频的流畅性，要想达到较好的流畅性体验要求——网络视频帧率不低于24帧，视频会议帧率不低于15帧。在实际开发中，我们遇到了不少问题<span id="more"></span>，主要包括：</p>
+<ul>
+<li>发送端帧率较低</li>
+<li>接收端帧率较低</li>
+<li>帧率波动较大</li>
+</ul>
+<p>本文主要研究WebRTC中的帧率调整策略，解决上述实际开发中帧率较低的问题，以期达到较好的流畅性体验。</p>
+<h2 id="%E5%B8%A7%E7%8E%87%E8%AE%A1%E7%AE%97%E6%96%B9%E6%B3%95" tabindex="-1">帧率计算方法</h2>
+<p>帧率并非恒定值，帧率大小反映的是每秒多少视频帧的统计值。在视频会议中，同一路视频流发送端的帧率和接收端的帧率并不相同。对于发送端帧率，我们需要明确：<strong>发送端输出帧率不等于摄像头采集帧率，编码器实际输入帧率不等于摄像头采集帧率，发送端帧率为编码器输出帧率</strong>。</p>
+<h3 id="%E5%8F%91%E9%80%81%E7%AB%AF%E5%B8%A7%E7%8E%87" tabindex="-1">发送端帧率</h3>
+<p>摄像头采集帧率决定了发送端输入帧率的最大值。当采集的视频数据传送到编码器时，受制于编码器性能和系统硬件性能，编码器的实际输入帧率并不等于摄像头的采集帧率。摄像头采集帧率和编码器输入帧率共同决定了发送端的帧率。在WebRTC中的统计信息展现的是摄像头的采集帧率（作为输入帧率）和编码器的输出帧率（作为输出帧率）。</p>
+<p><strong>1、发送端输入帧率计算</strong></p>
+<p>WebRTC在*“webrtc/video/vie_encoder.cc”*文件<strong>EncodeTask</strong>类中统计了摄像头的采集帧率——发送端输入帧率：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">bool</span> <span class="title">Run</span><span class="params">()</span> <span class="keyword">override</span> </span>&#123;</span><br><span class="line">  vie_encoder_-&gt;stats_proxy_-&gt;<span class="built_in">OnIncomingFrame</span>(frame_.<span class="built_in">width</span>(),frame_.<span class="built_in">height</span>());</span><br><span class="line">  <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>2、编码器输入帧率计算</strong></p>
+<p>为了计算编码器的实际输入帧率，WebRTC维持了一个大小为<eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi><mi>F</mi><mi>r</mi><mi>a</mi><mi>m</mi><mi>e</mi><mi>C</mi><mi>o</mi><mi>u</mi><mi>n</mi><mi>t</mi><mi>H</mi><mi>i</mi><mi>s</mi><mi>t</mi><mi>o</mi><mi>r</mi><mi>y</mi><mi>S</mi><mi>i</mi><mi>z</mi><mi>e</mi></mrow><annotation encoding="application/x-tex">kFrameCountHistorySize</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.03148em;">k</span><span class="mord mathnormal" style="margin-right:0.13889em;">F</span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="mord mathnormal">am</span><span class="mord mathnormal">e</span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="mord mathnormal">o</span><span class="mord mathnormal">u</span><span class="mord mathnormal">n</span><span class="mord mathnormal">t</span><span class="mord mathnormal" style="margin-right:0.08125em;">H</span><span class="mord mathnormal">i</span><span class="mord mathnormal">s</span><span class="mord mathnormal">t</span><span class="mord mathnormal" style="margin-right:0.03588em;">ory</span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="mord mathnormal">i</span><span class="mord mathnormal">ze</span></span></span></span></eq>的数组<eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>T</mi><mi>f</mi></msub></mrow><annotation encoding="application/x-tex">T_f</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.10764em;">f</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span></eq>，该数组用于保存最新的<eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi><mi>F</mi><mi>r</mi><mi>a</mi><mi>m</mi><mi>e</mi><mi>C</mi><mi>o</mi><mi>u</mi><mi>n</mi><mi>t</mi><mi>H</mi><mi>i</mi><mi>s</mi><mi>t</mi><mi>o</mi><mi>r</mi><mi>y</mi><mi>S</mi><mi>i</mi><mi>z</mi><mi>e</mi></mrow><annotation encoding="application/x-tex">kFrameCountHistorySize</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.03148em;">k</span><span class="mord mathnormal" style="margin-right:0.13889em;">F</span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="mord mathnormal">am</span><span class="mord mathnormal">e</span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="mord mathnormal">o</span><span class="mord mathnormal">u</span><span class="mord mathnormal">n</span><span class="mord mathnormal">t</span><span class="mord mathnormal" style="margin-right:0.08125em;">H</span><span class="mord mathnormal">i</span><span class="mord mathnormal">s</span><span class="mord mathnormal">t</span><span class="mord mathnormal" style="margin-right:0.03588em;">ory</span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="mord mathnormal">i</span><span class="mord mathnormal">ze</span></span></span></span></eq>个帧放入数组的时间戳信息。帧率计算<eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mi>p</mi><mi>s</mi></mrow><annotation encoding="application/x-tex">fps</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mord mathnormal">p</span><span class="mord mathnormal">s</span></span></span></span></eq>公式如下：<br>
+<section><eqn><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>f</mi><mi>p</mi><mi>s</mi><mo>=</mo><mfrac><mrow><msub><mi>N</mi><mi>f</mi></msub><mo>×</mo><mn>1000.0</mn><mi>f</mi></mrow><mrow><msub><mi>T</mi><mi>f</mi></msub><mo stretchy="false">[</mo><mn>0</mn><mo stretchy="false">]</mo><mo>−</mo><msub><mi>T</mi><mi>f</mi></msub><mo stretchy="false">[</mo><msub><mi>N</mi><mi>f</mi></msub><mo stretchy="false">]</mo></mrow></mfrac><mspace width="2em"/><mrow><msub><mi>N</mi><mi>f</mi></msub><mo>:</mo><mtext> </mtext><mi>m</mi><mi>a</mi><mi>x</mi><mo stretchy="false">(</mo><msub><mi>T</mi><mrow><mi>n</mi><mi>o</mi><mi>w</mi></mrow></msub><mo>−</mo><msub><mi>T</mi><mi>f</mi></msub><mo stretchy="false">[</mo><msub><mi>N</mi><mi>f</mi></msub><mo stretchy="false">]</mo><mo stretchy="false">)</mo><mo>&lt;</mo><mi>k</mi><mi>F</mi><mi>r</mi><mi>a</mi><mi>m</mi><mi>e</mi><mi>H</mi><mi>i</mi><mi>s</mi><mi>t</mi><mi>o</mi><mi>r</mi><mi>y</mi><mi>W</mi><mi>i</mi><mi>n</mi><mi>M</mi><mi>s</mi></mrow></mrow><annotation encoding="application/x-tex">
+fps=\frac{N_f\times 1000.0f}{T_f[0]-T_f[N_f]}  \qquad {N_f:\ max(T_{now}-T_f[N_f])&lt;kFrameHistoryWinMs}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mord mathnormal">p</span><span class="mord mathnormal">s</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.3435em;vertical-align:-0.9721em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3714em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.10764em;">f</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mopen">[</span><span class="mord">0</span><span class="mclose">]</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.10764em;">f</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mopen">[</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.109em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.10764em;">f</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mclose">]</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.109em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.10764em;">f</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord">1000.0</span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.9721em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:2em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.109em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.10764em;">f</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span><span class="mspace"> </span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mord mathnormal">ma</span><span class="mord mathnormal">x</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mord mathnormal mtight">o</span><span class="mord mathnormal mtight" style="margin-right:0.02691em;">w</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.10764em;">f</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mopen">[</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.109em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.10764em;">f</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mclose">])</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">&lt;</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mord mathnormal" style="margin-right:0.03148em;">k</span><span class="mord mathnormal" style="margin-right:0.13889em;">F</span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="mord mathnormal">am</span><span class="mord mathnormal" style="margin-right:0.08125em;">eH</span><span class="mord mathnormal">i</span><span class="mord mathnormal">s</span><span class="mord mathnormal">t</span><span class="mord mathnormal" style="margin-right:0.03588em;">ory</span><span class="mord mathnormal">Win</span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="mord mathnormal">s</span></span></span></span></span></span></eqn></section><br>
+其中，</p>
+<ul>
+<li><eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi><mi>F</mi><mi>r</mi><mi>a</mi><mi>m</mi><mi>e</mi><mi>C</mi><mi>o</mi><mi>u</mi><mi>n</mi><mi>t</mi><mi>H</mi><mi>i</mi><mi>s</mi><mi>t</mi><mi>o</mi><mi>r</mi><mi>y</mi><mi>S</mi><mi>i</mi><mi>z</mi><mi>e</mi></mrow><annotation encoding="application/x-tex">kFrameCountHistorySize</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.03148em;">k</span><span class="mord mathnormal" style="margin-right:0.13889em;">F</span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="mord mathnormal">am</span><span class="mord mathnormal">e</span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="mord mathnormal">o</span><span class="mord mathnormal">u</span><span class="mord mathnormal">n</span><span class="mord mathnormal">t</span><span class="mord mathnormal" style="margin-right:0.08125em;">H</span><span class="mord mathnormal">i</span><span class="mord mathnormal">s</span><span class="mord mathnormal">t</span><span class="mord mathnormal" style="margin-right:0.03588em;">ory</span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="mord mathnormal">i</span><span class="mord mathnormal">ze</span></span></span></span></eq>一般取值为90，<eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi><mi>F</mi><mi>r</mi><mi>a</mi><mi>m</mi><mi>e</mi><mi>C</mi><mi>o</mi><mi>u</mi><mi>n</mi><mi>t</mi><mi>H</mi><mi>i</mi><mi>s</mi><mi>t</mi><mi>o</mi><mi>r</mi><mi>y</mi><mi>S</mi><mi>i</mi><mi>z</mi><mi>e</mi></mrow><annotation encoding="application/x-tex">kFrameCountHistorySize</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.03148em;">k</span><span class="mord mathnormal" style="margin-right:0.13889em;">F</span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="mord mathnormal">am</span><span class="mord mathnormal">e</span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="mord mathnormal">o</span><span class="mord mathnormal">u</span><span class="mord mathnormal">n</span><span class="mord mathnormal">t</span><span class="mord mathnormal" style="margin-right:0.08125em;">H</span><span class="mord mathnormal">i</span><span class="mord mathnormal">s</span><span class="mord mathnormal">t</span><span class="mord mathnormal" style="margin-right:0.03588em;">ory</span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="mord mathnormal">i</span><span class="mord mathnormal">ze</span></span></span></span></eq>一般取值为2000；</li>
+<li><eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>N</mi><mi>f</mi></msub></mrow><annotation encoding="application/x-tex">N_f</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.109em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.10764em;">f</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span></eq>是使<eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>N</mi><mi>f</mi></msub><mo>:</mo><mtext> </mtext><mi>m</mi><mi>a</mi><mi>x</mi><mo stretchy="false">(</mo><msub><mi>T</mi><mrow><mi>n</mi><mi>o</mi><mi>w</mi></mrow></msub><mo>−</mo><msub><mi>T</mi><mi>f</mi></msub><mo stretchy="false">[</mo><msub><mi>N</mi><mi>f</mi></msub><mo stretchy="false">]</mo><mo stretchy="false">)</mo><mo>&lt;</mo><mi>k</mi><mi>F</mi><mi>r</mi><mi>a</mi><mi>m</mi><mi>e</mi><mi>H</mi><mi>i</mi><mi>s</mi><mi>t</mi><mi>o</mi><mi>r</mi><mi>y</mi><mi>W</mi><mi>i</mi><mi>n</mi><mi>M</mi><mi>s</mi></mrow><annotation encoding="application/x-tex">N_f:\ max(T_{now}-T_f[N_f])&lt;kFrameHistoryWinMs</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.109em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.10764em;">f</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span><span class="mspace"> </span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">ma</span><span class="mord mathnormal">x</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mord mathnormal mtight">o</span><span class="mord mathnormal mtight" style="margin-right:0.02691em;">w</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1.0361em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.10764em;">f</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mopen">[</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.109em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.10764em;">f</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mclose">])</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">&lt;</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.03148em;">k</span><span class="mord mathnormal" style="margin-right:0.13889em;">F</span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="mord mathnormal">am</span><span class="mord mathnormal" style="margin-right:0.08125em;">eH</span><span class="mord mathnormal">i</span><span class="mord mathnormal">s</span><span class="mord mathnormal">t</span><span class="mord mathnormal" style="margin-right:0.03588em;">ory</span><span class="mord mathnormal">Win</span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="mord mathnormal">s</span></span></span></span></eq>成立的最大序列号；</li>
+<li><eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>T</mi><mrow><mi>n</mi><mi>o</mi><mi>w</mi></mrow></msub></mrow><annotation encoding="application/x-tex">T_{now}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mord mathnormal mtight">o</span><span class="mord mathnormal mtight" style="margin-right:0.02691em;">w</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></eq>为当前时间，<eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>T</mi><mi>f</mi></msub><mo stretchy="false">[</mo><mn>0</mn><mo stretchy="false">]</mo><mo>=</mo><msub><mi>T</mi><mrow><mi>n</mi><mi>o</mi><mi>w</mi></mrow></msub></mrow><annotation encoding="application/x-tex">T_f[0]=T_{now}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0361em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.10764em;">f</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mopen">[</span><span class="mord">0</span><span class="mclose">]</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mord mathnormal mtight">o</span><span class="mord mathnormal mtight" style="margin-right:0.02691em;">w</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></eq>是数组内newest帧的时间戳，<eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>T</mi><mi>f</mi></msub><mo stretchy="false">[</mo><mi>k</mi><mi>F</mi><mi>r</mi><mi>a</mi><mi>m</mi><mi>e</mi><mi>C</mi><mi>o</mi><mi>u</mi><mi>n</mi><mi>t</mi><mi>H</mi><mi>i</mi><mi>s</mi><mi>t</mi><mi>o</mi><mi>r</mi><mi>y</mi><mi>S</mi><mi>i</mi><mi>z</mi><mi>e</mi><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">T_f[kFrameCountHistorySize]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0361em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.10764em;">f</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mopen">[</span><span class="mord mathnormal" style="margin-right:0.03148em;">k</span><span class="mord mathnormal" style="margin-right:0.13889em;">F</span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="mord mathnormal">am</span><span class="mord mathnormal">e</span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="mord mathnormal">o</span><span class="mord mathnormal">u</span><span class="mord mathnormal">n</span><span class="mord mathnormal">t</span><span class="mord mathnormal" style="margin-right:0.08125em;">H</span><span class="mord mathnormal">i</span><span class="mord mathnormal">s</span><span class="mord mathnormal">t</span><span class="mord mathnormal" style="margin-right:0.03588em;">ory</span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="mord mathnormal">i</span><span class="mord mathnormal">ze</span><span class="mclose">]</span></span></span></span></eq>为数组内现存oldest帧的时间戳；</li>
+<li>当<eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>N</mi><mi>f</mi></msub><mo>=</mo><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">N_f==0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.109em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.10764em;">f</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">==</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0</span></span></span></span></eq>时，不执行该公式，帧率保持上一次计算的结果。</li>
+</ul>
+<p>在WebRTC中，上述公式在*“webrtc/modules/video_coding/media_optimization.cc”*文件<strong>MediaOptimization</strong>类中实现。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">ProcessIncomingFrameRate</span><span class="params">(<span class="type">int64_t</span> now)</span> </span>&#123;</span><br><span class="line">  <span class="type">int32_t</span> num = <span class="number">0</span>, nr_of_frames = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">for</span> (num = <span class="number">1</span>; num &lt; (kFrameCountHistorySize - <span class="number">1</span>); ++num) &#123;</span><br><span class="line">    <span class="keyword">if</span> (incoming_frame_times_[num] &lt;= <span class="number">0</span> ||</span><br><span class="line">        <span class="comment">/* don&#x27;t use data older than 2 s */</span></span><br><span class="line">        now - incoming_frame_times_[num] &gt; kFrameHistoryWinMs) &#123;</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      nr_of_frames++;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (num &gt; <span class="number">1</span>) &#123;</span><br><span class="line">    <span class="type">const</span> <span class="type">int64_t</span> diff =</span><br><span class="line">        incoming_frame_times_[<span class="number">0</span>] - incoming_frame_times_[num - <span class="number">1</span>];</span><br><span class="line">    incoming_frame_rate_ = <span class="number">0.0</span>;  <span class="comment">/* No frame rate estimate available. */</span></span><br><span class="line">    <span class="keyword">if</span> (diff &gt; <span class="number">0</span>) &#123;</span><br><span class="line">      incoming_frame_rate_ = nr_of_frames * <span class="number">1000.0f</span> / <span class="built_in">static_cast</span>&lt;<span class="type">float</span>&gt;(diff);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>3、编码器输出帧率计算</strong></p>
+<p>为了计算编码器的实际输出帧率，WebRTC维护了一个<eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi><mi>B</mi><mi>i</mi><mi>t</mi><mi>r</mi><mi>a</mi><mi>t</mi><mi>e</mi><mi>A</mi><mi>v</mi><mi>e</mi><mi>r</mi><mi>a</mi><mi>g</mi><mi>e</mi><mi>W</mi><mi>i</mi><mi>n</mi><mi>M</mi><mi>s</mi></mrow><annotation encoding="application/x-tex">kBitrateAverageWinMs</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.03148em;">k</span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span><span class="mord mathnormal">i</span><span class="mord mathnormal">t</span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="mord mathnormal">a</span><span class="mord mathnormal">t</span><span class="mord mathnormal">e</span><span class="mord mathnormal">A</span><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="mord mathnormal" style="margin-right:0.02778em;">er</span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mord mathnormal">e</span><span class="mord mathnormal">Win</span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="mord mathnormal">s</span></span></span></span></eq>时间段内的已编码帧的数组<eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>T</mi><mi>f</mi></msub></mrow><annotation encoding="application/x-tex">T_f</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.10764em;">f</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span></eq>，依据下列公式来计算实际码率：<br>
+<section><eqn><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>f</mi><mi>p</mi><mi>s</mi><mo>=</mo><mfrac><mrow><mn>90000</mn><mo>×</mo><mo stretchy="false">(</mo><mi>s</mi><mi>i</mi><mi>z</mi><mi>e</mi><mi>o</mi><mi>f</mi><mo stretchy="false">(</mo><msub><mi>T</mi><mi>f</mi></msub><mo stretchy="false">)</mo><mo>−</mo><mn>1</mn><mo stretchy="false">)</mo><mo>+</mo><mfrac><msub><mi>T</mi><mrow><mi>d</mi><mi>i</mi><mi>f</mi><mi>f</mi></mrow></msub><mn>2</mn></mfrac></mrow><msub><mi>T</mi><mrow><mi>d</mi><mi>i</mi><mi>f</mi><mi>f</mi></mrow></msub></mfrac></mrow><annotation encoding="application/x-tex">
+fps=\frac{90000 \times (sizeof(T_f)-1) + \frac{T_{diff}}{2}}{T_{diff}}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mord mathnormal">p</span><span class="mord mathnormal">s</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.6985em;vertical-align:-0.9721em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.7264em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">d</span><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight" style="margin-right:0.10764em;">ff</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.735em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">90000</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mopen">(</span><span class="mord mathnormal">s</span><span class="mord mathnormal">i</span><span class="mord mathnormal">zeo</span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.10764em;">f</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord">1</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.9914em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.5131em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3448em;"><span style="top:-2.3488em;margin-left:-0.1389em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">d</span><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight" style="margin-right:0.10764em;">ff</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2901em;"><span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.9721em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></eqn></section><br>
+其中，</p>
+<ul>
+<li><eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>T</mi><mrow><mi>d</mi><mi>i</mi><mi>f</mi><mi>f</mi></mrow></msub><mo>=</mo><msub><mi>T</mi><mi>f</mi></msub><mo stretchy="false">[</mo><mi>b</mi><mi>a</mi><mi>c</mi><mi>k</mi><mo stretchy="false">]</mo><mo>−</mo><msub><mi>T</mi><mi>f</mi></msub><mo stretchy="false">[</mo><mi>f</mi><mi>r</mi><mi>o</mi><mi>n</mi><mi>t</mi><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">T_{diff}=T_f[back]-T_f[front]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">d</span><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight" style="margin-right:0.10764em;">ff</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.0361em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.10764em;">f</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mopen">[</span><span class="mord mathnormal">ba</span><span class="mord mathnormal">c</span><span class="mord mathnormal" style="margin-right:0.03148em;">k</span><span class="mclose">]</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1.0361em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.10764em;">f</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mopen">[</span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mord mathnormal">ro</span><span class="mord mathnormal">n</span><span class="mord mathnormal">t</span><span class="mclose">]</span></span></span></span></eq>，表示数组<eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>T</mi><mi>f</mi></msub></mrow><annotation encoding="application/x-tex">T_f</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.10764em;">f</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span></eq>最大的时间间隔，当<eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>T</mi><mrow><mi>d</mi><mi>i</mi><mi>f</mi><mi>f</mi></mrow></msub><mo>&lt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">T_{diff}&lt;0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">d</span><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight" style="margin-right:0.10764em;">ff</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">&lt;</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0</span></span></span></span></eq>时，<eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mi>p</mi><mi>s</mi><mo>=</mo><mi>s</mi><mi>i</mi><mi>z</mi><mi>e</mi><mi>o</mi><mi>f</mi><mo stretchy="false">(</mo><msub><mi>T</mi><mi>f</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">fps=sizeof(T_f)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mord mathnormal">p</span><span class="mord mathnormal">s</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.0361em;vertical-align:-0.2861em;"></span><span class="mord mathnormal">s</span><span class="mord mathnormal">i</span><span class="mord mathnormal">zeo</span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.10764em;">f</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></eq>；</li>
+<li><eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mi>i</mi><mi>z</mi><mi>e</mi><mi>o</mi><mi>f</mi><mo stretchy="false">(</mo><msub><mi>T</mi><mi>f</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">sizeof(T_f)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0361em;vertical-align:-0.2861em;"></span><span class="mord mathnormal">s</span><span class="mord mathnormal">i</span><span class="mord mathnormal">zeo</span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.10764em;">f</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></eq>表示数组<eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>T</mi><mi>f</mi></msub></mrow><annotation encoding="application/x-tex">T_f</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.10764em;">f</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span></eq>的大小，当<eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mi>i</mi><mi>z</mi><mi>e</mi><mi>o</mi><mi>f</mi><mo stretchy="false">(</mo><msub><mi>T</mi><mi>f</mi></msub><mo stretchy="false">)</mo><mo>&lt;</mo><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">sizeof(T_f)&lt;=1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0361em;vertical-align:-0.2861em;"></span><span class="mord mathnormal">s</span><span class="mord mathnormal">i</span><span class="mord mathnormal">zeo</span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.10764em;">f</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">&lt;=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span></eq>时，<eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mi>p</mi><mi>s</mi><mo>=</mo><mi>s</mi><mi>i</mi><mi>z</mi><mi>e</mi><mi>o</mi><mi>f</mi><mo stretchy="false">(</mo><msub><mi>T</mi><mi>f</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">fps=sizeof(T_f)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mord mathnormal">p</span><span class="mord mathnormal">s</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.0361em;vertical-align:-0.2861em;"></span><span class="mord mathnormal">s</span><span class="mord mathnormal">i</span><span class="mord mathnormal">zeo</span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.10764em;">f</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></eq>。</li>
+</ul>
+<p>在WebRTC中，上述公式在*“webrtc/modules/video_coding/media_optimization.cc”*文件<strong>MediaOptimization</strong>类中实现。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">MediaOptimization::PurgeOldFrameSamples</span><span class="params">(<span class="type">int64_t</span> now_ms)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">while</span> (!encoded_frame_samples_.<span class="built_in">empty</span>()) &#123;</span><br><span class="line">    <span class="keyword">if</span> (now_ms - encoded_frame_samples_.<span class="built_in">front</span>().time_complete_ms &gt;</span><br><span class="line">        kBitrateAverageWinMs) &#123;</span><br><span class="line">      encoded_frame_samples_.<span class="built_in">pop_front</span>();</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">MediaOptimization::UpdateSentFramerate</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (encoded_frame_samples_.<span class="built_in">size</span>() &lt;= <span class="number">1</span>) &#123;</span><br><span class="line">    avg_sent_framerate_ = encoded_frame_samples_.<span class="built_in">size</span>();</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="type">int</span> denom = encoded_frame_samples_.<span class="built_in">back</span>().timestamp -</span><br><span class="line">              encoded_frame_samples_.<span class="built_in">front</span>().timestamp;</span><br><span class="line">  <span class="keyword">if</span> (denom &gt; <span class="number">0</span>) &#123;</span><br><span class="line">    avg_sent_framerate_ =</span><br><span class="line">        (<span class="number">90000</span> * (encoded_frame_samples_.<span class="built_in">size</span>() - <span class="number">1</span>) + denom / <span class="number">2</span>) / denom;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    avg_sent_framerate_ = encoded_frame_samples_.<span class="built_in">size</span>();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="%E6%8E%A5%E6%94%B6%E7%AB%AF%E5%B8%A7%E7%8E%87" tabindex="-1">接收端帧率</h3>
+<p>在WebRTC中，将接收端帧率分为了三种：网络接收帧率——接收端输入帧率、解码器输出帧率、视频渲染帧率。</p>
+<p><strong>1、网络接收帧率</strong></p>
+<p>网络接收帧率统计的是接收端接收到网络发送过来的视频帧帧率。在完整接收到一帧数据后，由<strong>FrameBuffer</strong>类调用*ReceiveStatisticsProxy::OnCompleteFrame()*来统计。具体代码如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">OnCompleteFrame</span><span class="params">(<span class="type">bool</span> is_keyframe,</span></span></span><br><span class="line"><span class="params"><span class="function">                     <span class="type">size_t</span> size_bytes)</span> </span>&#123;</span><br><span class="line">  <span class="type">int64_t</span> now_ms = clock_-&gt;<span class="built_in">TimeInMilliseconds</span>();</span><br><span class="line">  frame_window_.<span class="built_in">insert</span>(std::<span class="built_in">make_pair</span>(now_ms, size_bytes));</span><br><span class="line">  <span class="type">int64_t</span> old_frames_ms = now_ms - kRateStatisticsWindowSizeMs;</span><br><span class="line">  <span class="keyword">while</span> (!frame_window_.<span class="built_in">empty</span>() &amp;&amp;</span><br><span class="line">         frame_window_.<span class="built_in">begin</span>()-&gt;first &lt; old_frames_ms) &#123;</span><br><span class="line">    frame_window_accumulated_bytes_ -= frame_window_.<span class="built_in">begin</span>()-&gt;second;</span><br><span class="line">    frame_window_.<span class="built_in">erase</span>(frame_window_.<span class="built_in">begin</span>());</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="type">size_t</span> framerate =</span><br><span class="line">      (frame_window_.<span class="built_in">size</span>() * <span class="number">1000</span> + <span class="number">500</span>) / kRateStatisticsWindowSizeMs;</span><br><span class="line">  stats_.network_frame_rate = <span class="built_in">static_cast</span>&lt;<span class="type">int</span>&gt;(framerate);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>2、解码器输出帧率</strong></p>
+<p>WebRTC实现了<strong>RateStatistics</strong>来统计解码器输出帧率，在编码结束后由<strong>VideoReceiveStream</strong>调用*ReceiveStatisticsProxy::OnDecodedFrame()*来统计。具体代码如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">OnDecodedFrame</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="type">uint64_t</span> now = clock_-&gt;<span class="built_in">TimeInMilliseconds</span>();</span><br><span class="line">  <span class="function">rtc::CritScope <span class="title">lock</span><span class="params">(&amp;crit_)</span></span>;</span><br><span class="line">  ++stats_.frames_decoded;</span><br><span class="line">  decode_fps_estimator_.<span class="built_in">Update</span>(<span class="number">1</span>, now);</span><br><span class="line">  stats_.decode_frame_rate = decode_fps_estimator_.<span class="built_in">Rate</span>(now).<span class="built_in">value_or</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>3、视频渲染帧率</strong></p>
+<p>WebRTC实现了<strong>RateStatistics</strong>来统计视频渲染帧率，在视频渲染结束后由<strong>VideoReceiveStream</strong>调用*ReceiveStatisticsProxy::OnRenderedFrame()*来统计。具体代码如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">OnRenderedFrame</span><span class="params">(<span class="type">const</span> VideoFrame&amp; frame)</span> </span>&#123;</span><br><span class="line">  <span class="type">uint64_t</span> now = clock_-&gt;<span class="built_in">TimeInMilliseconds</span>();</span><br><span class="line">  <span class="function">rtc::CritScope <span class="title">lock</span><span class="params">(&amp;crit_)</span></span>;</span><br><span class="line">  renders_fps_estimator_.<span class="built_in">Update</span>(<span class="number">1</span>, now);</span><br><span class="line">  stats_.render_frame_rate = renders_fps_estimator_.<span class="built_in">Rate</span>(now).<span class="built_in">value_or</span>(<span class="number">0</span>);</span><br><span class="line">  ++stats_.frames_rendered;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="%E5%8F%91%E9%80%81%E7%AB%AF%E5%B8%A7%E7%8E%87%E7%AD%96%E7%95%A5" tabindex="-1">发送端帧率策略</h2>
+<p>影响发送端帧率的主要因素包含：视频采集（摄像头/桌面）帧率、编码器性能。</p>
+<h3 id="%E8%A7%86%E9%A2%91%E9%87%87%E9%9B%86%E5%B8%A7%E7%8E%87%E7%AD%96%E7%95%A5" tabindex="-1">视频采集帧率策略</h3>
+<p>摄像头是视频采集的来源，其帧率决定了视频会议帧率的上限。与摄像头采集相关的参数包含：像素格式、帧率和分辨率。下表列出了ThinkPad T440P自带摄像头支持的部分视频格式：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">格式</th>
+<th style="text-align:center">分辨率</th>
+<th style="text-align:center">帧率</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">MJPG</td>
+<td style="text-align:center">1280x720</td>
+<td style="text-align:center">30</td>
+</tr>
+<tr>
+<td style="text-align:center">MJPG</td>
+<td style="text-align:center">640x360</td>
+<td style="text-align:center">30</td>
+</tr>
+<tr>
+<td style="text-align:center">YUY2</td>
+<td style="text-align:center">1280x720</td>
+<td style="text-align:center">10</td>
+</tr>
+<tr>
+<td style="text-align:center">YUY2</td>
+<td style="text-align:center">640x360</td>
+<td style="text-align:center">30</td>
+</tr>
+</tbody>
+</table>
+<p>可以看出对于YUY2格式，1280x720的帧率仅为10帧，要想达到30帧必须要采用MJPG格式。这是因为，同样是1280x720分辨率，30帧YUY2和MJPG格式需要传输的数据量分别为：</p>
+<ul>
+<li>YUY2：<em>1280x720x30x2x8=421Mbps</em></li>
+<li>MJPG：<em>1280x720x30x3x8/20=32Mbps</em></li>
+</ul>
+<p>YUY2需要的传输带宽过大，所以很多摄像头对于RGB、YUV等格式1280x720仅支持10帧。然而10帧是远远不能够满足视频会议的帧率需求的，因此在选择视频采集规格时，需要注意像素格式、帧率和分辨率的权衡。在实际应用中，我们可以采集MJPG格式1280x720x30视频规格，然后在应用层转换为YUV格式。WebRTC在*“webrtc/modules/video_capture/video_capture_impl.cc”*的<strong>VideoCaptureImpl</strong>类中实现了转换：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (frameInfo.codecType == kVideoCodecUnknown) &#123;</span><br><span class="line">  <span class="comment">/* Not encoded, convert to I420. */</span></span><br><span class="line">  <span class="type">const</span> VideoType commonVideoType =</span><br><span class="line">            <span class="built_in">RawVideoTypeToCommonVideoVideoType</span>(frameInfo.rawType);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (frameInfo.rawType != kVideoMJPEG &amp;&amp; <span class="built_in">CalcBufferSize</span>(commonVideoType, width,</span><br><span class="line">                     							<span class="built_in">abs</span>(height)) != videoFrameLength) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="type">int</span> stride_y = width, stride_uv = (width + <span class="number">1</span>) / <span class="number">2</span>;</span><br><span class="line">  <span class="type">int</span> target_width = width, target_height = height;</span><br><span class="line"></span><br><span class="line">  rtc::scoped_refptr&lt;I420Buffer&gt; buffer = I420Buffer::<span class="built_in">Create</span>(</span><br><span class="line">      target_width, <span class="built_in">abs</span>(target_height), stride_y, stride_uv, stride_uv);</span><br><span class="line">  <span class="type">const</span> <span class="type">int</span> conversionResult = <span class="built_in">ConvertToI420</span>(</span><br><span class="line">      commonVideoType, videoFrame, <span class="number">0</span>, <span class="number">0</span>, width, height, videoFrameLength,</span><br><span class="line">      apply_rotation ? _rotateFrame : kVideoRotation_0, buffer.<span class="built_in">get</span>());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>最终得到的YUV格式的视频数据会被送到编码器中被编码，需要注意：不是所有的视频数据都会被编码器编码，详细内容将在下一节介绍。</p>
+<h3 id="%E9%87%87%E9%9B%86%E7%BC%96%E7%A0%81%E4%B8%A2%E5%B8%A7%E7%AD%96%E7%95%A5" tabindex="-1">采集编码丢帧策略</h3>
+<p>受限于系统硬件性能和编码器性能，视频采集图片的速度有可能比编码器编码速度快，这将导致多余的图片帧在编码器任务队列中累积。由于视频会议需要较低的时延，编码器必须要及时处理最新的帧，此时WebRTC采取丢帧策略——<strong>当有多个帧在编码器任务队列时，只编码最新的一帧</strong>。WebRTC在*“webrtc/video/vie_encoder.cc”*文件<strong>EncodeTask</strong>类中实现了该策略：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">bool</span> <span class="title">Run</span><span class="params">()</span> <span class="keyword">override</span> </span>&#123;</span><br><span class="line">  ++vie_encoder_-&gt;captured_frame_count_;</span><br><span class="line">  <span class="keyword">if</span> (--vie_encoder_-&gt;posted_frames_waiting_for_encode_ == <span class="number">0</span>) &#123;</span><br><span class="line">    vie_encoder_-&gt;<span class="built_in">EncodeVideoFrame</span>(frame_, time_when_posted_us_);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">/* There is a newer frame in flight. Do not encode this frame. */</span></span><br><span class="line">    <span class="built_in">LOG</span>(LS_VERBOSE) &lt;&lt; <span class="string">&quot;Incoming frame dropped due to that the encoder is blocked.&quot;</span>;</span><br><span class="line">    ++vie_encoder_-&gt;dropped_frame_count_;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看出，由于编码器是阻塞的，如果编码器性能或系统硬件性能较差，编码器会丢掉因阻塞而累积的帧，进而导致发送端帧率降低。在具体使用场景中，这往往会导致两种现象：</p>
+<ul>
+<li>接收端黑屏：如果发送端一开始就卡死在编码器中，接收端会一直黑屏，直到第一个帧编码完成；</li>
+<li>接收端卡顿：如果发送端运行后经常阻塞在编码器中，接收端会卡顿，严重影响视频质量。</li>
+</ul>
+<p>因此，摄像头采集帧率并不等于编码器的实际输入帧率，<strong>MediaOptimization</strong>类中得到的编码器实际输入帧率，需要在下次编码前设置为编码器的输入帧率。</p>
+<h3 id="%E6%81%92%E5%AE%9A%E7%A0%81%E7%8E%87%E4%B8%A2%E5%B8%A7%E7%AD%96%E7%95%A5" tabindex="-1">恒定码率丢帧策略</h3>
+<p>除了上文所述的采集编码丢帧策略，WebRTC还实现了一种漏桶算法的变体，用于跟踪何时应该主动丢帧，以避免编码器无法保持其比特率时，产生过高的比特率。<a class="link"   target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Leaky_bucket" >漏桶算法<i class="fas fa-external-link-alt"></i></a>的示意图如下：</p>
+<img    
+                       lazyload
+                       alt="image"
+                       data-src="../../assets/webrtc-leaky-bucket-algorithm.jpg"
+                        
+                 >
+<p><a class="link"   target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Leaky_bucket" >漏桶算法<i class="fas fa-external-link-alt"></i></a>的实现位于*“webrtc/modules/video_coding/frame_dropper.cc”*中的<strong>FrameDropper</strong>类，其实现了三个关键方法：</p>
+<ul>
+<li><em>Fill()</em></li>
+<li><em>Leak()</em></li>
+<li><em>DropFrame()</em></li>
+</ul>
+<p>从字面上可以看出，这三个方法对应于上图所示漏桶算法的三个操作。这三个方法都在<strong>MediaOptimization</strong>类被调用。</p>
+<p>首先，来看看<strong>FrameDropper</strong>类的核心参数：</p>
+<ul>
+<li>漏桶容积：<em>accumulator_max_</em>，其值为<em>target-bps×kLeakyBucketSizeSeconds</em>，随目标码率改变而改变；</li>
+<li>漏桶累积：<em>accumulator_</em>，其表示漏桶累积的字节数，每次<em>Fill()<em>时增加，每次</em>Leak()<em>时减少，其最大值为</em>target-bps×kAccumulatorCapBufferSizeSecs</em>；</li>
+<li>丢帧率：<em>drop_ratio_</em>，其为一个指数滤波器，使丢帧率保持一个平滑的变化过程，每次*Leak()*后更新丢帧率；</li>
+<li>关键帧率：<em>key_frame_ratio_</em>，其为一个指数滤波器，使关键帧率保持一个平滑的变化过程，每次*Fill()*后更新；</li>
+<li>差分帧码率：<em>delta_frame_size_avg_kbits_</em>，其为一个指数滤波器，使关键帧率保持一个平滑的变化过程，每次*Fill()*后更新。</li>
+</ul>
+<p>其次，为了防止关键帧和较大的差分帧立即溢出，进而导致后续较小的帧出现较高丢帧，关键帧和较大的差分帧是不会被立即在桶中累计。相反，这些较大的帧会在漏桶中累计前，会分成若干小块，进而在*Leak()*操作中逐次累计这些小块，来防止较关键帧和较大的差分帧立即溢出。<strong>FrameDropper</strong>类增加了额外的几个参数来实现该策略：</p>
+<ul>
+<li><em>large_frame_accumulation_spread_</em>：大帧最大拆分块数，四舍五入取整；</li>
+<li><em>large_frame_accumulation_count_</em>：大帧剩余拆分块数，四舍五入取整；</li>
+<li><em>large_frame_accumulation_chunk_size_</em>：单个块尺寸，其值为<em>framesize/large_frame_accumulation_count_</em>。</li>
+</ul>
+<p>最后，来看看<strong>FrameDropper</strong>类的核心操作：</p>
+<p><strong>1、<em>Fill()</em></strong></p>
+<p>当视频帧被编码后，<strong>MediaOptimization</strong>类会调用<em>Fill()<em>方法来填充漏桶。调用顺序很简单，主要关注</em>Fill()<em>方法的实现——将大帧拆分为</em>large_frame_accumulation_count_<em>个小块，并不累加</em>accumulator_</em>；将小帧直接累计<em>accumulator_</em>。<em>Fill()<em>方法同时需要更新</em>key_frame_ratio_<em>和</em>delta_frame_size_avg_kbits_</em>，用以计算大帧拆分块数和大帧判断。具体实现如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">Fill</span><span class="params">(<span class="type">size_t</span> framesize_bytes, <span class="type">bool</span> delta_frame)</span> </span>&#123;</span><br><span class="line">  <span class="type">float</span> framesize_kbits = <span class="number">8.0f</span> * <span class="built_in">static_cast</span>&lt;<span class="type">float</span>&gt;(framesize_bytes) / <span class="number">1000.0f</span>;</span><br><span class="line">  <span class="keyword">if</span> (!delta_frame) &#123;</span><br><span class="line">    <span class="keyword">if</span> (large_frame_accumulation_count_ == <span class="number">0</span>) &#123;</span><br><span class="line">      <span class="keyword">if</span> (key_frame_ratio_.<span class="built_in">filtered</span>() &gt; <span class="number">1e-5</span> &amp;&amp;</span><br><span class="line">          <span class="number">1</span> / key_frame_ratio_.<span class="built_in">filtered</span>() &lt; large_frame_accumulation_spread_) &#123;</span><br><span class="line">        large_frame_accumulation_count_ =</span><br><span class="line">            <span class="built_in">static_cast</span>&lt;<span class="type">int32_t</span>&gt;(<span class="number">1</span> / key_frame_ratio_.<span class="built_in">filtered</span>() + <span class="number">0.5</span>);</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        large_frame_accumulation_count_ =</span><br><span class="line">            <span class="built_in">static_cast</span>&lt;<span class="type">int32_t</span>&gt;(large_frame_accumulation_spread_ + <span class="number">0.5</span>);</span><br><span class="line">      &#125;</span><br><span class="line">      large_frame_accumulation_chunk_size_ =</span><br><span class="line">          framesize_kbits / large_frame_accumulation_count_;</span><br><span class="line">      framesize_kbits = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (delta_frame_size_avg_kbits_.<span class="built_in">filtered</span>() != <span class="number">-1</span> &amp;&amp;</span><br><span class="line">        (framesize_kbits &gt;</span><br><span class="line">         kLargeDeltaFactor * delta_frame_size_avg_kbits_.<span class="built_in">filtered</span>()) &amp;&amp;</span><br><span class="line">        large_frame_accumulation_count_ == <span class="number">0</span>) &#123;</span><br><span class="line">      large_frame_accumulation_count_ =</span><br><span class="line">          <span class="built_in">static_cast</span>&lt;<span class="type">int32_t</span>&gt;(large_frame_accumulation_spread_ + <span class="number">0.5</span>);</span><br><span class="line">      large_frame_accumulation_chunk_size_ =</span><br><span class="line">          framesize_kbits / large_frame_accumulation_count_;</span><br><span class="line">      framesize_kbits = <span class="number">0</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      delta_frame_size_avg_kbits_.<span class="built_in">Apply</span>(<span class="number">1</span>, framesize_kbits);</span><br><span class="line">    &#125;</span><br><span class="line">    key_frame_ratio_.<span class="built_in">Apply</span>(<span class="number">1.0</span>, <span class="number">0.0</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  accumulator_ += framesize_kbits;</span><br><span class="line">  <span class="built_in">CapAccumulator</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>2、<em>Leak()</em></strong></p>
+<p><em>Leak()<em>操作按照编码器输入帧率的频率来执行，每次<strong>Leak</strong>的大小为</em>target_bps/input_fps</em>，每次<strong>Leak</strong>时需要判断是否需要累计<em>Fill()<em>方法拆分的块，进而更新</em>drop_ratio_</em>。*drop_ratio_*的更新遵循下列原则：</p>
+<ul>
+<li>当<em>accumulator_ &gt; 1.3f * accumulator_max_</em>，<em>drop_ratio_<em>基数调整为</em>0.8f</em>，提高丢帧率调整加速度；</li>
+<li>当<em>accumulator_ &lt; 1.3f * accumulator_max_</em>，<em>drop_ratio_<em>基数调整为</em>0.9f</em>，降低丢帧率调整加速度。</li>
+</ul>
+<p>实现代码如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">Leak</span><span class="params">(<span class="type">uint32_t</span> input_framerate)</span> </span>&#123;</span><br><span class="line">  <span class="type">float</span> expected_bits_per_frame = target_bitrate_ / input_framerate;</span><br><span class="line">  <span class="keyword">if</span> (large_frame_accumulation_count_ &gt; <span class="number">0</span>) &#123;</span><br><span class="line">    expected_bits_per_frame -= large_frame_accumulation_chunk_size_;</span><br><span class="line">    --large_frame_accumulation_count_;</span><br><span class="line">  &#125;</span><br><span class="line">  accumulator_ -= expected_bits_per_frame;</span><br><span class="line">  <span class="keyword">if</span> (accumulator_ &lt; <span class="number">0.0f</span>) &#123;</span><br><span class="line">    accumulator_ = <span class="number">0.0f</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">if</span> (accumulator_ &gt; <span class="number">1.3f</span> * accumulator_max_) &#123;</span><br><span class="line">    <span class="comment">/* Too far above accumulator max, react faster */</span></span><br><span class="line">    drop_ratio_.<span class="built_in">UpdateBase</span>(<span class="number">0.8f</span>);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">/* Go back to normal reaction */</span></span><br><span class="line">    drop_ratio_.<span class="built_in">UpdateBase</span>(<span class="number">0.9f</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (accumulator_ &gt; accumulator_max_) &#123;</span><br><span class="line">    <span class="comment">/* We are above accumulator max, and should ideally</span></span><br><span class="line"><span class="comment">     * drop a frame. Increase the dropRatio and drop</span></span><br><span class="line"><span class="comment">     * the frame later.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">if</span> (was_below_max_) &#123;</span><br><span class="line">      drop_next_ = <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    drop_ratio_.<span class="built_in">Apply</span>(<span class="number">1.0f</span>, <span class="number">1.0f</span>);</span><br><span class="line">    drop_ratio_.<span class="built_in">UpdateBase</span>(<span class="number">0.9f</span>);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    drop_ratio_.<span class="built_in">Apply</span>(<span class="number">1.0f</span>, <span class="number">0.0f</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  was_below_max_ = accumulator_ &lt; accumulator_max_;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>3、<em>DropFrame()</em></strong></p>
+<p><em>DropFrame()<em>操作用来判断是否需要将输入到编码器的这一帧丢弃，其利用</em>drop_ratio_<em>来使丢帧率保持一个平滑的变化过程。当</em>drop_ratio_.filtered() &gt;= 0.5f</em>时，表明连续丢弃多个帧（至少一个帧）；当<em>0.0f &lt; drop_ratio_.filtered() &lt; 0.5f</em>时，表明多个帧才会丢弃一个帧。具体的丢帧策略见实现：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">bool</span> <span class="title">FrameDropper::DropFrame</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (drop_ratio_.<span class="built_in">filtered</span>() &gt;= <span class="number">0.5f</span>) &#123;</span><br><span class="line">    <span class="type">float</span> denom = <span class="number">1.0f</span> - drop_ratio_.<span class="built_in">filtered</span>();</span><br><span class="line">    <span class="keyword">if</span> (denom &lt; <span class="number">1e-5</span>) &#123;</span><br><span class="line">      denom = <span class="number">1e-5f</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">int32_t</span> limit = <span class="built_in">static_cast</span>&lt;<span class="type">int32_t</span>&gt;(<span class="number">1.0f</span> / denom - <span class="number">1.0f</span> + <span class="number">0.5f</span>);</span><br><span class="line">    <span class="type">int</span> max_limit = <span class="built_in">static_cast</span>&lt;<span class="type">int</span>&gt;(incoming_frame_rate_ * max_drop_duration_secs_);</span><br><span class="line">    <span class="keyword">if</span> (limit &gt; max_limit) &#123;</span><br><span class="line">      limit = max_limit;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (drop_count_ &lt; <span class="number">0</span>) &#123;</span><br><span class="line">      drop_count_ = -drop_count_;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (drop_count_ &lt; limit) &#123;</span><br><span class="line">      drop_count_++;</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      drop_count_ = <span class="number">0</span>;</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (drop_ratio_.<span class="built_in">filtered</span>() &gt; <span class="number">0.0f</span> &amp;&amp; drop_ratio_.<span class="built_in">filtered</span>() &lt; <span class="number">0.5f</span>) &#123;</span><br><span class="line">    <span class="type">float</span> denom = drop_ratio_.<span class="built_in">filtered</span>();</span><br><span class="line">    <span class="keyword">if</span> (denom &lt; <span class="number">1e-5</span>) &#123;</span><br><span class="line">      denom = <span class="number">1e-5f</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">int32_t</span> limit = -<span class="built_in">static_cast</span>&lt;<span class="type">int32_t</span>&gt;(<span class="number">1.0f</span> / denom - <span class="number">1.0f</span> + <span class="number">0.5f</span>);</span><br><span class="line">    <span class="keyword">if</span> (drop_count_ &gt; <span class="number">0</span>) &#123;</span><br><span class="line">      drop_count_ = -drop_count_;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (drop_count_ &gt; limit) &#123;</span><br><span class="line">      <span class="keyword">if</span> (drop_count_ == <span class="number">0</span>) &#123;</span><br><span class="line">        drop_count_--;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        drop_count_--;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      drop_count_ = <span class="number">0</span>;</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  drop_count_ = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="%E6%8E%A5%E6%94%B6%E7%AB%AF%E5%B8%A7%E7%8E%87%E7%AD%96%E7%95%A5" tabindex="-1">接收端帧率策略</h2>
+<p>影响接收端帧率的主要因素包含：网络状况、解码器性能、渲染速度。</p>
+<h3 id="%E7%BD%91%E7%BB%9C%E7%8A%B6%E5%86%B5%E5%AF%BC%E8%87%B4%E4%B8%A2%E5%B8%A7" tabindex="-1">网络状况导致丢帧</h3>
+<p>网络因素对实时视频流的影响十分严重，当网络出现拥塞，导致较高的丢包率，明显的现象就是视频接收端帧率降到很低。比较严重时，接收端接收帧率可能只有几帧，导致无法进行正常的视频通话。WebRTC在*“webrtc/modules/video_coding/packet_buffer.cc&quot;<em>的<strong>PacketBuffer</strong>中，将接收到的RTP包组合成一个完整的视频帧。之后，该完整的帧会被送到</em>&quot;webrtc/modules/video_coding/rtp_frame_reference_finder.cc”*的<strong>RtpFrameReferenceFinder</strong>中。一个完整的帧可能是关键帧，也可能是参考帧，<strong>RtpFrameReferenceFinder</strong>类中关键帧直接送到解码器中处理。而对于参考帧，会判断其是否连续，若不连续会一直暂存在队列中，直到连续——送到解码器，或者下一个关键帧来了——从队列中删除。两个类相应的操作见下面两个函数：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">bool</span> <span class="title">PacketBuffer::InsertPacket</span><span class="params">(VCMPacket* packet)</span> </span>&#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">RtpFrameReferenceFinder::ManageFrameGeneric</span><span class="params">(std::unique_ptr&lt;RtpFrameObject&gt; frame,</span></span></span><br><span class="line"><span class="params"><span class="function">                                                 <span class="type">int</span> picture_id)</span> </span>&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>视频会议软件通常会采用NACK和FEC等手段来降低丢包对视频通话质量的影响。同时，解码器一定时间内，没有收到可解码数据，会向发送端请求I帧，这也就在一定程度上保证帧率不会过于低。这部分代码实现与*“webrtc/video/video_receive_stream.cc”*的<strong>VideoReceiveStream</strong>类中：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">VideoReceiveStream::Decode</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="type">static</span> <span class="type">const</span> <span class="type">int</span> kMaxWaitForFrameMs = <span class="number">3000</span>;</span><br><span class="line">  std::unique_ptr&lt;video_coding::FrameObject&gt; frame;</span><br><span class="line">  video_coding::FrameBuffer::ReturnReason res =</span><br><span class="line">      frame_buffer_-&gt;<span class="built_in">NextFrame</span>(kMaxWaitForFrameMs, &amp;frame);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (res == video_coding::FrameBuffer::ReturnReason::kStopped)</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (frame) &#123;</span><br><span class="line">    <span class="keyword">if</span> (video_receiver_.<span class="built_in">Decode</span>(frame.<span class="built_in">get</span>()) == VCM_OK)</span><br><span class="line">      rtp_stream_receiver_.<span class="built_in">FrameDecoded</span>(frame-&gt;picture_id);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="built_in">RequestKeyFrame</span>();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="%E8%A7%A3%E7%A0%81%E5%AF%BC%E8%87%B4%E4%B8%A2%E5%B8%A7" tabindex="-1">解码导致丢帧</h3>
+<p>看一下WebRTC内调用解码模块的代码，就可以看出WebRTC解码导致失败的可能原因。这部分代码位于*“webrtc/modules/video_coding/video_receiver.cc”*，实现如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int32_t</span> <span class="title">Decode</span><span class="params">(<span class="type">const</span> VCMEncodedFrame&amp; frame)</span> </span>&#123;</span><br><span class="line">  <span class="comment">/* Decode a frame */</span></span><br><span class="line">  <span class="type">int32_t</span> ret = _decoder-&gt;<span class="built_in">Decode</span>(frame, clock_-&gt;<span class="built_in">TimeInMilliseconds</span>());</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* Check for failed decoding, run frame type request callback if needed. */</span></span><br><span class="line">  <span class="type">bool</span> request_key_frame = <span class="literal">false</span>;</span><br><span class="line">  <span class="keyword">if</span> (ret &lt; <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (ret == VCM_ERROR_REQUEST_SLI) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="built_in">RequestSliceLossIndication</span>(</span><br><span class="line">          _decodedFrameCallback.<span class="built_in">LastReceivedPictureID</span>() + <span class="number">1</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      request_key_frame = <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (ret == VCM_REQUEST_SLI) &#123;</span><br><span class="line">    ret = <span class="built_in">RequestSliceLossIndication</span>(</span><br><span class="line">        _decodedFrameCallback.<span class="built_in">LastReceivedPictureID</span>() + <span class="number">1</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (!frame.<span class="built_in">Complete</span>() || frame.<span class="built_in">MissingFrame</span>()) &#123;</span><br><span class="line">    request_key_frame = <span class="literal">true</span>;</span><br><span class="line">    ret = VCM_OK;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (request_key_frame) &#123;</span><br><span class="line">    <span class="function">rtc::CritScope <span class="title">cs</span><span class="params">(&amp;process_crit_)</span></span>;</span><br><span class="line">    _scheduleKeyRequest = <span class="literal">true</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> ret;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>通过上面代码可以看出，如果解码器无法将接收到的数据解码，要么发送SLI要么发送PLI，请求重新发送关键帧。从SLI/PLI发出到收到可解码的关键帧这个时间间隔内，接收端的帧率会比正常情况低。</p>
+<h3 id="%E6%B8%B2%E6%9F%93%E5%AF%BC%E8%87%B4%E4%B8%A2%E5%B8%A7" tabindex="-1">渲染导致丢帧</h3>
+<p>在实际应用中，经过WebRTC处理后显示的帧率较大，但最终的显示效果却比较差，能够感觉到明显的卡顿。这就和应用软件的渲染有关。研究不深，暂不撰写。</p>
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/katex/dist/katex.min.css">
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/markdown-it-texmath/css/texmath.min.css">
+
+                    
+                </div>
+
+                
+                        
+<div class="post-copyright-info-container border-box">
+    <div class="copyright-info-content border-box">
+        <div class="copyright-info-top border-box">
+            <div class="copyright-post-title border-box text-ellipsis">
+                WebRTC帧率调整策略
+            </div>
+
+            <div class="copyright-post-link border-box text-ellipsis">
+                develop/webrtc-frame/
+            </div>
+        </div>
+
+        <div class="copyright-info-bottom border-box">
+            <div class="copyright-post-author bottom-item">
+                <div class="type">
+                    Author
+                </div>
+                <div class="content">ZeroJiu</div>
+            </div>
+
+            <div class="post-time bottom-item">
+                <div class="type">
+                    Published
+                </div>
+                <div class="content">2017-12-09 12:36</div>
+            </div>
+
+
+            <div class="post-license bottom-item">
+                <div class="type">
+                    License
+                </div>
+                <div class="content tooltip" data-tooltip-content="CC BY-NC-SA 4.0">
+                    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed" target="_blank">
+                        
+                            <i class="fa-brands fa-creative-commons"></i>
+                            <i class="fa-brands fa-creative-commons-by"></i>
+                            <i class="fa-brands fa-creative-commons-nc"></i>
+                            <i class="fa-brands fa-creative-commons-sa"></i>
+                        
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <i class="copyright-bg fa-solid fa-copyright"></i>
+    </div>
+    <div class="copy-copyright-info flex-center tooltip" data-tooltip-content="Copy copyright info" data-tooltip-offset-y="-2px">
+        <i class="fa-solid fa-copy"></i>
+    </div>
+</div>
+
+                
+
+                <div class="post-bottom-tags-and-share border-box">
+                    <div>
+                        
+                            <ul class="post-tags-box border-box">
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/WebRTC/">WebRTC</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Transport/">Transport</a>
+                                    </li>
+                                
+                            </ul>
+                        
+                    </div>
+                    <div>
+                        
+                            <div class="post-share-container border-box">
+    <ul class="share-list-wrap border-box">
+        <li class="qq share-item border-box flex-center tooltip"
+            data-tooltip-content="Share to QQ"
+        >
+            <i class="fa-brands fa-qq"></i>
+        </li>
+        <li class="wechat share-item border-box flex-center tooltip tooltip-img"
+            data-tooltip-content="Share to WeChat"
+            data-tooltip-img-tip="Scan by WeChat"
+            data-tooltip-img-style="background-color: #fff; top: -10px; padding: 0.6rem 0.6rem 0.1rem 0.6rem;"
+        >
+            <i class="fa-brands fa-weixin"></i>
+        </li>
+        <li class="weibo share-item border-box flex-center tooltip"
+            data-tooltip-content="Share to WeiBo"
+        >
+            <i class="fa-brands fa-weibo"></i>
+        </li>
+    </ul>
+</div>
+
+                        
+                    </div>
+                </div>
+
+                
+
+                
+                    <div class="post-nav border-box">
+                        
+                            <div class="prev-post">
+                                <a class="prev"
+                                   rel="prev"
+                                   href="/timecapsule/2017-improve/"
+                                   title="三月：迟来的总结和反思"
+                                >
+                                    <span class="left arrow-icon flex-center">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </span>
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">三月：迟来的总结和反思</span>
+                                        <span class="post-nav-item">Prev posts</span>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                        
+                            <div class="next-post">
+                                <a class="next"
+                                   rel="next"
+                                   href="/develop/codec-h264/"
+                                   title="H.264/MPEG-4 AVC学习"
+                                >
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">H.264/MPEG-4 AVC学习</span>
+                                        <span class="post-nav-item">Next posts</span>
+                                    </span>
+                                    <span class="right arrow-icon flex-center">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                    </div>
+                
+
+                
+                    
+
+
+
+
+
+
+                
+            </div>
+        </div>
+
+        
+    </div>
+</div>
+
+
+                
+            </div>
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="copyright-info info-item">
+        &copy;&nbsp;<span>2020</span>&nbsp;-&nbsp;2024
+        
+            &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">ZeroJiu</a>
+        
+    </div>
+
+    <div class="theme-info info-item">
+        Powered by&nbsp;<a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;&&nbsp;Theme&nbsp;<a class="keep-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep</a>
+    </div>
+
+    
+        
+        <div class="deploy-info info-item">
+            
+            This site is deployed on <span class="tooltip" data-tooltip-content="GitHub Pages"><img src="/images/brands/github.png"></span>
+            
+        </div>
+    
+
+    
+        <div class="count-info info-item">
+            
+
+            
+                <span class="count-item border-box uv">
+                    <span class="item-type border-box">Unique Visitor</span>
+                    <span class="item-value border-box uv" id="busuanzi_value_site_uv"></span>
+                </span>
+            
+
+            
+                <span class="count-item border-box pv">
+                    <span class="item-type border-box">Page View</span>
+                    <span class="item-value border-box pv" id="busuanzi_value_site_pv"></span>
+                </span>
+            
+        </div>
+    
+
+    
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="post-tools-list border-box">
+        <!-- PC encrypt again -->
+        
+
+        <!-- PC TOC show toggle -->
+        
+
+        <!-- PC go comment -->
+        
+
+        <!-- PC full screen -->
+        <li class="tools-item flex-center full-screen">
+            <i class="fa-solid fa-expand"></i>
+        </li>
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container border-box ">
+    <ul class="side-tools-list side-tools-show-handle border-box">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-toggle-theme-mode flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list border-box">
+        
+
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        <li class="tools-item tool-scroll-to-top flex-center show-arrow">
+            <i class="arrow fas fa-arrow-up"></i>
+            <span class="percent"></span>
+        </li>
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="Search..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+</main>
+
+
+
+<!-- common -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/utils.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/header-shrink.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/back2top.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/toggle-theme.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/code-block.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/main.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/libs/anime.min.js"></script>
+
+<!-- local-search -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/local-search.min.js"></script>
+
+
+<!-- lazyload -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/lazyload.min.js"></script>
+
+
+<div class="pjax">
+    <!-- home page -->
+    
+
+    <!-- post page -->
+    
+        <!-- post-helper -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/post/post-helper.min.js"></script>
+
+        <!-- toc -->
+        
+
+        <!-- copyright-info -->
+        
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/post/copyright-info.min.js"></script>
+        
+
+        <!-- share -->
+        
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/post/share.min.js"></script>
+        
+    
+
+    <!-- categories page -->
+    
+
+    <!-- links page -->
+    
+
+    <!-- photos page -->
+    
+
+    <!-- tools page -->
+    
+</div>
+
+<!-- mermaid -->
+
+    
+<script src="//cdn.jsdelivr.net/npm/mermaid@10.5.0/dist/mermaid.min.js"></script>
+
+    <script data-pjax>
+      if (window.mermaid) {
+        mermaid.init()
+      }
+    </script>
+
+
+
+
+
+
+<!-- pjax -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/libs/pjax.min.js"></script>
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        window.pjax = new Pjax({
+            selectors: [
+                'head title',
+                '.page-container',
+                '.pjax'
+            ],
+            history: true,
+            debug: false,
+            cacheBust: false,
+            timeout: 0,
+            analytics: false,
+            currentUrlFullReload: false,
+            scrollRestoration: false,
+        });
+
+        document.addEventListener('pjax:send', () => {
+            KEEP.utils.pjaxProgressBarStart()
+        });
+
+        document.addEventListener('pjax:complete', () => {
+            KEEP.utils.pjaxProgressBarEnd()
+            window.pjax.executeScripts(document.querySelectorAll('script[data-pjax], .pjax script'))
+            KEEP.initExecute()
+        });
+    });
+</script>
+
+
+
+
+</body>
+</html>

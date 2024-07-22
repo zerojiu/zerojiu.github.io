@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="ZeroJiu">
+    
+    <title>
+        
+            智能指针二三事 |
+        
+        小熊糖否
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+        <link rel="shortcut icon" href="/images/logo.ico">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/font/css/fontawesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/font/css/regular.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/font/css/solid.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/font/css/brands.min.css">
+    
+    <script class="keep-theme-configurations">
+    const KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"example.com","root":"/","language":"en","path":"search.xml"}
+    KEEP.theme_config = {"base_info":{"primary_color":"#c0392b","title":"小熊糖否","author":"ZeroJiu","avatar":"/images/author.jpg","logo":"/images/logo.ico","favicon":"/images/logo.ico"},"menu":{"home":"/","archives":"/archives","tags":"/tags","about":"/about"},"first_screen":{"enable":true,"background_img":"/images/bg.svg","background_img_dark":"/images/bg.svg","description":"True mastery of any skill takes a lifetime.","hitokoto":false},"social_contact":{"enable":true,"links":{"github":"https://github.com/zerojiu","weixin":null,"qq":null,"weibo":null,"zhihu":null,"twitter":null,"x":null,"facebook":null,"email":"xpringlee@gmail.com"}},"scroll":{"progress_bar":true,"percent":false,"hide_header":true},"home":{"announcement":null,"category":true,"tag":true,"post_datetime":"created"},"post":{"author_badge":{"enable":true,"level_badge":false,"custom_badge":["愚昧之巅","绝望之谷","开悟之坡","大师领域"]},"word_count":{"wordcount":true,"min2read":true},"datetime_format":"YYYY-MM-DD HH:mm:ss","copyright_info":true,"share":true,"img_align":"center","reward":{"enable":false,"img_link":null,"text":null}},"code_block":{"tools":{"enable":true,"style":"default"},"highlight_theme":"default"},"toc":{"enable":false,"number":false,"expand_all":true,"init_open":false,"layout":"right"},"website_count":{"busuanzi_count":{"enable":true,"site_uv":true,"site_pv":true,"page_pv":true}},"local_search":{"enable":true,"preload":true},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.36"},"waline":{"server_url":null,"reaction":false,"version":"3.2.1"},"giscus":{"repo":null,"repo_id":null,"category":"Announcements","category_id":null,"reactions_enabled":false},"artalk":{"server":null},"disqus":{"shortname":null}},"rss":{"enable":true},"lazyload":{"enable":true},"cdn":{"enable":true,"provider":"cdnjs"},"pjax":{"enable":true},"footer":{"since":2020,"word_count":false,"site_deploy":{"enable":true,"provider":"github","url":null},"record":{"enable":false,"list":[{"code":null,"link":null}]}},"inject":{"enable":false,"css":[null],"js":[null]},"root":"","source_data":{},"version":"4.1.5"}
+    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"}
+    KEEP.language_code_block = {"copy":"Copy code","copied":"Copied","fold":"Fold code block","folded":"Folded"}
+    KEEP.language_copy_copyright = {"copy":"Copy copyright info","copied":"Copied","title":"Original post title","author":"Original post author","link":"Original post link"}
+  </script>
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+        <span class="scroll-progress-bar"></span>
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <i class="pjax-progress-icon fas fa-circle-notch fa-spin"></i>
+    
+</div>
+
+
+
+<main class="page-container border-box">
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left border-box">
+            
+                <a class="logo-image border-box" href="/">
+                    <img src="/images/logo.ico">
+                </a>
+            
+            <a class="site-name border-box" href="/">
+               小熊糖否
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        
+                        <li class="menu-item">
+                            <a class=""
+                               href="/"
+                            >
+                                
+                                HOME
+                            </a>
+                        </li>
+                    
+                        
+                        <li class="menu-item">
+                            <a class=""
+                               href="/archives"
+                            >
+                                
+                                ARCHIVES
+                            </a>
+                        </li>
+                    
+                        
+                        <li class="menu-item">
+                            <a class=""
+                               href="/tags"
+                            >
+                                
+                                TAGS
+                            </a>
+                        </li>
+                    
+                        
+                        <li class="menu-item">
+                            <a class=""
+                               href="/about"
+                            >
+                                
+                                ABOUT
+                            </a>
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="fas search fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/"
+                    >HOME</a>
+                </li>
+            
+                
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/archives"
+                    >ARCHIVES</a>
+                </li>
+            
+                
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/tags"
+                    >TAGS</a>
+                </li>
+            
+                
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/about"
+                    >ABOUT</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+                
+
+                    
+<div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+        <div class="post-content-container border-box">
+            
+                <div class="post-content-top border-box"
+                     style="height: 13.8rem"
+                >
+                    <div class="cover-post-title">
+                        智能指针二三事
+                    </div>
+                    <img class="post-cover" src="/images/tags/cpp1.png"
+                         onerror="this.style.display='none'"
+                    >
+                </div>
+            
+
+            <div class="post-content-bottom border-box has-cover">
+                
+
+                
+                    <div class="post-header border-box">
+                        
+                            <div class="avatar-box border-box">
+                                <img src="/images/author.jpg">
+                            </div>
+                        
+                        <div class="info-box">
+                            <div class="author border-box">
+                                <span class="name">ZeroJiu</span>
+                                
+                                    <span class="author-badge">大师领域</span>
+                                
+                            </div>
+                            <div class="meta-info border-box">
+                                
+
+<div class="post-meta-info-container border-box post">
+    <div class="post-meta-info border-box">
+        
+
+        
+            <span class="meta-info-item post-create-date">
+                <i class="icon fa-solid fa-calendar-plus"></i>&nbsp;
+                <span class="datetime">2018-10-13 08:48:41</span>
+            </span>
+
+            <span class="meta-info-item post-update-date">
+                <i class="icon fa-solid fa-file-pen"></i>&nbsp;
+                <span class="datetime" data-updated="Fri Jul 19 2024 21:22:16 GMT+0800">2024-07-19 21:22:16</span>
+            </span>
+        
+
+        
+            <span class="meta-info-item post-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul class="post-category-ul">
+                    
+                            <li class="category-item"><a href="/categories/Develop/">Develop</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="post-tag meta-info-item border-box">
+                <ul class="post-tag-ul">
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/CPP/">CPP</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Experience/">Experience</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+            <span class="meta-info-item post-wordcount">
+                <i class="icon fas fa-file-word"></i>&nbsp;<span>3.2k Words</span>
+            </span>
+        
+        
+            <span class="meta-info-item post-min2read">
+                <i class="icon fas fa-clock"></i>&nbsp;<span>13 Mins</span>
+            </span>
+        
+        
+            <span class="meta-info-item post-pv">
+                <i class="icon fas fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+            </span>
+        
+    </div>
+
+    
+</div>
+
+                            </div>
+                        </div>
+                    </div>
+                
+
+                <div class="post-content keep-markdown-body ">
+                    
+
+                    
+                         <p>C++11中引入智能指针，智能指针主要用来解决资源管理中遇到的各种问题。在引入智能指针之前，我们必须要操作裸指针，裸指针是导致内存问题的罪魁祸首——空悬指针、内存泄漏、分配失败等。一些著名的开源C项目，现在仍然还需要面临着一些由裸指针引起的内存问题。<span id="more"></span></p>
+<p>如何使用智能指针能够轻易地在C++11标准中找到，如何用好智能指针却并不是那么简单。我们必须要清楚：</p>
+<ul>
+<li>智能指针解决了哪些问题？</li>
+<li>智能指针引入了哪些问题？</li>
+<li>智能指针使用存在哪些坑？</li>
+</ul>
+<h2 id="%E8%A7%A3%E5%86%B3" tabindex="-1">解决</h2>
+<p>C++11标准库中，智能指针主要包含<em>unique_ptr</em>、<em>shared_ptr</em>、<em>weak_ptr</em>三种。这三种智能指针已经能够解决我们遇到的大多数问题。这些问题包含：</p>
+<ul>
+<li>内存泄漏</li>
+<li>指针有效性检测</li>
+<li>资源独占</li>
+<li>多线程资源管理</li>
+<li>跨dll资源管理</li>
+</ul>
+<h3 id="%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F" tabindex="-1">内存泄漏</h3>
+<p>智能指针能够实现自动垃圾回收（Automatic Garbage Collection），这有效的解决了程序中部分内存/资源泄漏问题。智能指针能够有效地防止由于程序<strong>异常</strong>而导致的资源泄漏。例如：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">func1</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    Object* p = <span class="keyword">new</span> <span class="built_in">Object</span>();</span><br><span class="line">    p-&gt;<span class="built_in">doSomething</span>(); <span class="comment">/* throw exception */</span></span><br><span class="line">    <span class="keyword">delete</span> p;         <span class="comment">/* memory leak and resource leak in Object */</span></span><br><span class="line">&#125; </span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">func2</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    std::shared_ptr&lt;<span class="type">int</span>&gt; p = std::<span class="built_in">make_shared</span>&lt;<span class="type">int</span>&gt;(<span class="number">10</span>);</span><br><span class="line">    p-&gt;<span class="built_in">doSomething</span>(); <span class="comment">/* throw exception */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="%E6%8C%87%E9%92%88%E6%9C%89%E6%95%88%E6%80%A7%E6%A3%80%E6%B5%8B" tabindex="-1">指针有效性检测</h3>
+<p>裸指针只能检测指针是否是nullptr，无法检测出指针指向的对象是否有效。而智能指针能够检测其所指向对象的有效性。</p>
+<p>裸指针若不初始化，其值是一个随机值，也就是野指针，而智能指针会默认初始化为nullptr。编译器一般会对<strong>使用未初始化的野指针</strong>报错，若不报错我们则会面临程序奔溃、内存越界的风险。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">func</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="type">char</span>* p;   <span class="comment">/* p为野指针 */</span></span><br><span class="line">    <span class="type">static</span> <span class="type">char</span>* pp; <span class="comment">/* pp非野指针 */</span></span><br><span class="line">    std::shared_ptr&lt;<span class="type">char</span>&gt; sp;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>裸指针指向的对象被销毁后，未将裸指针设置为nullptr，则裸指针称为空悬指针。出现空悬指针的情况如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">func1</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="type">char</span> *p = <span class="literal">nullptr</span>;</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="type">char</span> c = <span class="string">&#x27;a&#x27;</span>;</span><br><span class="line">    p = &amp;c;</span><br><span class="line">  &#125; <span class="comment">/* c释放，p为空悬指针 */</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">func2</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="type">char</span> *p = <span class="keyword">new</span> <span class="built_in">char</span>();</span><br><span class="line">  <span class="keyword">delete</span> p; <span class="comment">/* p为空悬指针 */</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span>* <span class="title">func3</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="type">int</span> num = <span class="number">123</span>;</span><br><span class="line">  <span class="keyword">return</span> &amp;num; <span class="comment">/* 返回一个空悬指针 */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>访问空悬指针程序会抛出异常<em>write access violation</em>。而对智能指针，只有指针生命期结束或主动指向其他对象时，其所指向的对象才会被销毁（引用计数减一）。故而，智能指针不存在空悬指针问题。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">func1</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  std::shared_ptr&lt;<span class="type">int</span>&gt; sp1 = std::<span class="built_in">make_shared</span>&lt;<span class="type">int</span>&gt;(<span class="number">1</span>);</span><br><span class="line">  sp1 = std::<span class="built_in">make_shared</span>&lt;<span class="type">int</span>&gt;(<span class="number">2</span>); <span class="comment">/* 对象释放后又重新构造一个对象，sp1可以继续使用 */</span></span><br><span class="line">  &#123;</span><br><span class="line">    std::shared_ptr&lt;<span class="type">int</span>&gt; sp2 = std::<span class="built_in">make_shared</span>&lt;<span class="type">int</span>&gt;(<span class="number">1</span>);  </span><br><span class="line">  &#125; <span class="comment">/* 对象释放，但也无法使用sp2 */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="%E8%B5%84%E6%BA%90%E7%8B%AC%E5%8D%A0" tabindex="-1">资源独占</h3>
+<p>裸指针无法保证资源独占，可能会存在多个指针指向同一个对象，进而导致一些难以控制的问题。譬如：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">func</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  Object *p1 = <span class="keyword">new</span> <span class="built_in">Object</span>();</span><br><span class="line">  Object *p2 = p1;</span><br><span class="line">  <span class="keyword">delete</span> p1;</span><br><span class="line">  *p2; <span class="comment">/* 空悬指针 */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>智能指针中的<em>std::unique_ptr</em>能够独占资源所有权，某时某刻只有一个<em>std::unique_ptr</em>指向特定的对象。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">func</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="function">std::unique_ptr&lt;Object&gt; <span class="title">up1</span><span class="params">(<span class="keyword">new</span> Object())</span></span>;</span><br><span class="line">  std::unique_ptr&lt;Object&gt; up2 = up1; <span class="comment">/* error */</span></span><br><span class="line">  up2 = std::<span class="built_in">move</span>(up1); <span class="comment">/* up1转移所有权给up2，up1为nullptr */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86" tabindex="-1">多线程资源管理</h3>
+<p>智能指针能够很好地解决多线程情况下对象析构问题。这是裸指针难以办到的。对于裸指针来说，如果一个线程要访问该指针，而另一个线程需要delete该指针，后果难以想象。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">T</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    ~<span class="built_in">T</span>() &#123; <span class="comment">/* destruct resource in mutex */</span> &#125;</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">update</span><span class="params">()</span> </span>&#123; <span class="comment">/* update resource in mutex*/</span>&#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">extern</span> T *t;</span><br><span class="line"><span class="comment">/* thread 1 */</span></span><br><span class="line"><span class="keyword">delete</span> t;</span><br><span class="line">t = <span class="literal">nullptr</span>;</span><br><span class="line"><span class="comment">/* thread 2 */</span></span><br><span class="line"><span class="keyword">if</span> (t) t-&gt;<span class="built_in">update</span>();</span><br></pre></td></tr></table></figure>
+<p>即使有锁的保护，也无法避免程序出现问题，析构操作会将锁也析构了。对于智能指针来说，只要有线程访问持有对象的指针，则该对象不会被析构；如果对象要被析构，则所有线程都无法访问该指针。</p>
+<h3 id="%E8%B7%A8dll%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86" tabindex="-1">跨dll资源管理</h3>
+<p>某个dll模块如果想要向外界暴露内部资源的指针，如果采用裸指针，就需要注意资源是在内部释放，还是需要外部主动释放问题。一般情况下，我们遵循的原则是<strong>谁创建谁释放</strong>，然而这无法在语言层面上做到约束。对于需要内部释放的资源，如果外部主动释放了，则会导致重复释放。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">RM</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="function">Object* <span class="title">get</span><span class="params">()</span></span>;</span><br><span class="line">  ~<span class="built_in">RM</span>() &#123; <span class="comment">/* destruct all Object */</span> &#125;</span><br><span class="line">&#125;;</span><br><span class="line">RM rm;</span><br><span class="line">Object* o = rm.<span class="built_in">get</span>(); </span><br><span class="line"><span class="keyword">delete</span> o; <span class="comment">/* error */</span></span><br></pre></td></tr></table></figure>
+<p>对于智能指针来说，资源释放都是通过自动垃圾回收机制。使用该dll资源的用户无需关注是否需要释放资源。</p>
+<h2 id="%E5%BC%95%E5%85%A5" tabindex="-1">引入</h2>
+<p>智能指针有利有弊，最严重的问题是延长了对象的生命期。如果不采取特殊的做法，很难保证对象在我们想要析构的地方析构。同时，由于引入了引用计数，会增加拷贝的开销。</p>
+<h3 id="%E5%BB%B6%E9%95%BF%E5%AF%B9%E8%B1%A1%E7%94%9F%E5%91%BD%E6%9C%9F" tabindex="-1">延长对象生命期</h3>
+<p>由于智能指针<em>std::shared_ptr</em>延长了对象的生命期，所以在使用智能指针时需要明确一件事：在我们希望对象析构后，继续使用该对象没有副作用，否则必须要保证对象在我们想要析构时被析构。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">std::map&lt;<span class="type">uint32_t</span>, std::shared_ptr&lt;Object&gt;&gt; objects;</span><br><span class="line"><span class="function">std::shared_ptr&lt;Object&gt; <span class="title">create</span><span class="params">(<span class="type">uint32_t</span> index)</span> </span>&#123;</span><br><span class="line">  std::shared_ptr&lt;Object&gt; po = std::<span class="built_in">make_shared</span>&lt;Object&gt;();</span><br><span class="line">  objects.<span class="built_in">emplace</span>(index, po);</span><br><span class="line">  <span class="keyword">return</span> po;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">destroy</span><span class="params">(<span class="type">uint32_t</span> index)</span> </span>&#123;</span><br><span class="line">  objects.<span class="built_in">erase</span>(index);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* thread 1 */</span></span><br><span class="line"><span class="keyword">auto</span> po = <span class="built_in">create</span>(<span class="number">1</span>);</span><br><span class="line">po-&gt;<span class="built_in">doSomething</span>(); <span class="comment">/* make sure handle po is acceptable after try to destroy po */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* thread 2 */</span></span><br><span class="line"><span class="built_in">destroy</span>(<span class="number">1</span>);</span><br></pre></td></tr></table></figure>
+<p>另一方面，我们无法确定对象在何地析构，也就意味着对象可能在关键线程析构，进而降低了系统的性能。为此，可以用一个单独的线程专门来做析构，通过一个*BlockingQueue&lt;std::shared_ptr<void >&gt;*把对象析构都转移到那个专用线程中。这种方法的前提就是程序必须要额外开启一条线程。</p>
+<h3 id="%E5%A2%9E%E5%8A%A0%E6%8B%B7%E8%B4%9D%E5%BC%80%E9%94%80" tabindex="-1">增加拷贝开销</h3>
+<p>智能指针的拷贝相对于裸指针多了引用计数的操作，同时可能还会加锁。所以会增加系统开销。大多数拷贝操作发生在传参，因此推荐使用引用传参方式来替换值传参。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">bool</span> <span class="title">func</span><span class="params">(<span class="type">const</span> std::shared_ptr&lt;Object&gt; &amp;po)</span></span>;</span><br></pre></td></tr></table></figure>
+<h2 id="%E8%B8%A9%E5%9D%91" tabindex="-1">踩坑</h2>
+<p>智能指针使用过程中难免会遇到一些坑点。本节记录一些注意事项，避免低级失误。</p>
+<h3 id="unique_ptr%E5%88%9D%E5%A7%8B%E5%8C%96" tabindex="-1">unique_ptr初始化</h3>
+<p><em>std::unique_ptr</em>不支持拷贝和赋值。为<em>std::unique_ptr</em>赋初始值有两种方式：<em>new</em>操作和<em>std::make_unique</em>操作。使用这两种方式时都有需要注意的地方：</p>
+<ul>
+<li><em>std::unique_ptr</em>单参数版本的构造函数是<em>explicit</em>，所以不能使用*=*赋值；</li>
+<li><em>std::make_unique</em>操作是C++14新特性，在某些编译器上是不支持的，在跨平台应用中使用该操作，需要确认是否所有平台都支持该操作。</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">std::unique_ptr&lt;Object&gt; up = <span class="keyword">new</span> <span class="built_in">Object</span>(<span class="number">1</span>); <span class="comment">/* error */</span></span><br><span class="line"><span class="function">std::unique_ptr&lt;Object&gt; <span class="title">up</span><span class="params">(<span class="keyword">new</span> Object(<span class="number">1</span>))</span></span>;  <span class="comment">/* ok     */</span></span><br><span class="line">std::unique_ptr&lt;Object&gt; up = std::<span class="built_in">make_unique</span>&lt;Object&gt;(<span class="number">1</span>); <span class="comment">/* ok when compiler support */</span></span><br></pre></td></tr></table></figure>
+<h3 id="unique_ptr%E9%99%B7%E9%98%B1" tabindex="-1">unique_ptr陷阱</h3>
+<p>尽量不要将<em>std::unique_ptr</em>和裸指针混用。如果二者混用，会导致资源管理混乱，同时很有可能导致程序奔溃，内存泄漏：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Object *b = <span class="keyword">new</span> <span class="built_in">Object</span>();</span><br><span class="line">std::unique_ptr&lt;Object&gt; uo1, uo2;</span><br><span class="line">uo<span class="number">1.</span><span class="built_in">reset</span>(b);</span><br><span class="line">uo<span class="number">2.</span><span class="built_in">reset</span>(b); <span class="comment">/* uo1和uo2将指向同一个位置 */</span></span><br></pre></td></tr></table></figure>
+<p><em>release</em>操作并不会释放对象的内存，其仅仅是返回一个指向被管理对象的指针，并释放<em>std::unique_ptr</em>的所有权。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">std::unique_ptr&lt;Object&gt; uo = std::<span class="built_in">make_unique</span>&lt;Object&gt;();</span><br><span class="line">Object* o = uo.<span class="built_in">release</span>();</span><br><span class="line"><span class="keyword">delete</span> o;</span><br></pre></td></tr></table></figure>
+<h3 id="shared_ptr%E9%99%B7%E9%98%B1" tabindex="-1">shared_ptr陷阱</h3>
+<p>尽量不要通过<em>std::shared_ptr</em>智能指针的<em>get</em>操作获取其指向对象的裸指针。一方面智能指针析构时其变成了空悬指针，另一方面如果不小心<em>delete</em>了裸指针，那么智能指针将会<em>ACCESS VIOLATION</em>。同时，如果你把获取的裸指针继续赋给智能指针的话，又将是一个严重的问题。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">std::shared_ptr&lt;Object&gt; so = <span class="keyword">new</span> <span class="built_in">Object</span>();</span><br><span class="line">Object *o = so.<span class="built_in">get</span>();</span><br><span class="line"><span class="keyword">delete</span> o;</span><br><span class="line">so-&gt;<span class="built_in">doSomething</span>(); <span class="comment">/* access violation */</span></span><br></pre></td></tr></table></figure>
+<p>如果要使用智能指针的裸指针，要确保不能将该指针传递到模块外部，同时传递到内部时，也要保证内部对象在智能指针之前释放。</p>
+<h2 id="%E5%AE%9E%E8%B7%B5" tabindex="-1">实践</h2>
+<p>挖掘点智能指针实际使用过程中的实践经验。</p>
+<h3 id="%E5%BC%82%E5%B8%B8%E5%AE%89%E5%85%A8" tabindex="-1">异常安全</h3>
+<p>当使用<em>std::unique_ptr</em>需要注意异常问题。如下代码的执行顺序并不确定：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">f</span>(<span class="built_in">unique_ptr</span>&lt;T&gt;(<span class="keyword">new</span> T), <span class="built_in">function_may_throw</span>());</span><br></pre></td></tr></table></figure>
+<p>当上述代码的执行顺序为：<em>new T</em>→*function_may_throw()<em>→</em>unique_ptr<T>(…)<em>时，当</em>function_may_throw()*抛出异常，则会导致内存泄漏。以下写法能够避免内存泄漏：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">f</span>(std::<span class="built_in">make_unique</span>&lt;T&gt;(), <span class="built_in">function_may_throw</span>());</span><br></pre></td></tr></table></figure>
+<p>在C++17中对参数的执行顺序做了约束：</p>
+<blockquote>
+<p>The initialization of a parameter, including every associated value computation and side effect, is indeterminately sequenced with respect to that of any other parameter.</p>
+</blockquote>
+<p>也就意味上面那个不定执行顺序的代码，只可能有两种执行顺序：</p>
+<ul>
+<li>顺序一：<em>new T</em>→<em>unique_ptr<T>(…)<em>→</em>function_may_throw()</em></li>
+<li>顺序二：<em>function_may_throw()<em>→</em>new T</em>→<em>unique_ptr<T>(…)</em></li>
+</ul>
+<p>这两种执行顺序都不存在异常安全问题了。不过要求编译器支持C++17。</p>
+<blockquote>
+<p>注意：<em>std::make_shared</em>和<em>std::make_unique</em>都是异常安全的。</p>
+</blockquote>
+<h3 id="%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8" tabindex="-1">线程安全</h3>
+<p>对于智能指针，其引用计数增加/减少操作是线程安全的，并且是无锁的。但是其本身并非是线程安全的。因此在多线程访问的情况下，必须要一些同步措施。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">std::shared_ptr&lt;Object&gt; po = <span class="keyword">new</span> <span class="built_in">Object</span>();</span><br><span class="line"><span class="comment">/* thread 1 */</span></span><br><span class="line">std::shared_ptr&lt;Object&gt; new_po;</span><br><span class="line">&#123;</span><br><span class="line">  <span class="function">ScopedLock <span class="title">lock</span><span class="params">(mutex)</span></span>;</span><br><span class="line">  new_po = po; </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* thread 2 */</span></span><br><span class="line">std::shared_ptr&lt;Object&gt; new_po = <span class="keyword">new</span> <span class="built_in">Object</span>();</span><br><span class="line">&#123;</span><br><span class="line">  <span class="function">ScopedLock <span class="title">lock</span><span class="params">(mutex)</span></span>;</span><br><span class="line">  po = new_po;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="%E7%8B%AC%E5%8D%A0%E8%B5%84%E6%BA%90" tabindex="-1">独占资源</h3>
+<p>当我们需要独占某个资源时，尽量使用<em>std::unique_ptr</em>，不要使用<em>std::shared_ptr</em>。这样可以避免<em>std::shared_ptr</em>所面临的生命期延长问题。同时，多个<em>std::shared_ptr</em>可以访问修改同一个对象，这在资源独占时是不可接受的。</p>
+<p><em>std::shared_ptr</em>相对于<em>std::unqiue_ptr</em>资源开销更大，这是因为<em>std::shared_ptr</em>需要维护一个指向动态内存对象的线程安全的引用计数器。因此，资源独占时，首选<em>std::unique_ptr</em>智能指针。</p>
+<h3 id="raii" tabindex="-1">RAII</h3>
+<p>RAII，Resource Acquisition Is Initialization，资源获取时就是初始化时。在使用智能指针使尽量避免下面操作：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Object *o = <span class="keyword">new</span> Object;</span><br><span class="line"><span class="function">std::shared_ptr&lt;Object&gt; <span class="title">po</span><span class="params">(o)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>这要使用的缺陷在于：</p>
+<ul>
+<li>无法确保裸指针是否依然有效；</li>
+<li>无法确保裸指针不会被二次赋给智能指针。</li>
+</ul>
+<h3 id="%E5%88%A0%E9%99%A4%E5%99%A8" tabindex="-1">删除器</h3>
+<p>如果你使用智能指针管理的资源不是<em>new</em>分配的内存，记住传递给它一个删除器。注意使用*new []*分配的数组，也必须要使用删除器，否则会导致资源泄漏。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">std::shared_ptr&lt;Object&gt; <span class="title">po</span><span class="params">(<span class="keyword">new</span> Object[<span class="number">10</span>], [](Object *o)&#123;<span class="keyword">delete</span>[]p&#125;)</span></span>;</span><br><span class="line"><span class="function">std::shared_ptr&lt;Object&gt; <span class="title">po</span><span class="params">(<span class="keyword">new</span> Object[<span class="number">10</span>], default_deleter&lt;Object[]&gt;())</span></span>;</span><br></pre></td></tr></table></figure>
+<p>需要注意，<em>std::unique_ptr</em>是支持管理数组的。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">std::unique_ptr&lt;Object[]) <span class="built_in">uo</span>(<span class="keyword">new</span> A[<span class="number">10</span>]);</span><br></pre></td></tr></table></figure>
+<p><em>std::unique_ptr</em>的删除器有两种实现方式：函数指针、类对象和lambda表达式。上文已经给出了lambda表达式的写法。下面给出其他两个的例子：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">CConnect</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">disconnect</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">deleter</span><span class="params">(CConnect *obj)</span> </span>&#123;</span><br><span class="line">  obj-&gt;<span class="built_in">disconnect</span>();</span><br><span class="line">  <span class="keyword">delete</span> obj;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function">std::unique_ptr&lt;CConnect, <span class="title">decltype</span><span class="params">(Deleter)</span>*&gt; <span class="title">up</span><span class="params">(<span class="keyword">new</span> CConnect, deleter)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Deleter</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">operator</span><span class="params">()</span> <span class="params">(CConnect *obj)</span> </span>&#123;</span><br><span class="line">    obj-&gt;<span class="built_in">disconnect</span>();</span><br><span class="line">    <span class="keyword">delete</span> obj;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function">std::unique_ptr&lt;CConnect, Deleter&gt; <span class="title">up1</span><span class="params">(<span class="keyword">new</span> CConnect)</span></span>;</span><br><span class="line"><span class="function">std::unique_ptr&lt;CConnect, Deleter&gt; <span class="title">up2</span><span class="params">(<span class="keyword">new</span> CConnect, up<span class="number">1.</span>get_deleter())</span></span>;</span><br></pre></td></tr></table></figure>
+<h3 id="%E5%BE%AA%E7%8E%AF%E5%BC%95%E7%94%A8" tabindex="-1">循环引用</h3>
+<p>使用<em>std::shared_ptr</em>时要避免循环引用。这也是<em>std::weak_ptr</em>存在的价值。建议在设计类时，如果不需要资源的所有权，而不要求控制对象的生命期时，使用<em>std::weak_ptr</em>替代<em>std::shared_ptr</em>。<em>std::weak_ptr</em>不存在延长对象生命期的问题。</p>
+<p>循环引用的经典案例为列表，如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">Node</span> &#123;</span><br><span class="line">  std::shared_ptr&lt;Node&gt; _pre;</span><br><span class="line">  std::shared_ptr&lt;Node&gt; _next;</span><br><span class="line">  <span class="type">int</span> data;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function">std::shared_ptr&lt;Node&gt; <span class="title">n1</span><span class="params">(<span class="keyword">new</span> Node)</span></span>;</span><br><span class="line"><span class="function">std::shared_ptr&lt;Node&gt; <span class="title">n2</span><span class="params">(<span class="keyword">new</span> Node)</span></span>;</span><br><span class="line">n1-&gt;_next = n2;</span><br><span class="line">n2-&gt;_pre = n1;</span><br></pre></td></tr></table></figure>
+<p>要想打破循环引用，则需要借助<em>std::weak_ptr</em>的力量，如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">Node</span> &#123;</span><br><span class="line">  std::weak_ptr&lt;Node&gt; _pre;</span><br><span class="line">  std::weak_ptr&lt;Node&gt; _next;</span><br><span class="line">  <span class="type">int</span> data;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function">std::shared_ptr&lt;Node&gt; <span class="title">n1</span><span class="params">(<span class="keyword">new</span> Node)</span></span>;</span><br><span class="line"><span class="function">std::shared_ptr&lt;Node&gt; <span class="title">n2</span><span class="params">(<span class="keyword">new</span> Node)</span></span>;</span><br><span class="line">n1-&gt;_next = n2;</span><br><span class="line">n2-&gt;_pre = n1;</span><br><span class="line"></span><br><span class="line">std::shared_ptr&lt;Node&gt; spn = n2-&gt;_pre.<span class="built_in">lock</span>();</span><br><span class="line"><span class="keyword">if</span> (spn) &#123;</span><br><span class="line">  spn-&gt;<span class="built_in">doSomething</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="%E5%8F%82%E8%80%83" tabindex="-1">参考</h2>
+<ul>
+<li><a class="link"   target="_blank" rel="noopener" href="http://ootips.org/yonat/4dev/smart-pointers.html" >Smart Pointers - What, Why, Which?<i class="fas fa-external-link-alt"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://stackoverflow.com/questions/19472550/exception-safety-and-make-unique" >Exception safety and make_unique<i class="fas fa-external-link-alt"></i></a></li>
+</ul>
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/katex/dist/katex.min.css">
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/markdown-it-texmath/css/texmath.min.css">
+
+                    
+                </div>
+
+                
+                        
+<div class="post-copyright-info-container border-box">
+    <div class="copyright-info-content border-box">
+        <div class="copyright-info-top border-box">
+            <div class="copyright-post-title border-box text-ellipsis">
+                智能指针二三事
+            </div>
+
+            <div class="copyright-post-link border-box text-ellipsis">
+                develop/cpp-smartpointer-analysis/
+            </div>
+        </div>
+
+        <div class="copyright-info-bottom border-box">
+            <div class="copyright-post-author bottom-item">
+                <div class="type">
+                    Author
+                </div>
+                <div class="content">ZeroJiu</div>
+            </div>
+
+            <div class="post-time bottom-item">
+                <div class="type">
+                    Published
+                </div>
+                <div class="content">2018-10-13 08:48</div>
+            </div>
+
+
+            <div class="post-license bottom-item">
+                <div class="type">
+                    License
+                </div>
+                <div class="content tooltip" data-tooltip-content="CC BY-NC-SA 4.0">
+                    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed" target="_blank">
+                        
+                            <i class="fa-brands fa-creative-commons"></i>
+                            <i class="fa-brands fa-creative-commons-by"></i>
+                            <i class="fa-brands fa-creative-commons-nc"></i>
+                            <i class="fa-brands fa-creative-commons-sa"></i>
+                        
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <i class="copyright-bg fa-solid fa-copyright"></i>
+    </div>
+    <div class="copy-copyright-info flex-center tooltip" data-tooltip-content="Copy copyright info" data-tooltip-offset-y="-2px">
+        <i class="fa-solid fa-copy"></i>
+    </div>
+</div>
+
+                
+
+                <div class="post-bottom-tags-and-share border-box">
+                    <div>
+                        
+                            <ul class="post-tags-box border-box">
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/CPP/">CPP</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Experience/">Experience</a>
+                                    </li>
+                                
+                            </ul>
+                        
+                    </div>
+                    <div>
+                        
+                            <div class="post-share-container border-box">
+    <ul class="share-list-wrap border-box">
+        <li class="qq share-item border-box flex-center tooltip"
+            data-tooltip-content="Share to QQ"
+        >
+            <i class="fa-brands fa-qq"></i>
+        </li>
+        <li class="wechat share-item border-box flex-center tooltip tooltip-img"
+            data-tooltip-content="Share to WeChat"
+            data-tooltip-img-tip="Scan by WeChat"
+            data-tooltip-img-style="background-color: #fff; top: -10px; padding: 0.6rem 0.6rem 0.1rem 0.6rem;"
+        >
+            <i class="fa-brands fa-weixin"></i>
+        </li>
+        <li class="weibo share-item border-box flex-center tooltip"
+            data-tooltip-content="Share to WeiBo"
+        >
+            <i class="fa-brands fa-weibo"></i>
+        </li>
+    </ul>
+</div>
+
+                        
+                    </div>
+                </div>
+
+                
+
+                
+                    <div class="post-nav border-box">
+                        
+                            <div class="prev-post">
+                                <a class="prev"
+                                   rel="prev"
+                                   href="/develop/cpp-reverse/"
+                                   title="有关字符串翻转reverse的思考"
+                                >
+                                    <span class="left arrow-icon flex-center">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </span>
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">有关字符串翻转reverse的思考</span>
+                                        <span class="post-nav-item">Prev posts</span>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                        
+                            <div class="next-post">
+                                <a class="next"
+                                   rel="next"
+                                   href="/develop/webrtc-tcc-vs-gcc/"
+                                   title="WebRTC-GCC两种实现方案对比"
+                                >
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">WebRTC-GCC两种实现方案对比</span>
+                                        <span class="post-nav-item">Next posts</span>
+                                    </span>
+                                    <span class="right arrow-icon flex-center">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                    </div>
+                
+
+                
+                    
+
+
+
+
+
+
+                
+            </div>
+        </div>
+
+        
+    </div>
+</div>
+
+
+                
+            </div>
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="copyright-info info-item">
+        &copy;&nbsp;<span>2020</span>&nbsp;-&nbsp;2024
+        
+            &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">ZeroJiu</a>
+        
+    </div>
+
+    <div class="theme-info info-item">
+        Powered by&nbsp;<a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;&&nbsp;Theme&nbsp;<a class="keep-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep</a>
+    </div>
+
+    
+        
+        <div class="deploy-info info-item">
+            
+            This site is deployed on <span class="tooltip" data-tooltip-content="GitHub Pages"><img src="/images/brands/github.png"></span>
+            
+        </div>
+    
+
+    
+        <div class="count-info info-item">
+            
+
+            
+                <span class="count-item border-box uv">
+                    <span class="item-type border-box">Unique Visitor</span>
+                    <span class="item-value border-box uv" id="busuanzi_value_site_uv"></span>
+                </span>
+            
+
+            
+                <span class="count-item border-box pv">
+                    <span class="item-type border-box">Page View</span>
+                    <span class="item-value border-box pv" id="busuanzi_value_site_pv"></span>
+                </span>
+            
+        </div>
+    
+
+    
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="post-tools-list border-box">
+        <!-- PC encrypt again -->
+        
+
+        <!-- PC TOC show toggle -->
+        
+
+        <!-- PC go comment -->
+        
+
+        <!-- PC full screen -->
+        <li class="tools-item flex-center full-screen">
+            <i class="fa-solid fa-expand"></i>
+        </li>
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container border-box ">
+    <ul class="side-tools-list side-tools-show-handle border-box">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-toggle-theme-mode flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list border-box">
+        
+
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        <li class="tools-item tool-scroll-to-top flex-center show-arrow">
+            <i class="arrow fas fa-arrow-up"></i>
+            <span class="percent"></span>
+        </li>
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="Search..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+</main>
+
+
+
+<!-- common -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/utils.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/header-shrink.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/back2top.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/toggle-theme.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/code-block.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/main.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/libs/anime.min.js"></script>
+
+<!-- local-search -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/local-search.min.js"></script>
+
+
+<!-- lazyload -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/lazyload.min.js"></script>
+
+
+<div class="pjax">
+    <!-- home page -->
+    
+
+    <!-- post page -->
+    
+        <!-- post-helper -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/post/post-helper.min.js"></script>
+
+        <!-- toc -->
+        
+
+        <!-- copyright-info -->
+        
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/post/copyright-info.min.js"></script>
+        
+
+        <!-- share -->
+        
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/post/share.min.js"></script>
+        
+    
+
+    <!-- categories page -->
+    
+
+    <!-- links page -->
+    
+
+    <!-- photos page -->
+    
+
+    <!-- tools page -->
+    
+</div>
+
+<!-- mermaid -->
+
+    
+<script src="//cdn.jsdelivr.net/npm/mermaid@10.5.0/dist/mermaid.min.js"></script>
+
+    <script data-pjax>
+      if (window.mermaid) {
+        mermaid.init()
+      }
+    </script>
+
+
+
+
+
+
+<!-- pjax -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.1.5/js/libs/pjax.min.js"></script>
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        window.pjax = new Pjax({
+            selectors: [
+                'head title',
+                '.page-container',
+                '.pjax'
+            ],
+            history: true,
+            debug: false,
+            cacheBust: false,
+            timeout: 0,
+            analytics: false,
+            currentUrlFullReload: false,
+            scrollRestoration: false,
+        });
+
+        document.addEventListener('pjax:send', () => {
+            KEEP.utils.pjaxProgressBarStart()
+        });
+
+        document.addEventListener('pjax:complete', () => {
+            KEEP.utils.pjaxProgressBarEnd()
+            window.pjax.executeScripts(document.querySelectorAll('script[data-pjax], .pjax script'))
+            KEEP.initExecute()
+        });
+    });
+</script>
+
+
+
+
+</body>
+</html>
